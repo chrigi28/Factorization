@@ -29,7 +29,8 @@ static char stackOperators[PAREN_STACK_SIZE];
 static limb fibon2[MAX_LEN];
 extern limb MontgomeryR1[MAX_LEN];
 int lang;
-char *output;
+char inputString[1000000];
+char output[3000000];
 limb Mult1[MAX_LEN];
 limb Mult3[MAX_LEN];
 limb Mult4[MAX_LEN];
@@ -396,7 +397,6 @@ enum eExprErr ComputeExpression(char *expr, int type, BigInteger *ExpressionResu
             break;
           }
         }
-
         // Generate big integer from decimal number
         pBigInt = &stackValues[stackIndex];
         Dec2Bin(expr + exprIndex, pBigInt->limbs,
@@ -461,7 +461,6 @@ static enum eExprErr ComputeSubExpr(int stackIndex)
   int len, val, ctr;
   BigInteger *pArgument, *pResult;
   limb *pResultLimbs, *pArgumentLimbs, *pTemp, *pFibonPrev, *pFibonAct;
-  unsigned int carry;
   limb largeVal;
   char stackOper;
   int nbrLimbs;
@@ -524,7 +523,7 @@ static enum eExprErr ComputeSubExpr(int stackIndex)
       fibon2[0].x = 1;
       for (i = 1; i < val; i++)
       {
-        carry = 0;
+        unsigned int carry = 0;
         for (j=0; j<len; j++)
         {
           carry += (pFibonPrev+j)->x + (pFibonAct+j)->x;
@@ -677,3 +676,7 @@ static enum eExprErr ComputeSubExpr(int stackIndex)
   return EXPR_OK;
 }
 
+char *getInputStringPtr(void)
+{
+  return inputString;
+}

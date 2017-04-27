@@ -22,40 +22,33 @@ along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
 #include "bignbr.h"
 #include "expression.h"
 #include "factor.h"
-#include <stdio.h>
+#include "showtime.h"
 #ifdef __EMSCRIPTEN__
-#include <emscripten.h>
 extern long long lModularMult;
 #endif
-extern char *output;
 char batch;
 extern char verbose, prettyprint, cunningham;
 extern BigInteger tofactor;
 static int nbrToFactor[MAX_LEN];
 static BigInteger Quad1, Quad2, Quad3, Quad4;
-int groupLen = 6;
 struct sFactors astFactorsMod[1000];
 int factorsMod[10000];
 extern BigInteger factorValue;
 static BigInteger result;
 BigInteger valueX;
 char outputExpr[100000];
-char *ptrInputText;
-
 #ifdef __EMSCRIPTEN__
-extern int NextEC;
-extern double originalTenthSecond;
-void GetDHMSt(char **pptrText, int tenths);
+extern char *ptrInputText;
 #endif
+extern int NextEC;
 
 static void stringToHTML(char **pptrOutput, char *ptrString)
 {
   int character;
-  char c;
   char *ptrOutput = *pptrOutput;
   for (;;)
   {
-    c = *ptrString;
+    char c = *ptrString;
     if (c == 0)
     {
       break;    // End of string, so go out.
@@ -103,14 +96,13 @@ static void SkipSpaces(char **pptrText)
   *pptrText = ptrText;
 }
 
-static char evalExpression(char *expr, int counter, BigInteger *result)
+static char evalExpression(char *expr, int counter, BigInteger *ptrResult)
 {
   char *ptrInputExpr = expr;
   char *ptrOutputExpr = outputExpr;
-  char c;
   while (*ptrInputExpr != 0)
   {
-    c = *ptrInputExpr;
+    char c = *ptrInputExpr;
     if (c == ';')
     {
       break;
@@ -131,7 +123,7 @@ static char evalExpression(char *expr, int counter, BigInteger *result)
     ptrInputExpr++;
   }
   *ptrOutputExpr = 0;   // Append string terminator.
-  return ComputeExpression(outputExpr, 1, result);
+  return ComputeExpression(outputExpr, 1, ptrResult);
 }
 
 static void BatchError(char **pptrOutput, char *tofactorText, char *errorText)
@@ -153,13 +145,13 @@ static void BatchFactorization(char *tofactorText, int doFactorization)
   int counter = 0;
   char *ptrOutput = output;
   char *NextExpr, *EndExpr, *FactorExpr;
-  char c;
   enum eExprErr rc;
   char *ptrCharFound, *ptrSrcString, *ptrStartExpr;
   strcpy(ptrOutput, "2<ul><li>");
   ptrOutput += strlen(ptrOutput);
   while (ptrNextBatchFactor != NULL && ptrNextBatchFactor < ptrEndBatchFactor)
   {  // Get next line.
+    char c;
     counter = 1;
     ptrCurrBatchFactor = ptrNextBatchFactor;
     ptrNextBatchFactor = findChar(ptrCurrBatchFactor, '\n');
@@ -258,6 +250,7 @@ static void BatchFactorization(char *tofactorText, int doFactorization)
         {
           NumberLength = tofactor.nbrLimbs;
           CompressBigInteger(nbrToFactor, &tofactor);
+          Bin2Dec(tofactor.limbs, tofactorDec, tofactor.nbrLimbs, groupLen);
           factor(&tofactor, nbrToFactor, factorsMod, astFactorsMod, NULL);
         }
         SendFactorizationToOutput(rc, astFactorsMod, &ptrOutput, doFactorization);
@@ -278,6 +271,7 @@ static void BatchFactorization(char *tofactorText, int doFactorization)
       {
         NumberLength = tofactor.nbrLimbs;
         CompressBigInteger(nbrToFactor, &tofactor);
+        Bin2Dec(tofactor.limbs, tofactorDec, tofactor.nbrLimbs, groupLen);
         factor(&tofactor, nbrToFactor, factorsMod, astFactorsMod, NULL);
       }
       SendFactorizationToOutput(rc, astFactorsMod, &ptrOutput, doFactorization);
@@ -322,7 +316,6 @@ static void ExponentToBigInteger(int exponent, BigInteger *bigint)
 static void GetNumberOfDivisors(char **pptrOutput)
 {
   char *ptrOutput = *pptrOutput;
-  int *ptrFactor;
   struct sFactors *pstFactor;
   int factorNumber;
   result.limbs[0].x = 1;    // Set result to 1.
@@ -331,7 +324,7 @@ static void GetNumberOfDivisors(char **pptrOutput)
   pstFactor = &astFactorsMod[1];
   for (factorNumber = 1; factorNumber <= astFactorsMod[0].multiplicity; factorNumber++)
   {
-    ptrFactor = pstFactor->ptrFactor;
+    int *ptrFactor = pstFactor->ptrFactor;
     if (*ptrFactor == 1 && *(ptrFactor + 1) < 2)
     {                        // Factor is 1.
       break;
@@ -350,9 +343,9 @@ static void GetNumberOfDivisors(char **pptrOutput)
 }
 
 // Find sum of divisors as the product of (p^(e+1)-1)/(p-1) where p=prime and e=exponent.
+// Use Quad1 and Quad2 as temporary variables
 static void GetSumOfDivisors(char **pptrOutput)
 {
-  BigInteger Temp1;
   char *ptrOutput = *pptrOutput;
   struct sFactors *pstFactor;
   int factorNumber;
@@ -363,12 +356,12 @@ static void GetSumOfDivisors(char **pptrOutput)
   for (factorNumber = 1; factorNumber <= astFactorsMod[0].multiplicity; factorNumber++)
   {
     UncompressBigInteger(pstFactor->ptrFactor, &factorValue);
-    BigIntPowerIntExp(&factorValue, pstFactor->multiplicity + 1, &Temp1);   // p^(e+1)
-    addbigint(&Temp1, -1);   // p^(e+1)-1
-    BigIntMultiply(&result, &Temp1, &result);
-    UncompressBigInteger(pstFactor->ptrFactor, &Temp1);
-    addbigint(&Temp1, -1);   // p-1
-    BigIntDivide(&result, &Temp1, &result);
+    BigIntPowerIntExp(&factorValue, pstFactor->multiplicity + 1, &Quad1);   // p^(e+1)
+    addbigint(&Quad1, -1);   // p^(e+1)-1
+    BigIntMultiply(&result, &Quad1, &Quad2);
+    UncompressBigInteger(pstFactor->ptrFactor, &Quad1);
+    addbigint(&Quad1, -1);   // p-1
+    BigIntDivide(&Quad2, &Quad1, &result);
     pstFactor++;
   }
   strcpy(ptrOutput, lang ? "<p>Suma de divisores: " : "<p>Sum of divisors: ");
@@ -415,12 +408,12 @@ static void GetMobius(char **pptrOutput)
 {
   char *ptrOutput = *pptrOutput;
   struct sFactors *pstFactor;
-  int factorNumber;
   int mobius = 1;
   pstFactor = &astFactorsMod[1];
   if (astFactorsMod[0].multiplicity > 1 || *pstFactor->ptrFactor != 1 ||
     *(pstFactor->ptrFactor + 1) != 1)
   {                                // Number to factor is not 1.
+    int factorNumber;
     for (factorNumber = 1; factorNumber <= astFactorsMod[0].multiplicity; factorNumber++)
     {
       if (pstFactor->multiplicity == 1)
@@ -578,6 +571,10 @@ static void ComputeFourSquares(struct sFactors *pstFactors)
         CopyBigInt(&q, &p);
         subtractdivide(&q, 1, 2);     // q = (prime-1)/2
         memcpy(K.limbs, q.limbs, q.nbrLimbs * sizeof(limb));
+        if (p.nbrLimbs > q.nbrLimbs)
+        {
+          K.limbs[q.nbrLimbs].x = 0;
+        }
         // Compute Mult1 and Mult2 so Mult1^2 + Mult2^2 = -1 (mod p)
         memset(Mult1.limbs, 0, p.nbrLimbs*sizeof(limb));
         do
@@ -931,73 +928,53 @@ static void ShowFourSquares(char **pptrOutput)
 
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors)
 {
-	printf("ecmFrontText start");
   char *ptrOutput;
   enum eExprErr rc;
+#ifdef __EMSCRIPTEN__
   ptrInputText = tofactorText;
+#endif
   if (batch)
   {
     BatchFactorization(tofactorText, doFactorization);
     return;
   }
   rc = ComputeExpression(tofactorText, 1, &tofactor);
-  if (output == NULL)
-  {
-    output = (char *)malloc(1000000);
-  }
-  if (output == NULL)
-  {
-    return;   // Go out if cannot generate output string.
-  }
   if (rc == EXPR_OK && doFactorization)
   {
-    NumberLength = tofactor.nbrLimbs; // BigInteger in bignbr
+    NumberLength = tofactor.nbrLimbs;
     CompressBigInteger(nbrToFactor, &tofactor);
 #ifdef __EMSCRIPTEN__
     lModularMult = 0;
 #endif
+    Bin2Dec(tofactor.limbs, tofactorDec, tofactor.nbrLimbs, groupLen);
     factor(&tofactor, nbrToFactor, factorsMod, astFactorsMod, knownFactors);
-
   }
   ptrOutput = output;
-  strcpy(output, "<p>");
+//  strcpy(output, "2<p>");
   ptrOutput += strlen(output);
   SendFactorizationToOutput(rc, astFactorsMod, &ptrOutput, doFactorization);
-  if (rc == EXPR_OK && doFactorization)
-  {
-    if (tofactor.nbrLimbs > 1 || tofactor.limbs[0].x > 0)
-    {      // Number to factor is not zero.
-      GetNumberOfDivisors(&ptrOutput);
-      GetSumOfDivisors(&ptrOutput);
-      GetEulerTotient(&ptrOutput);
-      GetMobius(&ptrOutput);
-    }
-    ComputeFourSquares(astFactorsMod);
-    ShowFourSquares(&ptrOutput);
-    strcpy(ptrOutput, lang ? "<p>Tiempo transcurrido: " : "<p>Time elapsed: ");
-    ptrOutput += strlen(ptrOutput);
-#ifdef __EMSCRIPTEN__
-    GetDHMSt(&ptrOutput, (int)(tenths() - originalTenthSecond));
-    strcpy(ptrOutput, "</p>");
-    ptrOutput += strlen(ptrOutput);
-#endif
-  }
-  strcpy(ptrOutput, lang ? "<p>" COPYRIGHT_SPANISH "</p>" :
-    "<p>" COPYRIGHT_ENGLISH "</p>");
+//  if (rc == EXPR_OK && doFactorization)
+//  {
+//    if (tofactor.nbrLimbs > 1 || tofactor.limbs[0].x > 0)
+//    {      // Number to factor is not zero.
+//      GetNumberOfDivisors(&ptrOutput);
+//      GetSumOfDivisors(&ptrOutput);
+//      GetEulerTotient(&ptrOutput);
+//      GetMobius(&ptrOutput);
+//    }
+//    ComputeFourSquares(astFactorsMod);
+//    ShowFourSquares(&ptrOutput);
+//    showElapsedTime(&ptrOutput);
+//  }
+//  strcpy(ptrOutput, lang ? "<p>" COPYRIGHT_SPANISH "</p>" :
+//    "<p>" COPYRIGHT_ENGLISH "</p>");
 }
 
-#ifdef __EMSCRIPTEN__
-void doWork(char* data, int size)
+void doWork(void)
 {
   int flags;
-  char *ptrText;
-  char *ptrData = data;
-  char *ptrPower, *ptrMod;
+  char *ptrData = inputString;
   char *ptrWebStorage, *ptrKnownFactors;
-  if (output == NULL)
-  {
-    output = malloc(3000000);
-  }
   groupLen = 0;
   while (*ptrData != ',')
   {
@@ -1030,7 +1007,7 @@ void doWork(char* data, int size)
   {
     if (ptrKnownFactors)
     {
-      ptrText = ptrKnownFactors + strlen(ptrKnownFactors) + 1;
+      char *ptrText = ptrKnownFactors + strlen(ptrKnownFactors) + 1;
       NextEC = 0;
       while (*ptrText != 0)
       {
@@ -1040,6 +1017,7 @@ void doWork(char* data, int size)
     }
   }
   ecmFrontText(ptrData, flags & 2, ptrKnownFactors); // The 3rd parameter includes known factors.
+#ifdef __EMSCRIPTEN__
   databack(output);
-}
 #endif
+}

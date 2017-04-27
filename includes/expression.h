@@ -1,11 +1,10 @@
 #ifndef _EXPRESSION_H
 #define _EXPRESSION_H
 
-#define COPYRIGHT_SPANISH "Hecho por Darío Alpern. Actualizado el 18 de febrero de 2017."
-#define COPYRIGHT_ENGLISH "Written by Dario Alpern. Last updated on 18 February 2017."
+#define COPYRIGHT_SPANISH "Hecho por Darío Alpern. Actualizado el 23 de abril de 2017."
+#define COPYRIGHT_ENGLISH "Written by Dario Alpern. Last updated on 23 April 2017."
 
 #ifdef __EMSCRIPTEN__
-double tenths(void);
 void databack(char *data);
 int stamp(void);
 #endif
@@ -37,6 +36,8 @@ enum eExprErr
   EXPR_OK = 0
 };
 extern int lang;
+extern char inputString[1000000];
+extern char output[3000000];
 enum eExprErr ComputeGaussianExpression(char *expr, BigInteger *ExpressionResult);
 enum eExprErr ComputeExpression(char *expr, int type, BigInteger *ExpressionResult);
 void partition(int val, BigInteger *pResult);

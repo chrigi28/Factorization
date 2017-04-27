@@ -1,1 +1,2 @@
-mpiexec -n 4 ./Test 10 15
+clear
+mpiexec -n 2 ./Test 100 102

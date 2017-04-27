@@ -44,9 +44,8 @@ static void MultiplyBigNbrByMinPowerOf2(int *pPower2, limb *number, int len, lim
 {
   limb mostSignficLimb, oldLimb, newLimb;
   int index2, mask, shLeft;
-  limb *ptrDest, *ptrSrc;
+  limb *ptrDest;
 
-  ptrSrc = number;
   shLeft = 0;
   mostSignficLimb.x = (number + len - 1)->x;
   for (mask = LIMB_RANGE/2; mask > 0; mask >>= 1)
@@ -148,7 +147,14 @@ enum eExprErr BigIntDivide(BigInteger *pDividend, BigInteger *pDivisor, BigInteg
     // Initialize approximate inverse.
     inverse = MAX_VALUE_LIMB / ((double)adjustedArgument[nbrLimbs - 1].x + 1);
     approxInv[nbrLimbs-1].x = 1;
-    approxInv[nbrLimbs-2].x = (int)floor((inverse-1)*MAX_VALUE_LIMB);
+    if (inverse <= 1)
+    {
+      approxInv[nbrLimbs - 2].x = 0;
+    }
+    else
+    {
+      approxInv[nbrLimbs - 2].x = (int)floor((inverse - 1)*MAX_VALUE_LIMB);
+    }
     // Perform Newton approximation loop.
     // Get bit length of each cycle.
     bitLengthNbrCycles = 0;
@@ -235,7 +241,7 @@ enum eExprErr BigIntDivide(BigInteger *pDividend, BigInteger *pDivisor, BigInteg
     {                   // Increment quotient.
       for (idx = 0; idx <= nbrLimbsQuotient; idx++)
       {
-        if ((unsigned int)(++((ptrQuotient + idx)->x)) != LIMB_RANGE)
+        if ((++((ptrQuotient + idx)->x)) & MAX_INT_NBR)
         {
           break;
         }

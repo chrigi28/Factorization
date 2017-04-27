@@ -41,7 +41,7 @@ BigInteger stackImagValues[PAREN_STACK_SIZE];
 int stackOperators[PAREN_STACK_SIZE];
 int stackIndex, exprIndex;
 int lang;
-char *output;
+char output[3000000];
 limb Mult1[MAX_LEN];
 limb Mult3[MAX_LEN];
 limb Mult4[MAX_LEN];
@@ -960,11 +960,7 @@ static int ComputePower(BigInteger *Re1, BigInteger *Re2, BigInteger *Im1, BigIn
   {          // Exponent must be positive or zero.
     return EXPR_INVALID_PARAM;
   }
-#if BITS_PER_GROUP == 15
-  if (Re2->nbrLimbs > 2)
-#else
   if (Re2->nbrLimbs > 1)
-#endif
   {
     return EXPR_INTERM_TOO_HIGH;
   }

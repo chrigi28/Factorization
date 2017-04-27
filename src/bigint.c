@@ -160,7 +160,7 @@ void DivBigNbrByInt(int *pDividend, int divisor, int *pQuotient, int nbrLen)
     dividend = (remainder << BITS_PER_INT_GROUP) + *pDividend;
     dDividend = (double)remainder * dLimb + *pDividend;
     dQuotient = floor(dDividend / dDivisor + 0.5);
-    quotient = (int)dQuotient;   // quotient has correct value or 1 more.
+    quotient = (unsigned int)dQuotient;   // quotient has correct value or 1 more.
     remainder = dividend - quotient * divisor;
     if ((unsigned int)remainder >= (unsigned int)divisor)
     {     // remainder not in range 0 <= remainder < divisor. Adjust.
@@ -181,12 +181,12 @@ int RemDivBigNbrByInt(int *pDividend, int divisor, int nbrLen)
   pDividend += nbrLen - 1;
   for (ctr = nbrLen - 1; ctr >= 0; ctr--)
   {
-    int quotient, dividend;
+    unsigned int quotient, dividend;
     double dQuotient, dDividend;
     dividend = (remainder << BITS_PER_INT_GROUP) + *pDividend;
     dDividend = (double)remainder * dLimb + *pDividend;
     dQuotient = floor(dDividend / dDivisor + 0.5);
-    quotient = (int)dQuotient;   // quotient has correct value or 1 more.
+    quotient = (unsigned int)dQuotient;   // quotient has correct value or 1 more.
     remainder = dividend - quotient * divisor;
     if ((unsigned int)remainder >= (unsigned int)divisor)
     {     // remainder not in range 0 <= remainder < divisor. Adjust.
@@ -227,7 +227,7 @@ void MultBigNbr(int *pFactor1, int *pFactor2, int *pProd, int nbrLen)
     {
       dAccumulator = floor((dAccumulator - HALF_INT_RANGE/2)*dInvRangeLimb);
     }
-    low = (int)(dAccumulator - floor(dAccumulator / dRangeLimb) * dRangeLimb);
+    low = (int)(dAccumulator - floor(dAccumulator * dInvRangeLimb) * dRangeLimb);
   }
   *pProd = low;
   *(pProd+1) = (int)floor(dAccumulator/dRangeLimb);

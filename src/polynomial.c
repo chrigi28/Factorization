@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -23,15 +24,13 @@ along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
 #include "bignbr.h"
 #include "highlevel.h"
 #include "polynomial.h"
+#include "showtime.h"
 #define STACK_OPER_SIZE      100
 #define TOKEN_NUMBER         '0'
 #define TOKEN_START_EXPON    '1'
 #define TOKEN_END_EXPON      '2'
 #define TOKEN_UNARY_MINUS    '3'
-#ifdef __EMSCRIPTEN__
-int newStamp, oldStamp;
-extern char *output;
-#endif
+#define KARATSUBA_POLY_CUTOFF 8
 BigInteger primeMod;              // p
 int exponentMod;                  // k
 BigInteger powerMod;              // p^k
@@ -45,17 +44,21 @@ extern limb MontgomeryMultR1[MAX_LEN];
 extern int NumberLength, NumberLengthR1;
 static char RPNbuffer[1000000];
 int values[1000000];
+static int polyInv[1000000];
 static int valuesIndex;
 int valuesPrime[1000000];
 int poly1[1000000];
 int poly2[1000000];
 int poly3[1000000];
-static int poly4[1000000];
+int poly4[1000000];
 static int poly5[1000000];
+static int polyMultM[1000000];
+static int polyMultT[1000000];
 int polyMultTemp[1000000];
 static int polyLifted[1000000];
 unsigned char superscripts, onlyEvaluate;
 struct sFactorInfo factorInfo[MAX_DEGREE];
+static BigInteger coeff[2 * KARATSUBA_POLY_CUTOFF];
 int nbrFactorsFound;
 int *ptrOrigPoly;
 int degreeOrigPoly;
@@ -514,37 +517,219 @@ static int AddPolynomialExpr(int *ptrArgument1, int *ptrArgument2)
   return EXPR_OK;
 }
 
-// Multiply poly1 by poly2. The result will be stored in polyMultTemp.
-static void MultPolynomialInternal(int degree1, int degree2, /*@in@*/int *factor1, /*@in@*/int *factor2)
+// Multiply two groups of nbrLen coefficients. The first one starts at
+// idxFactor1 and the second one at idxFactor2. The 2*nbrLen coefficient
+// result is stored starting at idxFactor1. Use arrAux as temporary storage.
+// Accumulate products by result coefficient.
+static void ClassicalPolyMult(int idxFactor1, int idxFactor2, int coeffLen, int nbrLimbs)
 {
-  int currentDegree, currentDegree2;
-  int *ptrValue1 = polyMultTemp;
-  int nbrLimbs = powerMod.nbrLimbs + 1;
-  for (currentDegree = 0; currentDegree <= degree1 + degree2; currentDegree++)
-  {
-    *ptrValue1 = 1;        // Initialize number to zero.
-    *(ptrValue1+1) = 0;
-    ptrValue1 += nbrLimbs;
-  }
-  ptrValue1 = factor1;
-  for (currentDegree = 0; currentDegree <= degree1; currentDegree++)
-  {
-    int *ptrValue2, *ptrValueProd;
-    UncompressBigInteger(ptrValue1, &operand1);
-    ptrValue2 = factor2;
-    ptrValueProd = &polyMultTemp[currentDegree*nbrLimbs];
-    for (currentDegree2 = 0; currentDegree2 <= degree2; currentDegree2++)
-    {
-      UncompressBigInteger(ptrValue2, &operand2);
-      modmult(operand1.limbs, operand2.limbs, operand2.limbs);
-      UncompressBigInteger(ptrValueProd, &operand3);
-      AddBigNbrMod(operand2.limbs, operand3.limbs, operand3.limbs);
-      CompressBigInteger(ptrValueProd, &operand3);
-      ptrValue2 += nbrLimbs;
-      ptrValueProd += nbrLimbs;
+  int i, j;
+  int *ptrFactor1, *ptrFactor2;
+  for (i = 0; i < 2 * coeffLen - 1; i++)
+  {    // Process each limb of product (least to most significant limb).
+    if (i < coeffLen)
+    {   // Processing first half (least significant) of product.
+      ptrFactor2 = &polyMultTemp[(idxFactor2 + i)*nbrLimbs];
+      ptrFactor1 = &polyMultTemp[idxFactor1*nbrLimbs];
+      j = i;
     }
+    else
+    {  // Processing second half (most significant) of product.
+      ptrFactor2 = &polyMultTemp[(idxFactor2 + coeffLen - 1)*nbrLimbs];
+      ptrFactor1 = &polyMultTemp[(idxFactor1 + i - coeffLen + 1)*nbrLimbs];
+      j = 2 * (coeffLen-1) - i;
+    }
+    memset(coeff[i].limbs, 0, nbrLimbs * sizeof(limb));
+    for (; j >= 0; j--)
+    {
+      UncompressIntLimbs(ptrFactor1, operand3.limbs, nbrLimbs);
+      UncompressIntLimbs(ptrFactor2, operand2.limbs, nbrLimbs);
+      modmult(operand3.limbs, operand2.limbs, operand3.limbs);
+      AddBigNbrMod(coeff[i].limbs, operand3.limbs, coeff[i].limbs);
+      ptrFactor1 += nbrLimbs;
+      ptrFactor2 -= nbrLimbs;
+    }
+  }
+  ptrFactor1 = &polyMultTemp[idxFactor1*nbrLimbs];
+  for (i = 0; i < 2 * coeffLen - 1; i++)
+  {
+    CompressIntLimbs(ptrFactor1, coeff[i].limbs, nbrLimbs);
+    ptrFactor1 += nbrLimbs;
+  }
+  *ptrFactor1 = 1;
+  *(ptrFactor1+1) = 0;
+  return;
+}
+
+// Recursive Karatsuba function.
+static void KaratsubaPoly(int idxFactor1, int nbrLen, int diffIndex, int nbrLimbs)
+{
+  int idxFactor2 = idxFactor1 + nbrLen;
+  int i;
+  int *ptrResult, *ptrHigh, *ptr1, *ptr2;
+  int middle;
+  int halfLength;
+  int coeff[MAX_LEN];
+  if (nbrLen <= KARATSUBA_POLY_CUTOFF)
+  {
+    // Check if one of the factors is equal to zero.
+    ptrResult = &polyMultTemp[idxFactor1*nbrLimbs];
+    for (i = nbrLen; i > 0; i--)
+    {
+      if (*ptrResult != 1 || *(ptrResult+1) != 0)
+      {      // Coefficient is not zero.
+        break;
+      }
+      ptrResult += nbrLimbs;
+    }
+    if (i > 0)
+    {     // First factor is not zero. Check second.
+      ptrResult = &polyMultTemp[idxFactor2*nbrLimbs];
+      for (i = nbrLen; i > 0; i--)
+      {
+        if (*ptrResult != 1 || *(ptrResult + 1) != 0)
+        {
+          break;
+        }
+        ptrResult += nbrLimbs;
+      }
+    }
+    if (i == 0)
+    {    // One of the factors is equal to zero.
+      for (i = nbrLen - 1; i >= 0; i--)
+      {
+        polyMultTemp[idxFactor1*nbrLimbs] = 1;
+        polyMultTemp[idxFactor2*nbrLimbs] = 1;
+        polyMultTemp[idxFactor1*nbrLimbs+1] = 0;
+        polyMultTemp[idxFactor2*nbrLimbs+1] = 0;
+        idxFactor1++;
+        idxFactor2++;
+      }
+      return;
+    }
+    // Below cutoff: perform standard classical polynomial multiplcation.
+    ClassicalPolyMult(idxFactor1, idxFactor2, nbrLen, nbrLimbs);
+    return;
+  }
+  // Length > KARATSUBA_CUTOFF: Use Karatsuba multiplication.
+  // It uses three half-length multiplications instead of four.
+  //  x*y = (xH*b + xL)*(yH*b + yL)
+  //  x*y = (b + 1)*(xH*yH*b + xL*yL) + (xH - xL)*(yL - yH)*b
+  // The length of b is stored in variable halfLength.
+
+  // At this moment the order is: xL, xH, yL, yH.
+  // Exchange high part of first factor with low part of 2nd factor.
+  halfLength = nbrLen >> 1;
+  for (i = idxFactor1 + halfLength; i<idxFactor2; i++)
+  {
+    memcpy(coeff, &polyMultTemp[i*nbrLimbs], nbrLimbs*sizeof(int));
+    memcpy(&polyMultTemp[i*nbrLimbs], &polyMultTemp[(i+halfLength)*nbrLimbs], nbrLimbs * sizeof(int));
+    memcpy(&polyMultTemp[(i + halfLength)*nbrLimbs], coeff, nbrLimbs * sizeof(int));
+  }
+  // At this moment the order is: xL, yL, xH, yH.
+  // Compute (xH-xL) and (yL-yH) and store them starting from index diffIndex.
+  ptr1 = &polyMultTemp[idxFactor1*nbrLimbs];
+  ptr2 = &polyMultTemp[idxFactor2*nbrLimbs];
+  ptrResult = &polyMultTemp[diffIndex*nbrLimbs];
+  for (i = 0; i < halfLength; i++)
+  {
+    UncompressIntLimbs(ptr1, operand3.limbs, nbrLimbs);
+    UncompressIntLimbs(ptr2, operand2.limbs, nbrLimbs);
+    SubtBigNbrMod(operand2.limbs, operand3.limbs, operand3.limbs);
+    CompressIntLimbs(ptrResult, operand3.limbs, nbrLimbs);
+    ptr1 += nbrLimbs;
+    ptr2 += nbrLimbs;
+    ptrResult += nbrLimbs;
+  }
+  for (i = 0; i < halfLength; i++)
+  {
+    UncompressIntLimbs(ptr1, operand3.limbs, nbrLimbs);
+    UncompressIntLimbs(ptr2, operand2.limbs, nbrLimbs);
+    SubtBigNbrMod(operand3.limbs, operand2.limbs, operand3.limbs);
+    CompressIntLimbs(ptrResult, operand3.limbs, nbrLimbs);
+    ptr1 += nbrLimbs;
+    ptr2 += nbrLimbs;
+    ptrResult += nbrLimbs;
+  }
+  middle = diffIndex;
+  diffIndex += nbrLen;
+  KaratsubaPoly(idxFactor1, halfLength, diffIndex, nbrLimbs); // Multiply both low parts.
+  KaratsubaPoly(idxFactor2, halfLength, diffIndex, nbrLimbs); // Multiply both high parts.
+  KaratsubaPoly(middle, halfLength, diffIndex, nbrLimbs);     // Multiply the differences.
+     // Obtain (b+1)(xH*yH*b + xL*yL) = xH*yH*b^2 + (xL*yL+xH*yH)*b + xL*yL
+     // The first and last terms are already in correct locations.
+     // Add (xL*yL+xH*yH)*b.
+  ptrResult = &polyMultTemp[(idxFactor1 + halfLength) * nbrLimbs];
+  for (i = halfLength; i > 0; i--)
+  {
+    // Obtain coefficient from xH*yH*b^2 + xL*yL
+    UncompressIntLimbs(ptrResult, operand3.limbs, nbrLimbs);
+    // Obtain coefficient from xL*yL
+    UncompressIntLimbs(ptrResult - halfLength*nbrLimbs, operand2.limbs, nbrLimbs);
+    // Obtain coefficient from xH*yH
+    UncompressIntLimbs(ptrResult + halfLength*nbrLimbs, operand1.limbs, nbrLimbs);
+    // Add all three coefficients.
+    AddBigNbrMod(operand3.limbs, operand2.limbs, operand2.limbs);
+    AddBigNbrMod(operand2.limbs, operand1.limbs, operand2.limbs);
+    // Store coefficient of xH*yH*b^2 + (xL*yL+xH*yH)*b + xL*yL
+    CompressIntLimbs(ptrResult, operand2.limbs, nbrLimbs);
+    // Obtain coefficient from xH*yH
+    UncompressIntLimbs(ptrResult + nbrLen*nbrLimbs, operand2.limbs, nbrLimbs);
+    // Add coefficient from xL*yL
+    AddBigNbrMod(operand3.limbs, operand2.limbs, operand3.limbs);
+    // Add coefficient from xH*yH*b^2 + xL*yL
+    AddBigNbrMod(operand3.limbs, operand1.limbs, operand3.limbs);
+    // Store coefficient of xH*yH*b^2 + (xL*yL+xH*yH)*b + xL*yL
+    CompressIntLimbs(ptrResult + halfLength*nbrLimbs, operand3.limbs, nbrLimbs);
+    // Point to next address.
+    ptrResult += nbrLimbs;
+  }
+  // Compute final product by adding (xH - xL)*(yL - yH)*b.
+  ptrHigh = &polyMultTemp[middle*nbrLimbs];
+  ptrResult = &polyMultTemp[(idxFactor1 + halfLength)*nbrLimbs];
+  for (i = nbrLen; i > 0; i--)
+  {
+    UncompressIntLimbs(ptrResult, operand3.limbs, nbrLimbs);
+    UncompressIntLimbs(ptrHigh, operand2.limbs, nbrLimbs);
+    AddBigNbrMod(operand3.limbs, operand2.limbs, operand3.limbs);
+    CompressIntLimbs(ptrResult, operand3.limbs, nbrLimbs);
+    ptrHigh += nbrLimbs;
+    ptrResult += nbrLimbs;
+  }
+}
+
+// Multiply factor1 by factor2. The result will be stored in polyMultTemp.
+static void MultPolynomialInternal(int degree1, int degree2,
+                                  /*@in@*/int *factor1, /*@in@*/int *factor2)
+{
+  int karatDegree;
+  int *ptrValue1;
+  int nbrLimbs = powerMod.nbrLimbs + 1;
+  // Find the least power of 2 greater or equal than the maximum of factor1 and factor2.
+  int degree = (degree1 > degree2? degree1: degree2) + 1;
+  // Compute length of numbers for each recursion.
+  if (degree > KARATSUBA_POLY_CUTOFF)
+  {
+    int div = 1;
+    while (degree > KARATSUBA_POLY_CUTOFF)
+    {
+      div *= 2;
+      degree = (degree + 1) / 2;
+    }
+    degree *= div;
+  }
+  karatDegree = degree;
+  // Initialize Karatsuba polynomial.
+  ptrValue1 = polyMultTemp;
+  for (degree = 2 * karatDegree; degree > 0; degree--)
+  {
+    *ptrValue1 = 1;        // Initialize coefficient to zero.
+    *(ptrValue1 + 1) = 0;
     ptrValue1 += nbrLimbs;
   }
+  memcpy(polyMultTemp, factor1, (degree1+1)*nbrLimbs * sizeof(limb));
+  memcpy(&polyMultTemp[karatDegree*nbrLimbs], factor2, (degree2+1)*nbrLimbs * sizeof(limb));
+  KaratsubaPoly(0, karatDegree, 2 * karatDegree, nbrLimbs);
 }
 
 static int MultPolynomialExpr(int *ptrArgument1, int *ptrArgument2)
@@ -654,13 +839,13 @@ static int MultPolynomialExpr(int *ptrArgument1, int *ptrArgument2)
   return EXPR_OK;
 }
 
-static void ToPoly(int degree, int *polySrc, int *polyDest)
+static void ToPoly(int polyDegree, int *polySrc, int *polyDest)
 {
   int currentDegree;
   polySrc++;
-  if (degree < 0)
+  if (polyDegree < 0)
   {    // Polynomial is a monomial
-    for (currentDegree = 0; currentDegree < -degree; currentDegree++)
+    for (currentDegree = 0; currentDegree < -polyDegree; currentDegree++)
     {
       *polyDest = 1;
       *(polyDest + 1) = 0;
@@ -670,7 +855,7 @@ static void ToPoly(int degree, int *polySrc, int *polyDest)
   }
   else
   {   // Polynomial
-    for (currentDegree = 0; currentDegree <= degree; currentDegree++)
+    for (currentDegree = 0; currentDegree <= polyDegree; currentDegree++)
     {
       int nbrLimbs = *(polySrc)+1;
       memcpy(polyDest, polySrc, nbrLimbs*sizeof(int));
@@ -680,11 +865,11 @@ static void ToPoly(int degree, int *polySrc, int *polyDest)
   }
 }
 
-static void FromPoly(int degree, int *polyDest, int *polySrc)
+static void FromPoly(int polyDegree, int *polyDest, int *polySrc)
 {
   int currentDegree;
-  *polyDest++ = degree;
-  for (currentDegree = 0; currentDegree <= degree; currentDegree++)
+  *polyDest++ = polyDegree;
+  for (currentDegree = 0; currentDegree <= polyDegree; currentDegree++)
   {
     int nbrLimbs = *(polySrc)+1;
     memcpy(polyDest, polySrc, nbrLimbs*sizeof(int));
@@ -944,7 +1129,7 @@ int ComputePolynomial(char *input, int expo)
       ptrValue1 = stackValues[stackIndex - 1];
       if (insideExpon != 0)
       {
-        *ptrValue1 = -val;
+        *ptrValue1 = -*ptrValue1;
       }
       else
       {
@@ -1299,8 +1484,88 @@ void DividePolynomial(/*@in@*/int *pDividend, int dividendDegree, /*@in@*/int *p
   }
 }
 
+// Compute the polynomial polyInv as:
+// polyInv = x^(2*polyDegree) / polymod
+void GetPolyInvParm(int polyDegree, /*@in@*/int *polyMod)
+{
+  int *ptrCoeff, *ptrCoeff2;
+  int deg, outerDeg;
+  int nbrLimbs = NumberLength + 1;
+  // Point to leading coefficient of polyMod.
+  // Initialize polyInv as x^polyDegree - K*x^(polyDegree-1)
+  // where K is the coefficient of x^(polyDegree-1) of polyMod.
+  SetNumberToOne(&polyInv[polyDegree*nbrLimbs]);
+  UncompressIntLimbs(polyMod + (polyDegree-1)*nbrLimbs, operand1.limbs, nbrLimbs);
+  memset(operand2.limbs, 0, nbrLimbs * sizeof(limb));
+  SubtBigNbrMod(operand2.limbs, operand1.limbs, operand1.limbs);
+  ptrCoeff = &polyInv[(polyDegree - 1)*nbrLimbs];
+  CompressIntLimbs(ptrCoeff, operand1.limbs, nbrLimbs);
+  for (deg = polyDegree - 2; deg >= 0; deg--)
+  {
+    ptrCoeff -= nbrLimbs;
+    *ptrCoeff = 1;          // Set coefficient to zero.
+    *(ptrCoeff + 1) = 0;
+  }
+  // Use Newton iteration: F_{2n}(x) = F_n(x)*(2-D(x)*F_n(x))
+  memcpy(poly4, polyMod, nbrLimbs*polyDegree * sizeof(limb));
+  SetNumberToOne(&poly4[nbrLimbs*polyDegree]);
+  for (outerDeg = 1; outerDeg < polyDegree; outerDeg *= 2)
+  {  // Use poly5 as temporary polynomial
+    MultPolynomialInternal(polyDegree, polyDegree, polyInv, poly4);
+    ptrCoeff = poly5;
+    ptrCoeff2 = &polyMultTemp[polyDegree*nbrLimbs];
+    memset(operand2.limbs, 0, nbrLimbs * sizeof(limb));
+    for (deg = 0; deg < polyDegree; deg++)
+    {
+      UncompressIntLimbs(ptrCoeff2, operand3.limbs, nbrLimbs);
+      SubtBigNbrMod(operand2.limbs, operand3.limbs, operand3.limbs);
+      CompressIntLimbs(ptrCoeff, operand3.limbs, nbrLimbs);
+      ptrCoeff += nbrLimbs;
+      ptrCoeff2 += nbrLimbs;
+    }
+    SetNumberToOne(&poly5[polyDegree*nbrLimbs]);
+    MultPolynomialInternal(polyDegree, polyDegree, polyInv, poly5);
+    memcpy(polyInv, &polyMultTemp[polyDegree*nbrLimbs], polyDegree * nbrLimbs* sizeof(limb));
+  }
+}
+
+// Multiply two polynomials mod polyMod using inverse polynomial polyInv.
+// The algorithm is:
+// m <- (T*polyInv)/x^polyDegree
+// return T - m*polyMod
+
+void multUsingInvPolynomial(/*@in@*/int *polyFact1, /*@in@*/int *polyFact2,
+                           /*@out@*/int *polyProduct,
+                           int polyDegree, /*@in@*/int *polyMod)
+{
+  int currentDegree, index;
+  int nbrLimbs = NumberLength + 1;
+  // Compute T
+  MultPolynomialInternal(polyDegree, polyDegree, polyFact1, polyFact2);
+  memcpy(polyMultT, polyMultTemp, (2*polyDegree + 1)*nbrLimbs*sizeof(limb));
+  // Compute m
+  MultPolynomialInternal(polyDegree, polyDegree, &polyMultT[polyDegree*nbrLimbs], polyInv);
+  memcpy(polyMultM, &polyMultTemp[polyDegree*nbrLimbs],
+         (polyDegree + 1)*nbrLimbs * sizeof(limb));
+  // Compute m*polyMod
+  MultPolynomialInternal(polyDegree, polyDegree, polyMultM, polyMod);
+  // Compute T - mN.
+  index = 0;
+  for (currentDegree = 0; currentDegree <= polyDegree; currentDegree++)
+  {
+    UncompressBigInteger(&polyMultTemp[index], &operand1);
+    UncompressBigInteger(&polyMultT[index], &operand2);
+    SubtBigNbrMod(operand2.limbs, operand1.limbs, operand1.limbs);
+    CompressBigInteger(polyProduct, &operand1);
+    index += nbrLimbs;
+    polyProduct += nbrLimbs;
+  }
+}
+
 // Multiply two polynomials mod polyMod.
-void multPolynomial(/*@in@*/int *polyFact1, /*@in@*/int *polyFact2, /*@out@*/int *polyProduct, int polyDegree, /*@in@*/int *polyMod)
+void multPolynomial(/*@in@*/int *polyFact1, /*@in@*/int *polyFact2,
+                    /*@out@*/int *polyProduct,
+                    int polyDegree, /*@in@*/int *polyMod)
 {
   int index1, index2;
   int nbrLimbs = NumberLength + 1;
@@ -1373,10 +1638,10 @@ void powerPolynomial(int *polyBase, int *polyMod, int polyDegree, BigInteger *ex
   int nbrLimbs = NumberLength + 1;
   int powerIsOne = TRUE;
   // Initialize polyPower to 1.
-  memset(polyPower, 0, (polyDegree + 1)*nbrLimbs*sizeof(int));
+  memset(polyPower, 0, (polyDegree + 1)*nbrLimbs * sizeof(int));
   for (index = 0; index <= polyDegree; index++)
   {
-    *(polyPower+index*nbrLimbs) = 1;
+    *(polyPower + index*nbrLimbs) = 1;
   }
   SetNumberToOne(polyPower);
   for (index = expon->nbrLimbs - 1; index >= 0; index--)
@@ -1386,11 +1651,11 @@ void powerPolynomial(int *polyBase, int *polyMod, int polyDegree, BigInteger *ex
     {
       if (!powerIsOne)
       {
-        multPolynomial(polyPower, polyPower, polyPower, polyDegree, polyMod);
+        multUsingInvPolynomial(polyPower, polyPower, polyPower, polyDegree, polyMod);
       }
       if ((groupExp & mask) != 0)
       {
-        multPolynomial(polyPower, polyBase, polyPower, polyDegree, polyMod);
+        multUsingInvPolynomial(polyPower, polyBase, polyPower, polyDegree, polyMod);
         powerIsOne = FALSE;
       }
     }
@@ -1860,11 +2125,10 @@ int HenselLifting(void)
     while (currentExp != exponentMod)
     {
 #ifdef __EMSCRIPTEN__
-      newStamp = stamp();
-      if (newStamp != oldStamp)
+      int elapsedTime = (int)(tenths() - originalTenthSecond);
+      if (elapsedTime / 10 != oldTimeElapsed / 10)
       {
         char *ptrOutput = output;
-        oldStamp = newStamp;
         if (lang)
         {
           strcpy(ptrOutput, "1<p>Aplicando lema de Hensel en el factor número ");
@@ -2054,7 +2318,7 @@ static void showPowerX(char **pptrOutput, int polyDegree)
   *pptrOutput = ptrOutput;
 }
 
-static void showPolynomial(char **pptrOutput, int *ptrPoly, int polyDegree, int groupLen)
+static void showPolynomial(char **pptrOutput, int *ptrPoly, int polyDegree, int groupLength)
 {
   int nbrLimbs = NumberLength + 1;
   int *ptrValue1 = ptrPoly + (polyDegree - 1)*nbrLimbs;
@@ -2071,7 +2335,7 @@ static void showPolynomial(char **pptrOutput, int *ptrPoly, int polyDegree, int 
       if (*ptrValue1 != 1 || *(ptrValue1 + 1) != 1)
       {            // Coefficient is not one.
         UncompressBigInteger(ptrValue1, &operand1);
-        Bin2Dec(operand1.limbs, ptrOutput, operand1.nbrLimbs, groupLen);
+        Bin2Dec(operand1.limbs, ptrOutput, operand1.nbrLimbs, groupLength);
         ptrOutput += strlen(ptrOutput);
         if (currentDegree > 0)
         {
@@ -2088,7 +2352,7 @@ static void showPolynomial(char **pptrOutput, int *ptrPoly, int polyDegree, int 
   *pptrOutput = ptrOutput;
 }
 
-void outputPolynomial(char *ptrOutput, int groupLen)
+void outputPolynomial(char *ptrOutput, int groupLength)
 {
   struct sFactorInfo *pstFactorInfo = factorInfo;
   int nbrFactor, currentDegree;
@@ -2117,17 +2381,17 @@ void outputPolynomial(char *ptrOutput, int groupLen)
   UncompressBigInteger(&poly4[degree*nbrLimbs], &operand1);
   if ((operand1.nbrLimbs != 1 || operand1.limbs[0].x != 1) || degree == 0)
   {     // Leading coefficient is not 1 or degree is zero.
-    Bin2Dec(operand1.limbs, ptrOutput, operand1.nbrLimbs, groupLen);
+    Bin2Dec(operand1.limbs, ptrOutput, operand1.nbrLimbs, groupLength);
     ptrOutput += strlen(ptrOutput);
   }
   if (degree > 0)
   {
     showPowerX(&ptrOutput, degree);
   }
-  showPolynomial(&ptrOutput, poly4, degree, groupLen);
+  showPolynomial(&ptrOutput, poly4, degree, groupLength);
   strcpy(ptrOutput, " (mod ");
   ptrOutput += strlen(ptrOutput);
-  Bin2Dec(primeMod.limbs, ptrOutput, primeMod.nbrLimbs, groupLen);
+  Bin2Dec(primeMod.limbs, ptrOutput, primeMod.nbrLimbs, groupLength);
   ptrOutput += strlen(ptrOutput);
   if (exponentMod != 1)
   {
@@ -2154,7 +2418,7 @@ void outputPolynomial(char *ptrOutput, int groupLen)
     *ptrOutput++ = 'l';
     *ptrOutput++ = 'i';
     *ptrOutput++ = '>';
-    Bin2Dec(operand1.limbs, ptrOutput, operand1.nbrLimbs, groupLen);
+    Bin2Dec(operand1.limbs, ptrOutput, operand1.nbrLimbs, groupLength);
     ptrOutput += strlen(ptrOutput);
     *ptrOutput++ = '<';
     *ptrOutput++ = '/';
@@ -2175,7 +2439,7 @@ void outputPolynomial(char *ptrOutput, int groupLen)
       *ptrOutput++ = '(';
     }
     showPowerX(&ptrOutput, polyDegree);
-    showPolynomial(&ptrOutput, pstFactorInfo->ptrPolyLifted, polyDegree, groupLen);
+    showPolynomial(&ptrOutput, pstFactorInfo->ptrPolyLifted, polyDegree, groupLength);
     if (multiplicity > 1)
     {
       *ptrOutput++ = ')';
@@ -2196,7 +2460,7 @@ void outputPolynomial(char *ptrOutput, int groupLen)
   *ptrOutput++ = '\0';
 }
 
-void textErrorPol(char *output, enum eExprErr rc)
+void textErrorPol(char *ptrOutput, enum eExprErr rc)
 {
   char text[150];
 
@@ -2234,15 +2498,15 @@ void textErrorPol(char *output, enum eExprErr rc)
   default:
     textError(text, rc);
   }
-  *output++ = '<';
-  *output++ = 'p';
-  *output++ = '>';
-  strcpy(output, text);
-  output += strlen(output);
-  *output++ = '<';
-  *output++ = '/';
-  *output++ = 'p';
-  *output++ = '>';
-  *output = 0;    // Add terminator character.
+  *ptrOutput++ = '<';
+  *ptrOutput++ = 'p';
+  *ptrOutput++ = '>';
+  strcpy(ptrOutput, text);
+  ptrOutput += strlen(ptrOutput);
+  *ptrOutput++ = '<';
+  *ptrOutput++ = '/';
+  *ptrOutput++ = 'p';
+  *ptrOutput++ = '>';
+  *ptrOutput = 0;    // Add terminator character.
 }
 

@@ -23,10 +23,9 @@ along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
 #include "bignbr.h"
 #include "highlevel.h"
 #include "polynomial.h"
-#ifdef __EMSCRIPTEN__
-extern int newStamp, oldStamp;
-#endif
+#include "showtime.h"
 
+extern int poly4[1000000];
 // Perform distinct degree factorization
 static void DistinctDegreeFactorization(int polyDegree)
 {
@@ -52,6 +51,7 @@ static void DistinctDegreeFactorization(int polyDegree)
     }
     ptrPolyToFactor = pstFactorInfo->ptr;
     polyDegree = pstFactorInfo->degree;
+    GetPolyInvParm(polyDegree, ptrPolyToFactor);
     // For each loop, raise this polynomial to the primeth power and 
     // then compute the gcd between the polynomial to be factored and
     // the computed polynomial less x. If the degree of GCD is > 0, then the
@@ -59,11 +59,10 @@ static void DistinctDegreeFactorization(int polyDegree)
     for (currentDegree = 1; currentDegree * 2 <= polyDegree; currentDegree++)
     {
 #ifdef __EMSCRIPTEN__
-      newStamp = stamp();
-      if (newStamp != oldStamp)
+      int elapsedTime = (int)(tenths() - originalTenthSecond);
+      if (elapsedTime / 10 != oldTimeElapsed / 10)
       {
         char *ptrOutput = output;
-        oldStamp = newStamp;
         if (lang)
         {
           strcpy(ptrOutput, "1<p>Factorización de distintos grados: buscando factores de grado ");
@@ -92,7 +91,10 @@ static void DistinctDegreeFactorization(int polyDegree)
         }
         ptrOutput += strlen(ptrOutput);
         int2dec(&ptrOutput, nbrFactorsFound);
-        strcpy(ptrOutput, ".</p>");
+        strcpy(ptrOutput, lang ? ".</p><p>Transcurrió " : ".</p><p>Time elapsed: ");
+        ptrOutput += strlen(ptrOutput);
+        GetDHMS(&ptrOutput, elapsedTime / 10);
+        strcpy(ptrOutput, "</p>");
         databack(output);
       }
 #endif
@@ -101,7 +103,7 @@ static void DistinctDegreeFactorization(int polyDegree)
       memcpy(poly3, ptrPolyToFactor, (ptrValue1 - &poly3[0])*sizeof(int));
       SetNumberToOne(ptrValue1);  // Set leading coefficient to 1.
       powerPolynomial(poly1, poly3, polyDegree, &primeMod, poly2);
-      memcpy(poly1, poly2, polyDegree*nbrLimbs*sizeof(int));
+      memcpy(poly1, poly2, polyDegree*nbrLimbs * sizeof(int));
       // Subtract x.
       UncompressBigInteger(&poly2[nbrLimbs], &operand1);
       memcpy(operand2.limbs, MontgomeryMultR1, NumberLength*sizeof(limb));
@@ -137,6 +139,10 @@ static void DistinctDegreeFactorization(int polyDegree)
         ptrPolyToFactor += degreeGcd*nbrLimbs;
         // Replace poly1 by poly1 mod ptrPolyToFactor
         DividePolynomial(poly1, polyDegree + degreeGcd - 1, ptrPolyToFactor, polyDegree, poly2);
+        if (polyDegree > 0)
+        {
+          GetPolyInvParm(polyDegree, ptrPolyToFactor);
+        }
       }
     }
     if (polyDegree > 0)
@@ -175,6 +181,7 @@ static void SameDegreeFactorization(void)
       BigIntDivide2(&operand4);
     }
     ptrPolyToFactor = pstFactorInfo->ptr;
+    GetPolyInvParm(polyDegree, ptrPolyToFactor);
     for (;;)
     {
       // Copy polynomial to factor to poly3 and set leading coefficient to 1.
@@ -247,6 +254,7 @@ static void SameDegreeFactorization(void)
         {
           break;
         }
+        GetPolyInvParm(polyDegree, ptrPolyToFactor);
       }
     }
     pstFactorInfo++;
@@ -325,6 +333,9 @@ static int FactorPolynomial(char *input, int expo)
     return EXPR_OK;
   }
   // Generate polynomial mod prime.
+#ifdef __EMSCRIPTEN__
+  originalTenthSecond = tenths();
+#endif
   degree = values[0];
   ptrValue1 = &values[1];
   for (currentDegree = 0; currentDegree <= degree; currentDegree++)
@@ -381,19 +392,12 @@ static int FactorPolynomial(char *input, int expo)
   return rc;
 }
 
-void polyFactText(char *modText, char *polyText, int groupLen)
+void polyFactText(char *modText, char *polyText, int groupLength)
 {
+  char *ptrOutput;
   enum eExprErr rc;
   int expon = 0;
   rc = ComputeExpression(modText, 1, &powerMod);
-  if (output == NULL)
-  {
-    output = (char *)malloc(1000000);
-  }
-  if (output == NULL)
-  {
-    return;   // Go out if cannot generate output string.
-  }
   if (rc == EXPR_OK)
   {
     if (powerMod.sign == SIGN_NEGATIVE || (powerMod.nbrLimbs == 1 && powerMod.limbs[0].x < 2))
@@ -414,16 +418,20 @@ void polyFactText(char *modText, char *polyText, int groupLen)
     rc = FactorPolynomial(polyText, expon);
   }
   output[0] = '2';
+  ptrOutput = &output[1];
   if (rc != EXPR_OK)
   {
-    textErrorPol(output + 1, rc);
+    textErrorPol(ptrOutput, rc);
+    ptrOutput += strlen(ptrOutput);
   }
   else
   {
-    outputPolynomial(output + 1, groupLen);
+    outputPolynomial(ptrOutput, groupLength);
+    ptrOutput += strlen(ptrOutput);
+    showElapsedTime(&ptrOutput);
   }
-  strcat(output + 1, lang ? "<p>" COPYRIGHT_SPANISH "</p>" :
-                            "<p>" COPYRIGHT_ENGLISH "</p>");
+  strcpy(ptrOutput, lang ? "<p>" COPYRIGHT_SPANISH "</p>" :
+                           "<p>" COPYRIGHT_ENGLISH "</p>");
 }
 
 #ifdef __EMSCRIPTEN__
@@ -432,10 +440,6 @@ void doWork(char* data, int size)
   int flags;
   int groupLen = 0;
   char *ptrData = data;
-  if (output == NULL)
-  {
-    output = malloc(3000000);
-  }
   while (*ptrData != ',')
   {
     groupLen = groupLen * 10 + (*ptrData++ - '0');
@@ -447,6 +451,7 @@ void doWork(char* data, int size)
   superscripts = (unsigned char)(flags & 4);
   ptrData += 2;          // Skip flags and comma.
   polyFactText(ptrData, ptrData + strlen(ptrData) + 1, groupLen);
+  ptrData += strlen(ptrData);
   databack(output);
 }
 #endif

@@ -24,7 +24,6 @@ along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
 #include "factor.h"
 
 #ifdef __EMSCRIPTEN__
-extern int newStamp, oldStamp;
 extern long long lModularMult;
 #endif
 
@@ -63,8 +62,6 @@ int factorsMod[10000];
 struct sFactors astFactorsGO[1000];
 int factorsGO[10000];
 int NumberLength;
-extern char *output;
-static int groupLen;
 static void AdjustExponent(limb *nbr, limb mult, limb add, BigInteger *subGroupOrder);
 static void ExchangeMods(void);
 
@@ -79,7 +76,7 @@ static void showText(char *text)
   strcpy(output, text);
 }
 
-void textErrorDilog(char *output, enum eExprErr rc)
+void textErrorDilog(char *ptrOutput, enum eExprErr rc)
 {
   char text[150];
 
@@ -105,16 +102,16 @@ void textErrorDilog(char *output, enum eExprErr rc)
   default:
     textError(text, rc);
   }
-  *output++ = '<';
-  *output++ = 'p';
-  *output++ = '>';
-  strcpy(output, text);
-  output += strlen(output);
-  *output++ = '<';
-  *output++ = '/';
-  *output++ = 'p';
-  *output++ = '>';
-  *output = 0;    // Add terminator character.
+  *ptrOutput++ = '<';
+  *ptrOutput++ = 'p';
+  *ptrOutput++ = '>';
+  strcpy(ptrOutput, text);
+  ptrOutput += strlen(ptrOutput);
+  *ptrOutput++ = '<';
+  *ptrOutput++ = '/';
+  *ptrOutput++ = 'p';
+  *ptrOutput++ = '>';
+  *ptrOutput = 0;    // Add terminator character.
 }
 
 static void indicateCannotComputeLog(int indexBase, int indexExp)
@@ -179,6 +176,7 @@ void DiscreteLogarithm(void)
   if (!TestBigNbrEqual(&LastModulus, &modulus))
   {
     CompressBigInteger(nbrToFactor, &modulus);
+    Bin2Dec(modulus.limbs, tofactorDec, modulus.nbrLimbs, groupLen);
     factor(&modulus, nbrToFactor, factorsMod, astFactorsMod, NULL);
     NbrFactorsMod = astFactorsMod[0].multiplicity;
   }
@@ -701,19 +699,11 @@ static void AdjustExponent(limb *nbr, limb mult, limb add, BigInteger *subGroupO
   AdjustModN(nbr, subGroupOrder->limbs, nbrLimbs);
 }
 
-void dilogText(char *baseText, char *powerText, char *modText, int groupLen)
+void dilogText(char *baseText, char *powerText, char *modText, int groupLength)
 {
   char *ptrOutput;
   enum eExprErr rc;
   rc = ComputeExpression(baseText, 1, &base);
-  if (output == NULL)
-  {
-    output = (char *)malloc(1000000);
-  }
-  if (output == NULL)
-  {
-    return;   // Go out if cannot generate output string.
-  }
   if (rc == EXPR_OK)
   {
     if (base.sign == SIGN_NEGATIVE || (base.nbrLimbs == 1 && base.limbs[0].x == 0))
@@ -722,14 +712,6 @@ void dilogText(char *baseText, char *powerText, char *modText, int groupLen)
     }
   }
   rc = ComputeExpression(powerText, 1, &power);
-  if (output == NULL)
-  {
-    output = (char *)malloc(1000000);
-  }
-  if (output == NULL)
-  {
-    return;   // Go out if cannot generate output string.
-  }
   if (rc == EXPR_OK)
   {
     if (power.sign == SIGN_NEGATIVE || (power.nbrLimbs == 1 && base.limbs[0].x == 0))
@@ -738,14 +720,6 @@ void dilogText(char *baseText, char *powerText, char *modText, int groupLen)
     }
   }
   rc = ComputeExpression(modText, 1, &modulus);
-  if (output == NULL)
-  {
-    output = (char *)malloc(1000000);
-  }
-  if (output == NULL)
-  {
-    return;   // Go out if cannot generate output string.
-  }
   if (rc == EXPR_OK)
   {
     if (modulus.sign == SIGN_NEGATIVE || (modulus.nbrLimbs == 1 && modulus.limbs[0].x < 2))
@@ -785,15 +759,15 @@ void dilogText(char *baseText, char *powerText, char *modText, int groupLen)
     strcpy(ptrOutput, lang?"<p>Hallar <em>exp</em> tal que ": 
                            "<p>Find <em>exp</em> such that ");
     ptrOutput += strlen(ptrOutput);
-    Bin2Dec(base.limbs, ptrOutput, base.nbrLimbs, groupLen);
+    Bin2Dec(base.limbs, ptrOutput, base.nbrLimbs, groupLength);
     ptrOutput += strlen(ptrOutput);
     strcat(ptrOutput, "<sup><em>exp</em></sup> &equiv; ");
     ptrOutput += strlen(ptrOutput);
-    Bin2Dec(power.limbs, ptrOutput, power.nbrLimbs, groupLen);
+    Bin2Dec(power.limbs, ptrOutput, power.nbrLimbs, groupLength);
     ptrOutput += strlen(ptrOutput);
     strcat(ptrOutput, " (mod ");
     ptrOutput += strlen(ptrOutput);
-    Bin2Dec(modulus.limbs, ptrOutput, modulus.nbrLimbs, groupLen);
+    Bin2Dec(modulus.limbs, ptrOutput, modulus.nbrLimbs, groupLength);
     ptrOutput += strlen(ptrOutput);
     strcat(ptrOutput, ")</p><p>");
     ptrOutput += strlen(ptrOutput);
@@ -806,11 +780,11 @@ void dilogText(char *baseText, char *powerText, char *modText, int groupLen)
     {
       strcat(ptrOutput, "<em>exp</em> = ");
       ptrOutput += strlen(ptrOutput);
-      Bin2Dec(DiscreteLog.limbs, ptrOutput, DiscreteLog.nbrLimbs, groupLen);
+      Bin2Dec(DiscreteLog.limbs, ptrOutput, DiscreteLog.nbrLimbs, groupLength);
       ptrOutput += strlen(ptrOutput);
       strcat(ptrOutput, " + ");
       ptrOutput += strlen(ptrOutput);
-      Bin2Dec(DiscreteLogPeriod.limbs, ptrOutput, DiscreteLogPeriod.nbrLimbs, groupLen);
+      Bin2Dec(DiscreteLogPeriod.limbs, ptrOutput, DiscreteLogPeriod.nbrLimbs, groupLength);
       ptrOutput += strlen(ptrOutput);
       strcat(ptrOutput, "<em>k</em></p>");
     }
@@ -826,10 +800,6 @@ void doWork(char* data, int size)
   int groupLen = 0;
   char *ptrData = data;
   char *ptrPower, *ptrMod;
-  if (output == NULL)
-  {
-    output = malloc(3000000);
-  }
   groupLen = 0;
   while (*ptrData != ',')
   {

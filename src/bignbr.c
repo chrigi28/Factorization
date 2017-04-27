@@ -30,6 +30,7 @@ extern limb Mult4[MAX_LEN];
 extern int q[MAX_LEN];
 extern limb TestNbr[MAX_LEN];
 extern limb MontgomeryMultR1[MAX_LEN];
+int groupLen = 6;
 
 void CopyBigInt(BigInteger *pDest, BigInteger *pSrc)
 {
@@ -282,9 +283,9 @@ void expBigNbr(BigInteger *bignbr, double logar)
     mostSignificantLimb = 1;
     bignbr->nbrLimbs++;
   }
-  memset(bignbr->limbs, 0, bignbr->nbrLimbs * sizeof(limb));
-  bignbr->limbs[bignbr->nbrLimbs].x = mostSignificantLimb;
   bignbr->nbrLimbs++;
+  memset(bignbr->limbs, 0, bignbr->nbrLimbs * sizeof(limb));
+  bignbr->limbs[bignbr->nbrLimbs-1].x = mostSignificantLimb;
 }
 
 double logBigNbr(BigInteger *pBigNbr)
@@ -436,13 +437,12 @@ void BigIntDivide2(BigInteger *pArg)
 
 static void BigIntMutiplyPower2(BigInteger *pArg, int power2)
 {
-  unsigned int carry;
   int ctr;
   int nbrLimbs = pArg->nbrLimbs;
   limb *ptrLimbs = pArg->limbs;
   for (; power2 > 0; power2--)
   {
-    carry = 0;
+    unsigned int carry = 0;
     for (ctr = 0; ctr < nbrLimbs; ctr++)
     {
       carry += (unsigned int)(ptrLimbs + ctr)->x << 1;
@@ -542,28 +542,26 @@ void BigIntGcd(BigInteger *pArg1, BigInteger *pArg2, BigInteger *pResult)
 
 static void addToAbsValue(limb *pLimbs, int *pNbrLimbs, int addend)
 {
+  int ctr;
   int nbrLimbs = *pNbrLimbs;
-
   pLimbs->x += addend;
-  if ((unsigned int)pLimbs->x >= LIMB_RANGE)
-  {
-    int ctr;
+  if ((unsigned int)pLimbs->x < LIMB_RANGE)
+  {     // No overflow. Go out of routine.
+    return;
+  }
+    pLimbs->x -= LIMB_RANGE;
     for (ctr = 1; ctr < nbrLimbs; ctr++)
     {
-      (pLimbs + ctr - 1)->x -= LIMB_RANGE;
-      if (++((pLimbs + ctr)->x) >= 0)
-      {
-        break;
-      }
+    pLimbs++;        // Point to next most significant limb.
+    if (pLimbs->x != MAX_INT_NBR)
+    {   // No overflow. Go out of routine.
+      (pLimbs->x)++;   // Add carry.
+      return;
     }
-    if (ctr == nbrLimbs)
-    {
-      nbrLimbs++;
-      (pLimbs + ctr - 1)->x -= LIMB_RANGE;
-      ++((pLimbs + ctr)->x);
-    }
+    pLimbs->x = 0;
   }
-  *pNbrLimbs = nbrLimbs;
+  (*pNbrLimbs)++;        // Result has an extra limb.
+  (pLimbs + 1)->x = 1;   // Most significant limb must be 1.
 }
 
 static void subtFromAbsValue(limb *pLimbs, int *pNbrLimbs, int subt)
@@ -593,12 +591,12 @@ void subtractdivide(BigInteger *pBigInt, int subt, int divisor)
 {
   int nbrLimbs = pBigInt->nbrLimbs;
   // Point to most significant limb.
-  limb *pLimbs = pBigInt->limbs + nbrLimbs - 1;
+  limb *pLimbs;
   int ctr;
   int remainder = 0;
   double dDivisor = (double)divisor;
   double dLimb = (double)LIMB_RANGE;
-  if (subt != 0)
+  if (subt >= 0)
   {
     if (pBigInt->sign == SIGN_POSITIVE)
     {               // Subtract subt to absolute value.
@@ -609,22 +607,34 @@ void subtractdivide(BigInteger *pBigInt, int subt, int divisor)
       addToAbsValue(pBigInt->limbs, &nbrLimbs, subt);
     }
   }
+  else
+  {
+    if (pBigInt->sign == SIGN_POSITIVE)
+    {               // Subtract subt to absolute value.
+      addToAbsValue(pBigInt->limbs, &nbrLimbs, -subt);
+    }
+    else
+    {               // Add subt to absolute value.
+      subtFromAbsValue(pBigInt->limbs, &nbrLimbs, -subt);
+    }
+  }
+  pLimbs = pBigInt->limbs + nbrLimbs - 1;
   // Divide number by divisor.
   for (ctr = nbrLimbs - 1; ctr >= 0; ctr--)
   {
     double dDividend, dQuotient;
-    int quotient, dividend;
+    unsigned int quotient, dividend;
     dividend = (remainder << BITS_PER_INT_GROUP) + pLimbs->x;
     dDividend = (double)remainder * dLimb + pLimbs->x;
     dQuotient = floor(dDividend / dDivisor + 0.5);
-    quotient = (int)dQuotient;   // quotient has correct value or 1 more.
+    quotient = (unsigned int)dQuotient;   // quotient has correct value or 1 more.
     remainder = dividend - quotient * divisor;
     if ((unsigned int)remainder >= (unsigned int)divisor)
     {     // remainder not in range 0 <= remainder < divisor. Adjust.
       quotient--;
       remainder += divisor;
     }
-    (pLimbs--)->x = quotient;
+    (pLimbs--)->x = (int)quotient;
   }
   if (nbrLimbs > 1 && pBigInt->limbs[nbrLimbs - 1].x == 0)
   {   // Most significant limb is now zero, so discard it.
@@ -648,7 +658,7 @@ int getRemainder(BigInteger *pBigInt, int divisor)
     dividend = (remainder << BITS_PER_INT_GROUP) + pLimb->x;
     dDividend = (double)remainder * dLimb + pLimb->x;
     dQuotient = floor(dDividend / dDivisor + 0.5);
-    quotient = (int)dQuotient;   // quotient has correct value or 1 more.
+    quotient = (int)(unsigned int)dQuotient;   // quotient has correct value or 1 more.
     remainder = dividend - quotient * divisor;
     if ((unsigned int)remainder >= (unsigned int)divisor)
     {     // remainder not in range 0 <= remainder < divisor. Adjust.
@@ -666,7 +676,6 @@ int getRemainder(BigInteger *pBigInt, int divisor)
 
 void addbigint(BigInteger *pResult, int addend)
 {
-  limb carry;
   int sign;
   int nbrLimbs = pResult->nbrLimbs;
   limb *pResultLimbs = pResult->limbs;
@@ -685,11 +694,7 @@ void addbigint(BigInteger *pResult, int addend)
   }
   if (sign == SIGN_POSITIVE)
   {   // Add addend to absolute value of pResult.
-    carry.x = pResultLimbs->x + addend;
-    if (carry.x != 0)
-    {
-      addToAbsValue(pResultLimbs, &nbrLimbs, addend);
-    }
+    addToAbsValue(pResultLimbs, &nbrLimbs, addend);
   }
   else
   {  // Subtract addend from absolute value of pResult.
@@ -792,18 +797,18 @@ int bitLength(BigInteger *pBigNbr)
 
 int intModPow(int NbrMod, int Expon, int currentPrime)
 {
-  unsigned int Power = 1;
-  unsigned int Square = (unsigned int)NbrMod;
+  unsigned int power = 1;
+  unsigned int square = (unsigned int)NbrMod;
   while (Expon != 0)
   {
     if ((Expon & 1) == 1)
     {
-      Power = (Power * Square) % (unsigned int)currentPrime;
+      power = (power * square) % (unsigned int)currentPrime;
     }
-    Square = (Square * Square) % (unsigned int)currentPrime;
+    square = (square * square) % (unsigned int)currentPrime;
     Expon >>= 1;
   }
-  return (int)Power;
+  return (int)power;
 }
 
 static void InitTempFromInt(int value)
@@ -901,6 +906,27 @@ void CompressLimbsBigInteger(/*@out@*/limb *ptrValues, /*@in@*/BigInteger *bigin
       memset(ptrValues + nbrLimbs, 0, (NumberLength - nbrLimbs) * sizeof(limb));
     }
   }
+}
+
+void UncompressIntLimbs(/*@in@*/int *ptrValues, /*@out@*/limb *bigint, int nbrLen)
+{
+  int nbrLimbs = *ptrValues;
+  memcpy(bigint, ptrValues+1, nbrLimbs*sizeof(limb));
+  memset(bigint + nbrLimbs + 1, 0, (nbrLen - nbrLimbs) * sizeof(limb));
+}
+
+void CompressIntLimbs(/*@out@*/int *ptrValues, /*@in@*/limb *bigint, int nbrLen)
+{
+  int nbrLimbs;
+  memcpy(ptrValues+1, bigint, (nbrLen-1) * sizeof(limb));
+  for (nbrLimbs = nbrLen-1; nbrLimbs > 1; nbrLimbs--)
+  {
+    if (*(ptrValues + nbrLimbs) != 0)
+    {
+      break;
+    }
+  }
+  *ptrValues = nbrLimbs;
 }
 
 // This routine checks whether the number pointed by pNbr is
@@ -1026,8 +1052,8 @@ int PowerCheck(BigInteger *pBigNbr, BigInteger *pBase)
     // All approximations must be >= than true answer.
     if (nbrLimbs == 1)
     {
-      ptrLimb->x = (int)ceil(dN);
-      if (ptrLimb->x == LIMB_RANGE)
+      ptrLimb->x = (int)(unsigned int)ceil(dN);
+      if ((unsigned int)ptrLimb->x == LIMB_RANGE)
       {
         nbrLimbs = 2;
         ptrLimb->x = 0;
@@ -1036,9 +1062,10 @@ int PowerCheck(BigInteger *pBigNbr, BigInteger *pBase)
     }
     else
     {
-      j = (int)ceil(dN*LIMB_RANGE);
-      ptrLimb->x = j/LIMB_RANGE;
-      (ptrLimb - 1)->x = j%LIMB_RANGE;
+      dN += 1 / (double)LIMB_RANGE;
+      ptrLimb->x = (int)trunc(dN);
+      dN -= trunc(dN);
+      (ptrLimb - 1)->x = (int)trunc(dN*LIMB_RANGE);
     }
     pBase->nbrLimbs = nbrLimbs;
     // Perform Newton iteration for n-th root.
@@ -1108,7 +1135,6 @@ int checkMinusOne(limb *value, int nbrLimbs)
 //         pShRight = pointer to power of 2.
 void DivideBigNbrByMaxPowerOf2(int *pShRight, limb *number, int *pNbrLimbs)
 {
-  limb carry;
   int power2 = 0;
   int index, index2, mask, shRg;
   int nbrLimbs = *pNbrLimbs;
@@ -1131,7 +1157,6 @@ void DivideBigNbrByMaxPowerOf2(int *pShRight, limb *number, int *pNbrLimbs)
   }
   // Divide number by this power.
   shRg = power2 % BITS_PER_GROUP; // Shift right bit counter
-  carry.x = 0;
   if ((number[nbrLimbs - 1].x & (-(1 << shRg))) != 0)
   {   // Most significant bits set.
     *pNbrLimbs = nbrLimbs - index;
@@ -1158,7 +1183,7 @@ void DivideBigNbrByMaxPowerOf2(int *pShRight, limb *number, int *pNbrLimbs)
 // Check if number is pseudoprime base 3
 int isPseudoprime(BigInteger *pResult)
 {
-  int Base, delta, baseNbr, ctr, i, nbrLimbsQ, Mult3Len;
+  int base, delta, baseNbr, ctr, i, nbrLimbsQ, Mult3Len;
   limb largeVal;
   int nbrLimbs = pResult->nbrLimbs;
   limb *pResultLimbs = pResult->limbs;
@@ -1169,7 +1194,7 @@ int isPseudoprime(BigInteger *pResult)
     {
       int Q;
       for (Q = 3; Q*Q <= largeVal.x; Q += 2)
-      {     // Check if Base is prime
+      {     // Check if base is prime
         if (largeVal.x % Q == 0)
         {
           break;     // Composite
@@ -1182,21 +1207,21 @@ int isPseudoprime(BigInteger *pResult)
     }
     return TRUE;
   }
-  Base = 3;
+  base = 3;
   delta = 2;
   for (baseNbr = 100; baseNbr > 0; baseNbr--)
-  {    // Compute value mod Base. If it is zero, the number is composite.
-    if (getRemainder(pResult, Base) == 0)
+  {    // Compute value mod base. If it is zero, the number is composite.
+    if (getRemainder(pResult, base) == 0)
     {                      // Number is composite.
       return FALSE;
     }
-    Base += delta;         // Skip multiples of 3.
-    if (Base > 5)
+    base += delta;         // Skip multiples of 3.
+    if (base > 5)
     {
       delta = 6 - delta;   // Exchange delta between 2 and 4.
     }
   }
-  Base = 3;
+  base = 3;
   (pResultLimbs + nbrLimbs)->x = 0;
   memcpy(q, pResultLimbs, (nbrLimbs + 1)*sizeof(limb));
   nbrLimbsQ = nbrLimbs;
@@ -1209,11 +1234,11 @@ int isPseudoprime(BigInteger *pResult)
   GetMontgomeryParms(nbrLimbs);
   for (baseNbr = 20; baseNbr > 0; baseNbr--)
   {    // Try up to 20 bases.
-    modPowBaseInt(Base, Mult3, Mult3Len, Mult1); // Mult1 = base^Mult3.
+    modPowBaseInt(base, Mult3, Mult3Len, Mult1); // Mult1 = base^Mult3.
                                                  // If Mult1 = 1 or Mult1 = TestNbr-1, then try next base.
     if (checkOne(Mult1, nbrLimbs) != 0 || checkMinusOne(Mult1, nbrLimbs) != 0)
     {
-      Base += 2;
+      base += 2;
       continue;
     }
     for (i = 0; i < ctr; i++)
@@ -1236,7 +1261,7 @@ int isPseudoprime(BigInteger *pResult)
     }
     // If power (Mult4) is 1, that means that number is at least PRP,
     // so continue loop trying to find square root of -1.
-    Base += 2;
+    base += 2;
   }
   return TRUE;
 }

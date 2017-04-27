@@ -103,7 +103,7 @@ void squareRoot(/*@in@*/limb *argument, /*@out@*/limb *sqRoot, int len, /*@out@*
   int shRight;
   limb *ptrDest, *ptrSrc;
   double invSqrt;
-  int prevLimb, currLimb;
+  int currLimb;
 
   // Obtain logarithm of 2 of argument.
   for (index=len - 1; index>2; index--)
@@ -122,8 +122,8 @@ void squareRoot(/*@in@*/limb *argument, /*@out@*/limb *sqRoot, int len, /*@out@*
     }
     else
     {
-      double dArg = argument->x + (double)(argument + 1)->x*LIMB_RANGE;
-      int square[2];
+      int square[3];   // MultBigNbr routine uses an extra limb for result.
+      double dArg = argument->x + (double)(argument + 1)->x*(double)LIMB_RANGE;
       dArg = floor(sqrt(dArg + 0.5));
       if (dArg == (double)LIMB_RANGE)
       {
@@ -151,8 +151,15 @@ void squareRoot(/*@in@*/limb *argument, /*@out@*/limb *sqRoot, int len, /*@out@*
   // Initialize approximate inverse square root.
   invSqrt = LIMB_RANGE / sqrt(getMantissa(adjustedArgument+len, len)*LIMB_RANGE+1);
   approxInvSqrt[lenInvSqrt - 1].x = 1;
-  approxInvSqrt[lenInvSqrt - 2].x = (int)((invSqrt-1)*LIMB_RANGE);
-
+  invSqrt = (invSqrt - 1)*LIMB_RANGE;
+  if (invSqrt > MAX_INT_NBR)
+  {
+    approxInvSqrt[lenInvSqrt - 2].x = MAX_INT_NBR;
+  }
+  else
+  {
+    approxInvSqrt[lenInvSqrt - 2].x = (int)invSqrt;
+  }
                // Perform Newton approximation loop.
                // Get bit length of each cycle.
   bitLengthNbrCycles = 0;
@@ -165,7 +172,7 @@ void squareRoot(/*@in@*/limb *argument, /*@out@*/limb *sqRoot, int len, /*@out@*
                // Each loop increments precision.
   while (--bitLengthNbrCycles >= 0)
   {
-    int limbLength;
+    int limbLength, prevLimb;
     bitLength = bitLengthCycle[bitLengthNbrCycles];
     limbLength = (bitLength + 3*(BITS_PER_GROUP)-1) / BITS_PER_GROUP;
     if (limbLength > lenInvSqrt)
@@ -218,7 +225,7 @@ void squareRoot(/*@in@*/limb *argument, /*@out@*/limb *sqRoot, int len, /*@out@*
       }
       approxInv[idx].x = 0;
     }
-    if (idx == 2*lenInvSqrt-2)
+    if (idx == 2*lenInvSqrt-1)
     {                // Roll back on overflow.
       for (idx = 2 * lenInvSqrt - lenInvSqrt2-1; idx < 2 * lenInvSqrt-1; idx++)
       {

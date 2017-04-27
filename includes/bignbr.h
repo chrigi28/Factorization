@@ -16,7 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
     */
-
+#ifndef _BIGNBR_H
+#define _BIGNBR_H
 #define MAX_LEN 2500        // 20000 digits
 #define BITS_PER_GROUP 31
 #define BITS_PER_INT_GROUP 31
@@ -53,6 +54,7 @@ extern limb TestNbr[MAX_LEN];
 extern limb MontgomeryMultR2[MAX_LEN];
 extern limb MontgomeryMultR1[MAX_LEN];
 extern int NumberLength, NumberLengthR1;
+extern int groupLen;
 
 #include "expression.h"
 void multiply(limb *factor1, limb *factor2, limb *result, int len, int *pResultLen);
@@ -113,6 +115,9 @@ void expBigNbr(BigInteger *pBigNbr, double logar);
 double logBigNbr(BigInteger *pBigNbr);
 double logLimbs(limb *pBigNbr, int nbrLimbs);
 double getMantissa(limb *ptrLimb, int nbrLimbs);
+void UncompressIntLimbs(/*@in@*/int *ptrValues, /*@out@*/limb *bigint, int nbrLen);
+void CompressIntLimbs(/*@out@*/int *ptrValues, /*@in@*/limb *bigint, int nbrLen);
+
 
 void ChSignBigNbr(int *nbr, int length);
 void AddBigNbr(int *pNbr1, int *pNbr2, int *pSum, int nbrLen);
@@ -126,6 +131,7 @@ void MultBigNbr(int *pFactor1, int *pFactor2, int *pProd, int nbrLen);
 void IntToBigNbr(int value, int *bigNbr, int nbrLength);
 int BigNbrToBigInt(BigInteger *pBigNbr, int *pBigInt);
 void BigIntToBigNbr(BigInteger *pBigNbr, int *pBigInt, int nbrLenBigInt);
+int BigNbrIsZero(limb *pNbr);
 void GcdBigNbr(int *pNbr1, int *pNbr2, int *pGcd, int nbrLen);
 void AdjustBigIntModN(int *Nbr, int *Mod, int nbrLen);
 void MultBigNbrModN(int Nbr1[], int Nbr2[], int Prod[], int Mod[], int nbrLen);
@@ -135,3 +141,4 @@ void ModInvBigInt(int *num, int *inv, int *mod, int NumberLength);
 void IntToBigNbr(int value, int *bigNbr, int nbrLength);
 
 typedef void(*mmCback)(void);
+#endif
