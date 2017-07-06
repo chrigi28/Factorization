@@ -98,7 +98,8 @@ int main(int argc, char** argv) {
 					waitList.idx++;
 					if(factoringRunning == 1){
 						MPI_Send(&factoringRunning,1,MPI_INT,0,REGISTER_FOR_EC,MPI_COMM_WORLD);
-    			        sendBigInteger(&N,rank);
+    			        printf("main0: Send FactorData to rank:%d\n",rank);
+						sendBigInteger(&N,rank);
     			        sendPstFactors(&pstFactors,rank);
     			        MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank ,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
 					}
@@ -106,12 +107,11 @@ int main(int argc, char** argv) {
     			}
 				break;
     			case SEND_RDY_FACTOR:{
-//    				printf("main0: SEND_RDY_FACTOR\n");
+    				printf("main0: SEND_RDY_FACTOR received from rank %d\n",rank);
     				//MPI_Recv(&receiveBuffer[rank],1,MPI_INT,rank,SEND_RDY_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 //    				printf("main0: rdy fac rec  send job\n");
     				//argv[1]
-//    				printf("main0: length is : %d\n",strlen(argv[1]));
-    				MPI_Send(argv[1],strlen(argv[1]),MPI_CHAR,rank,JOBTOFACTOR,MPI_COMM_WORLD);
+//    				MPI_Send(&argv[1],(int)strlen(argv[1]),MPI_CHAR,rank,JOBTOFACTOR,MPI_COMM_WORLD);
 //    				printf("main0: job sended \n");
     				MPI_Irecv(&null, 1, MPI_INT, rank ,START_FACTORING, MPI_COMM_WORLD, &request[rank]);
     			}
@@ -126,15 +126,15 @@ int main(int argc, char** argv) {
 
     			    printf("main0: bigint and pstfactor received\n");
     			    factoringRunning = 1;
-    			    int i;
-    			    for(i = 0;i<waitList.idx;i++){
+
+    			    for(int i = 0;i<waitList.idx;i++){
 //    			    	printf("main0: \nforloop idx: %d\n",i);
     			    	MPI_Send(&i,1,MPI_INT,waitList.list[i],REGISTER_FOR_EC,MPI_COMM_WORLD);
     			        //currentEC++;
     			        sendBigInteger(&N,waitList.list[i]);
 //    			        printf("main0: bigint sent\n");
     			        sendPstFactors(&pstFactors,waitList.list[i]);
-
+    			        printf("main0: send FactorData to rank:%d\n",waitList.list[i]);
     			        MPI_Irecv(&receiveBuffer[waitList.list[i]], 1, MPI_INT, waitList.list[i],MPI_ANY_TAG, MPI_COMM_WORLD, &request[waitList.list[i]]);
     			    }
     			    printf("RANK TO RECEIVE FROM %d \n",rank);
@@ -169,13 +169,13 @@ int main(int argc, char** argv) {
     		printf("rank1: send rdy factor\n");
     		MPI_Send(&null,1,MPI_INT,0,SEND_RDY_FACTOR,MPI_COMM_WORLD);
 //    		printf("rank1: wait for jobtofactor\n");
-    		MPI_Probe(0,JOBTOFACTOR,MPI_COMM_WORLD,&status);
+//    		MPI_Probe(0,JOBTOFACTOR,MPI_COMM_WORLD,&status);
 //    		printf("3\n");
-    	    MPI_Get_count(&status, MPI_CHAR, &incoming_msg_size);
+//    	    MPI_Get_count(&status, MPI_CHAR, &incoming_msg_size);
 //    	    printf("4 count: %d\n",incoming_msg_size);
-    	    char receive[incoming_msg_size];
-    	    MPI_Recv(&receive,incoming_msg_size,MPI_CHAR,0,JOBTOFACTOR,MPI_COMM_WORLD,&status); //term to factor as char array (as commandline)
-//    		printf("startFrontTExt\n");
+//    	    char receive[incoming_msg_size+1];
+//    	    MPI_Recv(&receive,incoming_msg_size,MPI_CHAR,0,JOBTOFACTOR,MPI_COMM_WORLD,&status); //term to factor as char array (as commandline)
+    		printf("startFrontTExt\n");
     	    ecmFrontText(argv[1], 1, NULL);
     	}
     	else{
@@ -196,6 +196,9 @@ int main(int argc, char** argv) {
     			//irecv for cancel or update
     			printf("Rank%d: data received start ecmParallel\n",world_rank);
     			ecmParallel(&N, &pstFactors,world_rank);
+    			printf("rank%d: returned from ecmParallel\n",world_rank);
+    		}else{
+    			printf("rank%d: Closes EC received :%d\n",world_rank,EC);
     		}
 
 

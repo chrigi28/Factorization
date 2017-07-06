@@ -1,0 +1,3 @@
+18:06:30 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm

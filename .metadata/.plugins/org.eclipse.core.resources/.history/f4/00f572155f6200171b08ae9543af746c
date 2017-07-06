@@ -1,0 +1,92 @@
+#include "helper.h"
+
+void sendBigInteger(BigInteger *number,int dest){
+	MPI_Send( &(number->nbrLimbs), 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
+	MPI_Send( &(number->limbs), number->nbrLimbs, MPI_INT, dest, 0, MPI_COMM_WORLD);
+	MPI_Send( &(number->sign), 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
+}
+void receiveBigInteger(BigInteger *number, int source){
+	MPI_Recv( &(number->nbrLimbs), 1, MPI_INT, source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	MPI_Recv( &(number->limbs), number->nbrLimbs, MPI_INT,source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	MPI_Recv( &(number->sign), 1,MPI_INT, source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+}
+/*
+ sFactors pstFactors[1000]
+ struct sFactors{
+  int *ptrFactor;
+  int multiplicity;
+  int upperBound;
+};
+
+ */
+void printPstFactors(struct sFactors *pstFactors){
+	for(int i = 0; i<pstFactors[0].multiplicity;i++){
+		printf("multiplicity from pstFactors[%d] is: %d\n",i,pstFactors[i].multiplicity);
+		printf("upperbound from pstFactors[%d] is: %d\n",i,pstFactors[i].multiplicity);
+		printf("SIZE of ptrFactor is %i \n",pstFactors[i].ptrFactor[0]);
+		for(int j = 0;j<pstFactors[i].ptrFactor[0];j++){
+			printf("data from pstFactors[%d].ptrFactor[%d] = %d\n",i,j,pstFactors[i].ptrFactor[j]);
+		}
+	}
+
+}
+void sendPstFactors(struct sFactors *pstFactors,int dest){
+	int NumberOfElements = pstFactors->multiplicity;
+
+
+	MPI_Send( &NumberOfElements,1,MPI_INT,dest,NO_OF_PSTFACTORS,MPI_COMM_WORLD);
+//	MPI_Send( &(pstFactors->upperBound),1,MPI_INT,dest,SEND_UPPERBOUND,MPI_COMM_WORLD);
+//	int i = 0;
+//	struct sFactors *pstFactor = pstFactors+1;
+//	for(int i = 0; i<20;i++){
+//		printf("%d\n",pstFactor->ptrFactor[i]);
+//	}
+//	printf("\n size of pstfactors is %d\n",pstFactors->multiplicity);
+	for(int i = 0;i<pstFactors[0]->multiplicity;i++){
+		int numberLength = pstFactors[i].ptrFactor[0];
+//		printf("sending %d data\n",numberLength);
+//		for(int i = 0;i<numberLength;i++)
+//			printf("send data: %d",*((pstFactor->ptrFactor)+i));
+		MPI_Send( &(pstFactors[i].multiplicity), 1, MPI_INT, dest, SEND_MULTIPLICITY, MPI_COMM_WORLD);
+		MPI_Send( &(pstFactors[i].upperBound), 1, MPI_INT, dest, SEND_UPPERBOUND, MPI_COMM_WORLD);
+		MPI_Send( &(pstFactors[i].ptrFactor[0]), numberLength , MPI_INT, dest, SEND_PTRFACTOR, MPI_COMM_WORLD);
+
+//		printf("\ni is %d max is %d\n",i+1,pstFactors->multiplicity);
+
+	}
+}
+
+void receivePstFactors(struct sFactors *pstFactors,int source){
+	int numberOfElements;
+	MPI_Recv( &numberOfElements,1,MPI_INT,source,NO_OF_PSTFACTORS,MPI_COMM_WORLD,MPI_STATUSES_IGNORE);
+//	int i = numberOfElements;
+//	pstFactors->multiplicity = numberOfElements;
+//	int* ptrData;
+//	pstFactors->ptrFactor =ptrData;
+//	MPI_Recv( &(pstFactors->upperBound),1,MPI_INT,source,SEND_UPPERBOUND,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+//	struct sFactors *pstFactor = pstFactors+1;
+	int count = 0;
+	for(int i = 0;i<numberOfElements;i++){
+		MPI_Recv( &(pstFactors[i].multiplicity), 1, MPI_INT, source, SEND_MULTIPLICITY, MPI_COMM_WORLD,MPI_STATUSES_IGNORE);
+		MPI_Recv( &(pstFactors[i].upperBound), 1, MPI_INT, source, SEND_UPPERBOUND, MPI_COMM_WORLD,MPI_STATUSES_IGNORE);
+		MPI_Status status;
+		MPI_Probe(source,SEND_PTRFACTOR,MPI_COMM_WORLD,&status);
+
+		MPI_Get_count(&status,MPI_INT,&count);
+//		printf("count is %d\n",count);
+		int temp[count];
+		memset(temp,-1,sizeof(int));
+		pstFactor->ptrFactor =temp;
+//		printf("waiting for data i: %d  max: %d\n",i,numberOfElements);
+		MPI_Recv(temp, count , MPI_INT, source, SEND_PTRFACTOR, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+		//&(pstFactor->ptrFactor)
+//		printf("received: %d\n",temp[0]);
+		pstFactor++;
+	}
+//	pstFactor = pstFactors+1;
+//	for(int i = 0; i<count;i++){
+//		printf("received: %d\n",*(pstFactor->ptrFactor));
+//	}
+	printf("\n receive end");
+}

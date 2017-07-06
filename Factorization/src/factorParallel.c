@@ -1251,7 +1251,7 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank)
       }
     }
     else{
-    	printf("rank %d:request EC\n",rank);
+    	printf("rank %d:request EC (from factorParallel)\n",rank);
     	int null = 1;
     	 MPI_Send(&null,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);
     	 printf("rank %d:wait for EC\n",rank);

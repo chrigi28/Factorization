@@ -2,6 +2,7 @@
 #define _HELPER_H
 #include "mpi.h"
 #include "factor.h"
+#include <stdio.h>
 
 
 enum Messages {
@@ -32,7 +33,8 @@ void sendBigInteger(BigInteger *number,int dest);
 void receiveBigInteger(BigInteger *number, int source);
 void sendPstFactors(struct sFactors *pstFactors,int dest);
 void receivePstFactors(struct sFactors *pstFactors,int source);
-
+void printPstFactors(struct sFactors *pstFactors);
+void logPstFactors(struct sFactors *pstFactors);
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors);
 
 #endif

@@ -18,10 +18,12 @@ along with Alpertron Calculators.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <math.h>
 #include "bignbr.h"
 #include "expression.h"
 #include "factor.h"
+#include "helper.h"
 #include "showtime.h"
 #ifdef __EMSCRIPTEN__
 extern long long lModularMult;
@@ -942,7 +944,7 @@ void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors)
     return;
   }
   rc = ComputeExpression(tofactorText, 1, &tofactor);
-  printf("RC is : %d\n",rc);
+  printf("rank1:expression ok? RC is : %d\n",rc);
   if (rc == EXPR_OK && doFactorization)
   {
     NumberLength = tofactor.nbrLimbs;

@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/PATH/delimiter=\:
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/PATH/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/PATH/value=/home/osboxes/bin\:/home/osboxes/.local/bin\:/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/usr/games\:/usr/local/games\:/snap/bin\:${PATH}
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/Path/delimiter=\:
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/Path/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/Path/value=${PATH}
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.base.1448134060/appendContributed=true
