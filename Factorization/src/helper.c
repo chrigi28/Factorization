@@ -2,6 +2,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+char * STATENAMES[]={
+	"GET_JOB\0",
+	"SEND_JOB\0",
+	"SEND_RESULT\0",
+	"SEND_RDY_FACTOR\0",
+	"JOBTOFACTOR\0",
+	"START_FACTORING\0",
+	"REGISTER_FOR_EC\0",
+	"SEND_EC\0",
+	"NO_OF_PSTFACTORS\0",
+	"SEND_MULTIPLICITY\0",
+	"SEND_UPPERBOUND\0",
+	"SEND_PTRFACTOR\0",
+	"CHECK_FACTOR\0",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+};
 void sendBigInteger(BigInteger *number,int dest){
 	MPI_Send( &(number->nbrLimbs), 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
 	MPI_Send( &(number->limbs), number->nbrLimbs, MPI_INT, dest, 0, MPI_COMM_WORLD);
@@ -107,4 +129,12 @@ void receivePstFactors(struct sFactors *pstFactors,int source){
 //		printf("received: %d\n",*(pstFactor->ptrFactor));
 //	}
 //	printf("\n receive end");
+}
+
+void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
+	char *ptrOutput;
+	char output[3000000];
+	ptrOutput = output;
+	SendFactorizationToOutput(EXPR_OK,pstFactors,&ptrOutput,1);
+	printf("factorisation is: \n%s",ptrOutput);
 }

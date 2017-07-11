@@ -929,7 +929,7 @@ static void ShowFourSquares(char **pptrOutput)
   *pptrOutput = ptrOutput;
 }
 
-void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors)
+void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank)
 {
 //	printf("%s\n",tofactorText);
 
@@ -955,7 +955,7 @@ void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors)
     Bin2Dec(tofactor.limbs, tofactorDec, tofactor.nbrLimbs, groupLen);
 //    factor(&tofactor, nbrToFactor, factorsMod, astFactorsMod, knownFactors);
     printf("before factorparallel\n");
-    factorParallel(&tofactor, nbrToFactor, factorsMod, astFactorsMod, knownFactors);
+    factorParallel(&tofactor, nbrToFactor, factorsMod, astFactorsMod, knownFactors,world_rank);
     printf("\nafter factorparallel\n");
   }
   ptrOutput = output;
@@ -1025,7 +1025,7 @@ void doWork(void)
       flags = 2;  // do factorization, no batch mode.
     }
   }
-  ecmFrontText(ptrData, flags & 2, ptrKnownFactors); // The 3rd parameter includes known factors.
+//  ecmFrontText(ptrData, flags & 2, ptrKnownFactors); // The 3rd parameter includes known factors.
 #ifdef __EMSCRIPTEN__
   databack(output);
 #endif

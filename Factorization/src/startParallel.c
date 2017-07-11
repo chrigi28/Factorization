@@ -8,7 +8,7 @@
 #include "bignbr.h"
 #include "highlevel.h"
 #include "factor.h"
-void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors);
+//void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
 //end copy
 void cho_Waitany(MPI_Status *status);
 
@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
     		int idx;
     		int list[world_size];
     	}waitList;
+    	int currentEClist[world_size];
     	memset(&(waitList.list[0]),-1,sizeof(waitList.list[0])*world_size);
     	waitList.idx = 0;
     	while(pendingAnswers > 0 ){
@@ -84,9 +85,11 @@ int main(int argc, char** argv) {
     		int waitLength = world_size;
     		//cho_Waitany(&status);
     		int rank = -1;
+    		printf("\nrank0: wait for next Request: \n");
     		MPI_Waitany(pendingAnswers+1,request,&rank,&status);
     		//int rank = status.MPI_SOURCE;
-    		printf("\nTag: %d\n",status.MPI_TAG);
+    		char *t1 = STATENAMES[status.MPI_TAG];
+    		printf("\nRequest received Tag: %s\n",t1);
     		switch(status.MPI_TAG){
     			case REGISTER_FOR_EC:{
     				printf("main0: register_for ec received %d\n",rank);
@@ -126,7 +129,10 @@ int main(int argc, char** argv) {
 
     			    printf("main0: bigint and pstfactor received\n");
     			    factoringRunning = 1;
-
+    			    MPI_Send(&currentEC,1,MPI_INT,rank,START_FACTORING,MPI_COMM_WORLD);
+    			    currentEClist[rank] = currentEC;
+    			    currentEC++;
+    			    printf("main0: send data to %d processes\n",waitList.idx);
     			    for(int i = 0;i<waitList.idx;i++){
 //    			    	printf("main0: \nforloop idx: %d\n",i);
     			    	MPI_Send(&i,1,MPI_INT,waitList.list[i],REGISTER_FOR_EC,MPI_COMM_WORLD);
@@ -137,7 +143,7 @@ int main(int argc, char** argv) {
     			        printf("main0: send FactorData to rank:%d\n",waitList.list[i]);
     			        MPI_Irecv(&receiveBuffer[waitList.list[i]], 1, MPI_INT, waitList.list[i],MPI_ANY_TAG, MPI_COMM_WORLD, &request[waitList.list[i]]);
     			    }
-    			    printf("RANK TO RECEIVE FROM %d \n",rank);
+    			    printf("\n\nRANK TO RECEIVE FROM %d \n",rank);
     			    MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
     			break;
 
@@ -145,9 +151,23 @@ int main(int argc, char** argv) {
     				//MPI_Recv(&null,1,MPI_INT,rank,SEND_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     				printf("main0: ec request received from %d\n",rank);
     				MPI_Send(&currentEC,1,MPI_INT,rank,SEND_EC,MPI_COMM_WORLD);
-    				currentEC++;
+    			    currentEClist[rank] = currentEC;
+    			    currentEC++;
     				MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
     				printf("main0: nextEC is : %d\n",currentEC);
+    			break;
+
+    			case CHECK_FACTOR:
+    				printf("main0: parallel found\n");
+//    				int length = receiveBuffer[rank];
+    				limb GD[MAX_LEN];
+    				int NumberLength;
+    		    	MPI_Recv(&NumberLength,1,MPI_INT,rank,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    				MPI_Recv(&GD,NumberLength*sizeof(limb),MPI_INT,rank,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    				printf("main0: GD received\n");
+
+    				printf("main0: checkdata received\n");
+
     			break;
 
     			default:
@@ -176,7 +196,7 @@ int main(int argc, char** argv) {
 //    	    char receive[incoming_msg_size+1];
 //    	    MPI_Recv(&receive,incoming_msg_size,MPI_CHAR,0,JOBTOFACTOR,MPI_COMM_WORLD,&status); //term to factor as char array (as commandline)
     		printf("startFrontTExt\n");
-    	    ecmFrontText(argv[1], 1, NULL);
+    	    ecmFrontText(argv[1], 1, NULL,1);
     	}
     	else{
     		printf("Rank%d: sendRdy for ec:()\n",world_rank);

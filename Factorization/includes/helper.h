@@ -6,7 +6,7 @@
 
 
 enum Messages {
-	GET_JOB,
+	GET_JOB = 0,
 	SEND_JOB,
 	SEND_RESULT,
 	SEND_RDY_FACTOR,
@@ -17,8 +17,10 @@ enum Messages {
 	NO_OF_PSTFACTORS,
 	SEND_MULTIPLICITY,
 	SEND_UPPERBOUND,
-	SEND_PTRFACTOR
+	SEND_PTRFACTOR,
+	CHECK_FACTOR
 };
+extern char * STATENAMES[];
 
 enum eEcmResult{
   FACTOR_NOT_FOUND = 0,
@@ -35,6 +37,7 @@ void sendPstFactors(struct sFactors *pstFactors,int dest);
 void receivePstFactors(struct sFactors *pstFactors,int source);
 void printPstFactors(struct sFactors *pstFactors);
 void logPstFactors(struct sFactors *pstFactors);
-void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors);
+void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
+void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
 
 #endif

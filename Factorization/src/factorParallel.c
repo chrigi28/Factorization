@@ -1771,10 +1771,12 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank)
   } //end for
 }
 
-void ecmParallel(BigInteger *N, struct sFactors *pstFactors,int world_rank)
+void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 {
 
-	printf("rankd %d: ecm begin\n ",world_rank);
+	printf("rank %d: ecm begin\n ",world_rank);
+	//showFactors(N,pstFactors,world_rank);
+	printPstFactors(pstFactors);
   int P, Q;
 #ifndef __EMSCRIPTEN__
   (void)pstFactors;     // Ignore parameter.
@@ -1845,8 +1847,16 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors,int world_rank)
       FactoringSIQS(TestNbr, GD);
       break;
     }
-    else if (ecmResp == FACTOR_FOUND)
-    {
+    else if (ecmResp == FACTOR_FOUND){
+//memcpy(Temp1.limbs, GD, numLimbs * sizeof(limb));
+    	MPI_Send(&GD[0].x,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+    	MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+    	MPI_Send(GD,NumberLength* sizeof(limb),MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+
+    	// send message to rank0
+    	// tell rank 1 to stop and check factor
+    	// if proper factor stop all
+    	// start rank 1 again keep rank > 1 rdy for EC
       break;
     }
     if(ecmResp == CLOSE_PROZESS){
@@ -1871,10 +1881,12 @@ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, ch
   }
   else
   {//expression ok
+	  printf("\nelse\n");
     strcpy(ptrOutput, tofactorDec);
     ptrOutput += strlen(ptrOutput);
     if (doFactorization)
     {
+      printf("\ndoFactor\n");
       struct sFactors *pstFactor;
       pstFactor = pstFactors+1;
       if (pstFactors->multiplicity == 1 && pstFactor->multiplicity == 1 &&
@@ -1889,8 +1901,9 @@ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, ch
         strcpy(ptrOutput, " = ");
         ptrOutput += strlen(ptrOutput);
         for (;;)
-        {
+        {printf("\n forever\n");
           NumberLength = *pstFactor->ptrFactor;
+          printf("\nNR of pst: %d\n",NumberLength);
           UncompressBigInteger(pstFactor->ptrFactor, &factorValue);
           Bin2Dec(factorValue.limbs, ptrOutput, factorValue.nbrLimbs, groupLen);
           ptrOutput += strlen(ptrOutput);
@@ -1997,6 +2010,7 @@ static void SortFactors(struct sFactors *pstFactors)
 // Insert new factor found into factor array. This factor array must be sorted.
 static void insertIntFactor(struct sFactors *pstFactors, struct sFactors *pstFactorDividend, int divisor)
 {
+  printf("\n-------------------------\nFactor Found insertInt\n\n");
   struct sFactors *pstCurFactor;
   int factorNumber;
   int *ptrFactor = pstFactorDividend->ptrFactor;
@@ -2059,6 +2073,7 @@ static void insertIntFactor(struct sFactors *pstFactors, struct sFactors *pstFac
 // The divisor must be also sorted.
 static void insertBigFactor(struct sFactors *pstFactors, BigInteger *divisor)
 {
+  printf("\n-------------------------\nFactor Found insertbigInt\n\n");
   struct sFactors *pstCurFactor;
   int factorNumber;
   int lastFactorNumber = pstFactors->multiplicity;
@@ -2206,7 +2221,7 @@ static int getNextInteger(char **ppcFactors, int *result, char delimiter)
 
 // pstFactors -> ptrFactor points to end of factors.
 // pstFactors -> multiplicity indicates the number of different factors.
-void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFactors *pstFactors, char *pcKnownFactors)
+void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFactors *pstFactors, char *pcKnownFactors,int world_rank)
 {// factorParallel(&tofactor,             nbrToFactor, factorsMod, astFactorsMod(empty array of sfactor),   knownFactors);
   struct sFactors *pstCurFactor;
   int factorNbr, expon;
@@ -2371,16 +2386,19 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
     else
     {
 
-
+// ========================================================================================================
+// ========================================================================================================
       printf("\n\nBEFORE ecmParallel\n\n");
 
-      int a = 1;
-      MPI_Send(&a,1,MPI_INT,0,START_FACTORING,MPI_COMM_WORLD);
+      int nextEC = 1;
+      MPI_Send(&nextEC,1,MPI_INT,0,START_FACTORING,MPI_COMM_WORLD);
       sendBigInteger(&prime,0);
       sendPstFactors(pstFactors,0);
     	//send message to Master factor &prime with pstFactors
       printf("rank1: data transfered\n");
-      ecmParallel(&prime, pstFactors,1);        // Factor number.
+//      MPI_Send(&nextEC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);
+//      MPI_Recv(&nextEC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      ecmParallel(&prime, pstFactors,world_rank);        // Factor number.
       // Check whether GD is not one. In this case we found a proper factor.
       printf("rank1: after ecmParallel\n");
       if(closeFlag == 1){
@@ -2397,9 +2415,7 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
           break;
         }
       }
-      if (ctr != NumberLength || GD[0].x != 1)
-      {
-    	  printf("rank1: check iwas\n");
+      if (ctr != NumberLength || GD[0].x != 1){
         int numLimbs;
         Temp1.sign = SIGN_POSITIVE;
         numLimbs = NumberLength;
