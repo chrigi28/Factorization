@@ -138,3 +138,16 @@ void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
 	SendFactorizationToOutput(EXPR_OK,pstFactors,&ptrOutput,1);
 	printf("factorisation is: \n%s",ptrOutput);
 }
+
+void cho_Waitany(MPI_Status *status){
+	int noMess = 0;
+	//printf("cho wait\n");
+	while(noMess == 0){
+		//usleep(100000);
+
+		usleep(500000);
+		MPI_Iprobe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&noMess,status);
+
+	}
+	//printf("received from %i, tag %i\n",status->MPI_SOURCE,status->MPI_TAG);
+}

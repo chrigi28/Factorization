@@ -69,6 +69,7 @@ int main(int argc, char** argv) {
     		printf("pending answers %i\n",pendingAnswers);
     		//printf("wait for any comm\n");
     		int waitLength = world_size;
+
     		cho_Waitany(&status);
     		int rank = status.MPI_SOURCE;
     		if(status.MPI_TAG == GET_JOB){

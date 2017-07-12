@@ -2,8 +2,11 @@
 #define _HELPER_H
 #include "mpi.h"
 #include "factor.h"
+#include <mpi.h>
 #include <stdio.h>
-
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
 enum Messages {
 	GET_JOB = 0,
@@ -39,5 +42,5 @@ void printPstFactors(struct sFactors *pstFactors);
 void logPstFactors(struct sFactors *pstFactors);
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
-
+void cho_Waitany(MPI_Status *status);
 #endif

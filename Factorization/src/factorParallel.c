@@ -1255,7 +1255,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank)
     	int null = 1;
     	 MPI_Send(&null,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);
     	 printf("rank %d:wait for EC\n",rank);
-    	 MPI_Recv(&EC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    	 MPI_Status status;
+    	 cho_Waitany(&status);
+    	 MPI_Recv(&EC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,&status);
     	 printf("rank %d:EC received: %d\n",rank,EC);
 //      EC++;
 //      EC = getNextECToCompute(); // cho requestEC from main
@@ -1849,10 +1851,14 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
     }
     else if (ecmResp == FACTOR_FOUND){
 //memcpy(Temp1.limbs, GD, numLimbs * sizeof(limb));
-    	MPI_Send(&GD[0].x,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
-    	MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
-    	MPI_Send(GD,NumberLength* sizeof(limb),MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
-
+    	if(world_rank >1){
+			MPI_Send(&GD[0].x,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+			MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+			int l = NumberLength * sizeof(limb);
+			printf("size of GD is:%d\n",l);
+			MPI_Send(GD,NumberLength * sizeof(limb),MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+			printf("\n Data Send to Master %d finished return\n",world_rank);
+    	}
     	// send message to rank0
     	// tell rank 1 to stop and check factor
     	// if proper factor stop all
