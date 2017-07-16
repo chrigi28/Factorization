@@ -1,3 +1,270 @@
-18:06:30 **** Incremental Build of configuration Default for project Factorization ****
+16:03:18 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+16:42:40 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+./src/helper.c: In function ‘cho_Waitany’:
+./src/helper.c:148:3: warning: implicit declaration of function ‘usleep’ [-Wimplicit-function-declaration]
+   usleep(500000);
+   ^~~~~~
+17:08:20 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+./src/helper.c: In function ‘cho_Waitany’:
+./src/helper.c:148:3: warning: implicit declaration of function ‘usleep’ [-Wimplicit-function-declaration]
+   usleep(500000);
+   ^~~~~~
+17:14:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+./src/helper.c: In function ‘cho_Waitany’:
+./src/helper.c:148:3: warning: implicit declaration of function ‘usleep’ [-Wimplicit-function-declaration]
+   usleep(500000);
+   ^~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:217:56: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+     MPI_Iprobe(0,REGISTER_FOR_EC,MPI_COMM_WORLD,&found,status);
+                                                        ^~~~~~
+In file included from ./src/startParallel.c:1:0:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+17:16:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:19:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:20:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:26:18 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:29:27 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1855:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:41:08 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmCurveParallel’:
+./src/factorParallel.c:1260:55: error: incompatible type for argument 7 of ‘MPI_Recv’
+       MPI_Recv(&EC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,status);
+                                                       ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+17:41:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:44:15 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:49:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:111:7: error: expected ‘;’ before ‘printPstFactors’
+       printPstFactors(&pstFactors);
+       ^~~~~~~~~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+17:50:28 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:111:7: error: expected ‘;’ before ‘printPstFactors’
+       printPstFactors(pstFactors);
+       ^~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+17:50:34 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:111:7: error: expected ‘;’ before ‘printPstFactors’
+       printPstFactors(&pstFactors);
+       ^~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+17:50:42 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1857:27: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    printf("size of GD is:%d\n",NumberLength * sizeof(limb));
+                           ^
+17:51:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:56:17 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:57:08 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:09:38 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+                                                                                                                                             15:34:25 **** Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:49:56 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:58:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:00:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:33:01 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:108:43: error: ‘numberLength’ undeclared (first use in this function)
+   printf("number of sended elements %d\n",numberLength);
+                                           ^~~~~~~~~~~~
+./src/helper.c:108:43: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:33:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:35:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:53:08 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:54:38 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:02:04 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:02:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:05:14 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:06:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:23:10 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:108:16: error: invalid initializer
+   int temp[] = malloc(ptrSize*sizeof(int));
+                ^~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:23:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:108:7: error: array size missing in ‘temp’
+   int temp[];
+       ^~~~
+./src/helper.c:109:8: error: assignment to expression with array type
+   temp = malloc(ptrSize*sizeof(int));
+        ^
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+20:28:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:47:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:02:34 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:03:14 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:33:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:50:27 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:105:21: warning: format ‘%d’ expects a matching ‘int’ argument [-Wformat=]
+   printf("Element: %d\n");
+                     ^
+22:51:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:53:40 **** Incremental Build of configuration Default for project Factorization ****
 make 
 mpicc ./src/*.c -I./includes -o ./bin/Test -lm

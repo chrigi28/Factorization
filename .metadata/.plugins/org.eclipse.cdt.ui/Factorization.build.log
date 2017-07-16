@@ -1,6 +1,6 @@
-18:06:30 **** Incremental Build of configuration Default for project Factorization ****
+22:53:40 **** Incremental Build of configuration Default for project Factorization ****
 make 
 mpicc ./src/*.c -I./includes -o ./bin/Test -lm
 
-18:06:32 Build Finished (took 2s.309ms)
+22:53:42 Build Finished (took 2s.81ms)
 
