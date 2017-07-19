@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 	enum Messages message = GET_JOB;
 	int outBuffer[10];
 	BigInteger N;
-	struct sFactors pstFactors;
+	struct sFactors pstFactors[1000];
 	MPI_Status status;
 	// Get the number of processes
 	int world_size;
@@ -102,14 +102,16 @@ int main(int argc, char** argv) {
 //					MPI_Recv(&receiveBuffer,rcount,MPI_INT,rank,REGISTER_FOR_EC,MPI_COMM_WORLD,&status);
 				waitList.list[waitList.idx] = rank;
 				waitList.idx++;
+				printf("\nprinting pstFactors before send to rank%d\n",rank);
+				printPstFactors(&pstFactors[0],world_rank);
+
 				if (factoringRunning == 1) {
-					MPI_Send(&factoringRunning, 1, MPI_INT, rank,
-							REGISTER_FOR_EC, MPI_COMM_WORLD);
+					MPI_Send(&factoringRunning, 1, MPI_INT, rank,REGISTER_FOR_EC, MPI_COMM_WORLD);
 					printf("main0: Send FactorData to rank:%d\n", rank);
-					sendBigInteger(&N, rank);
+					sendBigInteger(&N, rank,world_rank);
 					printf("main0:printing before sending\n ");
-					printPstFactors(&pstFactors);
-					sendPstFactors(&pstFactors, rank);
+					printPstFactors(&pstFactors[0],world_rank);
+					sendPstFactors(&pstFactors[0], rank,world_rank);
 					// MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank ,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
 				}
 //					printf("main0: register_for ec received %d\n",rank);
@@ -130,12 +132,14 @@ int main(int argc, char** argv) {
 				printf("\nmain0: startFactoring\n");
 				//MPI_Recv(&null, 1, MPI_INT, rank,START_FACTORING, MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
 
-				receiveBigInteger(&N, rank);
+				receiveBigInteger(&N, rank,world_rank);
 				printf("\nmain0: bigint received\n");
-				receivePstFactors(&pstFactors, rank);
+				receivePstFactors(&pstFactors[0], rank,world_rank);
+				printf("\nafter received pstfactors\n");
+				showFactors(&N,pstFactors,world_rank);
 				printf("MAIN0: printing pstFactors after receiving\n");
-				printPstFactors(&pstFactors);
-				printf("\nmain0: bigint and pstfactor received\n");
+				printPstFactors(&pstFactors[0],world_rank);
+				printf("\nmain0: bigint and pstfactor received\n\n");
 				factoringRunning = 1;
 //    			    MPI_Send(&currentEC,1,MPI_INT,rank,START_FACTORING,MPI_COMM_WORLD);
 
@@ -145,9 +149,9 @@ int main(int argc, char** argv) {
 					MPI_Send(&i, 1, MPI_INT, waitList.list[i], REGISTER_FOR_EC,
 							MPI_COMM_WORLD);
 					//currentEC++;
-					sendBigInteger(&N, waitList.list[i]);
+					sendBigInteger(&N, waitList.list[i],world_rank);
 //    			        printf("main0: bigint sent\n");
-					sendPstFactors(&pstFactors, waitList.list[i]);
+					sendPstFactors(&pstFactors[0], waitList.list[i],world_rank);
 					printf("main0: send FactorData to rank:%d\n",
 							waitList.list[i]);
 //    			        MPI_Irecv(&receiveBuffer[waitList.list[i]], 1, MPI_INT, waitList.list[i],MPI_ANY_TAG, MPI_COMM_WORLD, &request[waitList.list[i]]);
@@ -179,6 +183,7 @@ int main(int argc, char** argv) {
 				printf("main0: GD received\n");
 
 				printf("main0: checkdata received\n");
+
 
 				break;
 
@@ -231,14 +236,17 @@ int main(int argc, char** argv) {
 						MPI_STATUS_IGNORE);
 				printf("Rank%d: EC received %d\n", world_rank, EC);
 				if (EC != -1) {
-					receiveBigInteger(&N, 0);
+					receiveBigInteger(&N, 0,world_rank);
 					printf("Rank%d: bigint received\n", world_rank);
-					receivePstFactors(&pstFactors, 0);
-					printPstFactors(&pstFactors);
-					//irecv for cancel or update
+					receivePstFactors(&pstFactors[0], 0,world_rank);
+					printPstFactors(&pstFactors[0],world_rank);
+//					char outString[30000];
+//					SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+//					//irecv for cancel or update
+//					printf("\n\n\nFactorisation is:\n%s \n",&outString);
 					printf("Rank%d: data received start ecmParallel\n",
 							world_rank);
-					ecmParallel(&N, &pstFactors, world_rank);
+					ecmParallel(&N, &pstFactors[0], world_rank);
 					printf("rank%d: returned from ecmParallel\n", world_rank);
 				} else {
 					printf("rank%d: Closes EC received :%d\n", world_rank, EC);
@@ -253,6 +261,9 @@ int main(int argc, char** argv) {
 	printf("process finished finalize mpiworld: %i\n", world_rank);
 	// Finalize the MPI environment.
 	MPI_Finalize();
+	for(int i=0;i<pstFactors[0].multiplicity;i++){
+		free(pstFactors[i].ptrFactor);
+	}
 	return 0;
 }
 

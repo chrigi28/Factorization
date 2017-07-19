@@ -40,5 +40,5 @@ void FactoringSIQS(limb *pNbrToFactor, limb *pFactor);
 void ecmParallel(BigInteger *N, struct sFactors *pstFactors,int world_rank);
 extern int lang;
 char *findChar(char *str, char c);
-void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char* print);
 #endif

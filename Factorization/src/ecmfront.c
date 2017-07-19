@@ -961,7 +961,8 @@ void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,in
   ptrOutput = output;
 //  strcpy(output, "2<p>");
   ptrOutput += strlen(output);
-  SendFactorizationToOutput(rc,astFactorsMod, &ptrOutput, doFactorization);
+  char* print;
+  SendFactorizationToOutput(rc,astFactorsMod, &ptrOutput, doFactorization,print);
 //  if (rc == EXPR_OK && doFactorization)
 //  {
 //    if (tofactor.nbrLimbs > 1 || tofactor.limbs[0].x > 0)

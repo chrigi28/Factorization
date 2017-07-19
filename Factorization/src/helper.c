@@ -24,12 +24,14 @@ char * STATENAMES[]={
 	"",
 	"",
 };
-void sendBigInteger(BigInteger *number,int dest){
+void sendBigInteger(BigInteger *number,int dest, int source){
+	printf("sending bigInt from %d to %d\n",source,dest);
 	MPI_Send( &(number->nbrLimbs), 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
 	MPI_Send( &(number->limbs), number->nbrLimbs, MPI_INT, dest, 0, MPI_COMM_WORLD);
 	MPI_Send( &(number->sign), 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
 }
-void receiveBigInteger(BigInteger *number, int source){
+void receiveBigInteger(BigInteger *number, int source, int dest){
+	printf("rank%d: receive bigInt from %d",dest,source);
 	MPI_Recv( &(number->nbrLimbs), 1, MPI_INT, source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	MPI_Recv( &(number->limbs), number->nbrLimbs, MPI_INT,source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	MPI_Recv( &(number->sign), 1,MPI_INT, source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -44,13 +46,13 @@ void receiveBigInteger(BigInteger *number, int source){
 };
 
  */
-void printPstFactors(struct sFactors *pstFactors){
-	printf("PRINT PSTFACTORS\n");
+void printPstFactors(struct sFactors *pstFactors, int source){
+	printf("rank%d: PRINT PSTFACTORS\n",source);
 
 	for(int i = 0; i<pstFactors[0].multiplicity;i++){
-		printf("multiplicity from pstFactors[%d] is: %d\n",i,pstFactors[i].multiplicity);
-		printf("upperbound from pstFactors[%d] is: %d\n",i,pstFactors[i].multiplicity);
-		printf("SIZE of ptrFactor is %d \n",pstFactors[i].ptrFactor[0]);
+		printf("multiplicity from pstFactors[%d] is: %d @%p\n",i,pstFactors[i].multiplicity,&(pstFactors[i].multiplicity));
+		printf("upperbound from pstFactors[%d] is: %d @%p\n",i,pstFactors[i].upperBound,&(pstFactors[i].upperBound));
+		printf("SIZE of pstFactors[%d].ptrFactor[0] is %d %p\n",i,pstFactors[i].ptrFactor[0],&(pstFactors[i].ptrFactor[0]));
 		for(int j = 0;j<pstFactors[i].ptrFactor[0];j++){
 			printf("data from pstFactors[%d].ptrFactor[%d] = %d @%p\n",i,j,pstFactors[i].ptrFactor[j],&(pstFactors[i].ptrFactor[j]));
 		}
@@ -64,9 +66,9 @@ void logPstFactors(struct sFactors *pstFactors){
 	fp = fopen("logFile.log", "a");
 	for(int i = 0; i<pstFactors[0].multiplicity;i++){
 		fprintf(fp,"multiplicity from pstFactors[%d] is: %d\n",i,pstFactors[i].multiplicity);
-		fprintf(fp,"upperbound from pstFactors[%d] is: %d\n",i,pstFactors[i].multiplicity);
-		fprintf(fp,"SIZE of ptrFactor is %i \n",pstFactors[i].ptrFactor[0]);
-		for(int j = 0;j<pstFactors[i].ptrFactor[0];j++){
+		fprintf(fp,"upperbound from pstFactors[%d] is: %d\n",i,pstFactors[i].upperBound);
+		fprintf(fp,"SIZE of ptrFactor[%d] is %d \n",i,pstFactors[i].ptrFactor[0]);
+		for(int j = 0;j<=pstFactors[i].ptrFactor[0];j++){
 			fprintf(fp,"data from pstFactors[%d].ptrFactor[%d] = %d\n",i,j,pstFactors[i].ptrFactor[j]);
 		}
 	}
@@ -74,13 +76,14 @@ void logPstFactors(struct sFactors *pstFactors){
 
 }
 
-void sendPstFactors(struct sFactors *pstFactors,int dest){
-	int NumberOfElements = pstFactors->multiplicity;
+void sendPstFactors(struct sFactors *pstFactors,int dest,int source){
+	printf("\n\nrank%d: start sending PstFactors to %d\n\n",source,dest);
+	int NumberOfElements = pstFactors->multiplicity+1;
 //	printf("numberOfMpultiplicities: %d\n",NumberOfElements);
 
 	MPI_Send( &NumberOfElements,1,MPI_INT,dest,NO_OF_PSTFACTORS,MPI_COMM_WORLD);
-	for(int i = 0;i<pstFactors[0].multiplicity;i++){
-		int numberLength = pstFactors[i].ptrFactor[0];
+	for(int i = 0;i<NumberOfElements;i++){
+		int numberLength = pstFactors[i].ptrFactor[0]+1;
 		MPI_Send(&numberLength,1,MPI_INT,dest,NO_OF_PSTFACTORS,MPI_COMM_WORLD);
 		MPI_Send( &(pstFactors[i].multiplicity), 1, MPI_INT, dest, SEND_MULTIPLICITY, MPI_COMM_WORLD);
 		MPI_Send( &(pstFactors[i].upperBound), 1, MPI_INT, dest, SEND_UPPERBOUND, MPI_COMM_WORLD);
@@ -88,45 +91,55 @@ void sendPstFactors(struct sFactors *pstFactors,int dest){
 //			printf("value is psti:%d factj:%d  = %d: @%p\n",i,j,pstFactors[i].ptrFactor[j],&(pstFactors[i].ptrFactor[j]));
 //		}
 //		printf("number of sended elements %d\n",numberLength);
-		if( numberLength !=0 ){
+		if( numberLength >= 1 ){
 			MPI_Send( &(pstFactors[i].ptrFactor[0]), numberLength , MPI_INT, dest, SEND_PTRFACTOR, MPI_COMM_WORLD);
 
+		}else{
+			printf("numberlength is: %d\n",numberLength);
 		}
 
 	}
 }
 
-void receivePstFactors(struct sFactors *pstFactors,int source){
+void receivePstFactors(struct sFactors *pstFactors,int source,int dest){
+	printf("\n\nrank%d: start receiveing PstFactors from %d\n\n",dest,source);
 	int numberOfElements;
 	MPI_Recv( &numberOfElements,1,MPI_INT,source,NO_OF_PSTFACTORS,MPI_COMM_WORLD,MPI_STATUSES_IGNORE);
 //	printf("\n\nnumberOfElements %d\n\n",numberOfElements);
 //	int count = 0;
 	for(int i = 0;i<numberOfElements;i++){
-		printf("Element: %d\n",i);
 		MPI_Recv( &(pstFactors[i].multiplicity), 1, MPI_INT, source, SEND_MULTIPLICITY, MPI_COMM_WORLD,MPI_STATUSES_IGNORE);
+		//printf("Element: %d WRITE TO %p\n",i,&(pstFactors[i].multiplicity));
 		MPI_Recv( &(pstFactors[i].upperBound), 1, MPI_INT, source, SEND_UPPERBOUND, MPI_COMM_WORLD,MPI_STATUSES_IGNORE);
+		//printf("Element: %dWRITE TO%p\n",i,&(pstFactors[i].multiplicity));
 		MPI_Status status;
 		int ptrSize;
 		MPI_Recv(&ptrSize,1,MPI_INT,source,NO_OF_PSTFACTORS,MPI_COMM_WORLD,&status);
-		int *temp = malloc(ptrSize*sizeof(int));
-
-		pstFactors[i].ptrFactor =temp;
-		printf("waiting for data i: %d  max: %d\n",i,numberOfElements);
-		sleep(1);
+		//int *temp;
+		//printf("number of Elements to receie %d \n",ptrSize);
+		pstFactors[i].ptrFactor =  (int *) malloc(ptrSize*sizeof(int));
+		int* ptr = pstFactors[i].ptrFactor;
+		//printf("waiting for data i: %d  max: %d write to %p\n",i,numberOfElements,ptr);
 		if( ptrSize !=0 ){
-			MPI_Recv(temp, ptrSize , MPI_INT, source, SEND_PTRFACTOR, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-
+			MPI_Recv(pstFactors[i].ptrFactor , ptrSize , MPI_INT, source, SEND_PTRFACTOR, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+//			for(int j=0;j<ptrSize;j++){
+//				printf("pstFactor[%d].ptrFactor[%d] = %d @%p\n",i,j,pstFactors[i].ptrFactor[j],&(pstFactors[i].ptrFactor[j]));
+//			}
+		}else{
+			pstFactors[i].ptrFactor[0] = 0;
 		}
 
 	}
+
 }
 
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
-	char *ptrOutput;
-	char output[3000000];
-	ptrOutput = output;
-	SendFactorizationToOutput(EXPR_OK,pstFactors,&ptrOutput,1);
-	printf("factorisation is: \n%s",ptrOutput);
+	printf("\nRank%d print current factors:\n",world_rank);
+	char a[30000];
+    char *outString = &a[0];
+	char **lt = &outString;
+	SendFactorizationToOutput(EXPR_OK,pstFactors,lt,1,a);
+	printf("Factorisation is: \n%s\n",a);
 }
 
 void cho_Waitany(MPI_Status *status){

@@ -21,7 +21,10 @@ enum Messages {
 	SEND_MULTIPLICITY,
 	SEND_UPPERBOUND,
 	SEND_PTRFACTOR,
-	CHECK_FACTOR
+	CHECK_FACTOR,
+	GD_LENGTH,
+	TEST_GD,
+	NUMBER_LENGTH
 };
 extern char * STATENAMES[];
 
@@ -34,11 +37,11 @@ enum eEcmResult{
   CLOSE_PROZESS
 };
 
-void sendBigInteger(BigInteger *number,int dest);
-void receiveBigInteger(BigInteger *number, int source);
-void sendPstFactors(struct sFactors *pstFactors,int dest);
-void receivePstFactors(struct sFactors *pstFactors,int source);
-void printPstFactors(struct sFactors *pstFactors);
+void sendBigInteger(BigInteger *number,int dest,int source);
+void receiveBigInteger(BigInteger *number, int source,int dest);
+void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+void printPstFactors(struct sFactors *pstFactors, int source);
 void logPstFactors(struct sFactors *pstFactors);
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);

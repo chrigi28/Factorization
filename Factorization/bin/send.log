@@ -1,0 +1,189 @@
+all register comm i: 1
+all register comm i: 2
+main0: pending answers 2
+
+rank0: wait for next Request: 
+rank 1: worker
+rank1: send rdy factor
+startFrontTExt
+rank 2: worker
+Rank2: sendRdy for ec:()
+rank1:expression ok? RC is : 0
+before factorparallel
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertInt
+
+
+-------------------------
+Factor Found insertInt
+
+
+
+BEFORE ecmParallel
+
+sending bigInt from 1 to 0
+
+Rank1 print current factors:
+Factorisation is: 
+1000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000000 000001 (202 digits) = 7 * 11 * 13 * 7237 * 909090 909090 909090 909090 909090 909090 909090 909090 909090 909090 909091 (66 digits) * 151 844838 869849 233259 486126 696296 656224 803247 050034 392856 004020 851318 089123 809726 269308 969322 787203 124359 404586 017823 547186 542903 (129 digits)
+
+
+rank1: start sending PstFactors to 0
+
+rank1: data transfered
+rank 1: ecm begin
+ rank1: PRINT PSTFACTORS
+multiplicity from pstFactors[0] is: 6 @0x557b81371148
+upperbound from pstFactors[0] is: 0 @0x557b8137114c
+SIZE of pstFactors[0].ptrFactor[0] is 0 0x557b81364e60
+multiplicity from pstFactors[1] is: 1 @0x557b81371158
+upperbound from pstFactors[1] is: 0 @0x557b8137115c
+SIZE of pstFactors[1].ptrFactor[0] is 1 0x557b81364e50
+data from pstFactors[1].ptrFactor[0] = 1 @0x557b81364e50
+multiplicity from pstFactors[2] is: 1 @0x557b81371168
+upperbound from pstFactors[2] is: 0 @0x557b8137116c
+SIZE of pstFactors[2].ptrFactor[0] is 1 0x557b81364e1c
+data from pstFactors[2].ptrFactor[0] = 1 @0x557b81364e1c
+multiplicity from pstFactors[3] is: 1 @0x557b81371178
+upperbound from pstFactors[3] is: 0 @0x557b8137117c
+SIZE of pstFactors[3].ptrFactor[0] is 1 0x557b81364e48
+data from pstFactors[3].ptrFactor[0] = 1 @0x557b81364e48
+multiplicity from pstFactors[4] is: 1 @0x557b81371188
+upperbound from pstFactors[4] is: 0 @0x557b8137118c
+SIZE of pstFactors[4].ptrFactor[0] is 1 0x557b81364e58
+data from pstFactors[4].ptrFactor[0] = 1 @0x557b81364e58
+multiplicity from pstFactors[5] is: 1 @0x557b81371198
+upperbound from pstFactors[5] is: 0 @0x557b8137119c
+SIZE of pstFactors[5].ptrFactor[0] is 8 0x557b81364e24
+data from pstFactors[5].ptrFactor[0] = 8 @0x557b81364e24
+data from pstFactors[5].ptrFactor[1] = 976128931 @0x557b81364e28
+data from pstFactors[5].ptrFactor[2] = 1561806289 @0x557b81364e2c
+data from pstFactors[5].ptrFactor[3] = 723162568 @0x557b81364e30
+data from pstFactors[5].ptrFactor[4] = 1541946190 @0x557b81364e34
+data from pstFactors[5].ptrFactor[5] = 162573763 @0x557b81364e38
+data from pstFactors[5].ptrFactor[6] = 93112105 @0x557b81364e3c
+data from pstFactors[5].ptrFactor[7] = 678963800 @0x557b81364e40
+rank:1 ecmcurveparallel NextEc = 0 
+rank 1:request EC (from factorParallel)
+rank 1:wait for EC
+
+Request received Tag5: START_FACTORING from 1
+
+main0: startFactoring
+rank0: receive bigInt from 1
+main0: bigint received
+
+
+rank0: start receiveing PstFactors from 1
+
+
+after received pstfactors
+
+Rank0 print current factors:
+Factorisation is: 
+ = 7 * 11 * 13 * 7237 * 909090 909090 909090 909090 909090 909090 909090 909090 909090 909090 909091 (66 digits) * 151 844838 869849 233259 486126 696296 656224 803247 050034 392856 004020 851318 089123 809726 269308 969322 787203 124359 404586 017823 547186 542903 (129 digits)
+MAIN0: printing pstFactors after receiving
+rank0: PRINT PSTFACTORS
+multiplicity from pstFactors[0] is: 6 @0x7ffeb6705f68
+upperbound from pstFactors[0] is: 0 @0x7ffeb6705f6c
+SIZE of pstFactors[0].ptrFactor[0] is 0 0x557a9c9a10b0
+multiplicity from pstFactors[1] is: 1 @0x7ffeb6705f78
+upperbound from pstFactors[1] is: 0 @0x7ffeb6705f7c
+SIZE of pstFactors[1].ptrFactor[0] is 1 0x557a9c9a37f0
+data from pstFactors[1].ptrFactor[0] = 1 @0x557a9c9a37f0
+multiplicity from pstFactors[2] is: 1 @0x7ffeb6705f88
+upperbound from pstFactors[2] is: 0 @0x7ffeb6705f8c
+SIZE of pstFactors[2].ptrFactor[0] is 1 0x557a9c9a1130
+data from pstFactors[2].ptrFactor[0] = 1 @0x557a9c9a1130
+multiplicity from pstFactors[3] is: 1 @0x7ffeb6705f98
+upperbound from pstFactors[3] is: 0 @0x7ffeb6705f9c
+SIZE of pstFactors[3].ptrFactor[0] is 1 0x557a9c9a1150
+data from pstFactors[3].ptrFactor[0] = 1 @0x557a9c9a1150
+multiplicity from pstFactors[4] is: 1 @0x7ffeb6705fa8
+upperbound from pstFactors[4] is: 0 @0x7ffeb6705fac
+SIZE of pstFactors[4].ptrFactor[0] is 1 0x557a9c9a1170
+data from pstFactors[4].ptrFactor[0] = 1 @0x557a9c9a1170
+multiplicity from pstFactors[5] is: 1 @0x7ffeb6705fb8
+upperbound from pstFactors[5] is: 0 @0x7ffeb6705fbc
+SIZE of pstFactors[5].ptrFactor[0] is 8 0x557a9c9a3be0
+data from pstFactors[5].ptrFactor[0] = 8 @0x557a9c9a3be0
+data from pstFactors[5].ptrFactor[1] = 976128931 @0x557a9c9a3be4
+data from pstFactors[5].ptrFactor[2] = 1561806289 @0x557a9c9a3be8
+data from pstFactors[5].ptrFactor[3] = 723162568 @0x557a9c9a3bec
+data from pstFactors[5].ptrFactor[4] = 1541946190 @0x557a9c9a3bf0
+data from pstFactors[5].ptrFactor[5] = 162573763 @0x557a9c9a3bf4
+data from pstFactors[5].ptrFactor[6] = 93112105 @0x557a9c9a3bf8
+data from pstFactors[5].ptrFactor[7] = 678963800 @0x557a9c9a3bfc
+
+main0: bigint and pstfactor received
+
+main0: send data to 0 processes
+
+
+RANK TO RECEIVE FROM 1 
+main0: pending answers 2
+
+rank0: wait for next Request: 
+Rank2: waiting for EC
+
+Request received Tag7: SEND_EC from 1
+main0: ec request received from 1
+main0: nextEC is : 2
+main0: pending answers 2
+
+rank0: wait for next Request: 
+rank 1:EC received: 1
+rank:1 ecmcurveparallel NextEc = 0 
+rank 1:request EC (from factorParallel)
+rank 1:wait for EC
+
+Request received Tag7: SEND_EC from 1
+main0: ec request received from 1
+main0: nextEC is : 3
+main0: pending answers 2
+
+rank0: wait for next Request: 
+rank 1:EC received: 2
+rank:1 ecmcurveparallel NextEc = 0 
+rank 1:request EC (from factorParallel)
+rank 1:wait for EC
+
+Request received Tag7: SEND_EC from 1
+main0: ec request received from 1
+main0: nextEC is : 4
+main0: pending answers 2
+
+rank0: wait for next Request: 

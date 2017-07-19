@@ -1778,7 +1778,7 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 
 	printf("rank %d: ecm begin\n ",world_rank);
 	//showFactors(N,pstFactors,world_rank);
-	printPstFactors(pstFactors);
+	printPstFactors(pstFactors,world_rank);
   int P, Q;
 #ifndef __EMSCRIPTEN__
   (void)pstFactors;     // Ignore parameter.
@@ -1877,9 +1877,11 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
   return;
 }
 
-void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char *print)
 {
   char *ptrOutput = *pptrOutput;
+  print = *pptrOutput;
+//  printf("start\n");
   if (rc != EXPR_OK)
   {
     textError(ptrOutput, rc);
@@ -1887,12 +1889,11 @@ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, ch
   }
   else
   {//expression ok
-	  printf("\nelse\n");
     strcpy(ptrOutput, tofactorDec);
     ptrOutput += strlen(ptrOutput);
     if (doFactorization)
     {
-      printf("\ndoFactor\n");
+//      printf("2\n");
       struct sFactors *pstFactor;
       pstFactor = pstFactors+1;
       if (pstFactors->multiplicity == 1 && pstFactor->multiplicity == 1 &&
@@ -1907,12 +1908,14 @@ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, ch
         strcpy(ptrOutput, " = ");
         ptrOutput += strlen(ptrOutput);
         for (;;)
-        {printf("\n forever\n");
+        {//printf("\n forever\n");
+//          printf("3\n");
           NumberLength = *pstFactor->ptrFactor;
-          printf("\nNR of pst: %d\n",NumberLength);
+          //printf("\nNR of pst: %d\n",NumberLength);
           UncompressBigInteger(pstFactor->ptrFactor, &factorValue);
           Bin2Dec(factorValue.limbs, ptrOutput, factorValue.nbrLimbs, groupLen);
           ptrOutput += strlen(ptrOutput);
+
           if (pstFactor->multiplicity > 1)
           {
             if (prettyprint)
@@ -1948,6 +1951,7 @@ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, ch
     }
   }
   *pptrOutput = ptrOutput;
+  //printf("\nhole string @%p is: \n%s\n\n----------------------------------------------------",&print,print);
 }
 
 static void SortFactors(struct sFactors *pstFactors)
@@ -2398,8 +2402,11 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 
       int nextEC = 1;
       MPI_Send(&nextEC,1,MPI_INT,0,START_FACTORING,MPI_COMM_WORLD);
-      sendBigInteger(&prime,0);
-      sendPstFactors(pstFactors,0);
+      sendBigInteger(&prime,0,world_rank);
+
+		showFactors(&prime,pstFactors,world_rank);
+		//irecv for cancel or update
+		sendPstFactors(pstFactors,0,world_rank);
     	//send message to Master factor &prime with pstFactors
       printf("rank1: data transfered\n");
 //      MPI_Send(&nextEC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);
@@ -2413,6 +2420,12 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
       }
       if(closeFlag == FACTOR_FOUND_BY_PARALLEL){
     	  //MPI_Send(GD,)
+    	  int length;
+    	  MPI_Recv(&length,1,MPI_INT,0,GD_LENGTH,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    	  MPI_Recv(&(GD[0].x),length,MPI_INT,0,TEST_GD,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    	  MPI_Recv(&NumberLength,1,MPI_INT,0,NUMBER_LENGTH,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    	  receiveBigInteger(&Temp1,0,world_rank);
+//    	  receivePstFactors(pstFactors,0,world_rank);
       }
       for (ctr = 1; ctr < NumberLength; ctr++)
       {

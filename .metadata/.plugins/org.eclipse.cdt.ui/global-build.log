@@ -268,3 +268,1245 @@ mpicc ./src/*.c -I./includes -o ./bin/Test -lm
 22:53:40 **** Incremental Build of configuration Default for project Factorization ****
 make 
 mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:51:31 **** Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:55:56 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:01:44 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:139:5: error: expected ‘;’ before ‘printPstFactors’
+     printPstFactors(&pstFactors);
+     ^~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:01:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:21:58 **** Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:24:24 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:117:33: error: lvalue required as left operand of assignment
+   &(pstFactors[i].ptrFactor[0]) =temp;
+                                 ^
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:24:49 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:117:33: error: lvalue required as left operand of assignment
+   &(pstFactors[i].ptrFactor[0]) =temp;
+                                 ^
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:25:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:25:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:120:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(*temp, ptrSize , MPI_INT, source, SEND_PTRFACTOR, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^
+In file included from ./includes/helper.h:3:0,
+                 from ./src/helper.c:1:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+19:26:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:117:30: warning: assignment makes integer from pointer without a cast [-Wint-conversion]
+   pstFactors[i].ptrFactor[0] = temp;
+                              ^
+19:26:31 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:117:33: error: lvalue required as left operand of assignment
+   &(pstFactors[i].ptrFactor[0]) = temp;
+                                 ^
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:26:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:117:31: error: lvalue required as left operand of assignment
+   &pstFactors[i].ptrFactor[0] = temp;
+                               ^
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:27:34 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:116:9: error: lvalue required as left operand of assignment
+   &temp = malloc(ptrSize*sizeof(int));
+         ^
+./src/helper.c:118:31: error: lvalue required as left operand of assignment
+   &pstFactors[i].ptrFactor[0] = &temp;
+                               ^
+./src/helper.c:119:53: warning: format ‘%p’ expects argument of type ‘void *’, but argument 4 has type ‘int’ [-Wformat=]
+   printf("waiting for data i: %d  max: %d write to %p\n",i,numberOfElements,temp);
+                                                     ^
+./src/helper.c:121:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(temp, ptrSize , MPI_INT, source, SEND_PTRFACTOR, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/helper.c:1:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:27:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:116:9: error: lvalue required as left operand of assignment
+   &temp = malloc(ptrSize*sizeof(int));
+         ^
+./src/helper.c:118:33: error: lvalue required as left operand of assignment
+   &(pstFactors[i].ptrFactor[0]) = &temp;
+                                 ^
+./src/helper.c:119:53: warning: format ‘%p’ expects argument of type ‘void *’, but argument 4 has type ‘int’ [-Wformat=]
+   printf("waiting for data i: %d  max: %d write to %p\n",i,numberOfElements,temp);
+                                                     ^
+./src/helper.c:121:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(temp, ptrSize , MPI_INT, source, SEND_PTRFACTOR, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/helper.c:1:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:28:11 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:118:33: error: lvalue required as left operand of assignment
+   &(pstFactors[i].ptrFactor[0]) = temp;
+                                 ^
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:33:09 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:35:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:36:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:39:40 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:40:09 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘sendPstFactors’:
+./src/helper.c:97:30: warning: format ‘%d’ expects a matching ‘int’ argument [-Wformat=]
+    printf("numberlength is: %d\n");
+                              ^
+19:40:19 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:01:41 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:121:53: warning: format ‘%p’ expects argument of type ‘void *’, but argument 4 has type ‘int’ [-Wformat=]
+   printf("waiting for data i: %d  max: %d write to %p\n",i,numberOfElements,*ptr);
+                                                     ^
+20:01:56 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:04:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:05:28 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:05:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:06:33 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:08:36 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:11:30 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:14:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:16:06 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:21:03 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1781:2: error: too few arguments to function ‘printPstFactors’
+  printPstFactors(pstFactors);
+  ^~~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2401:7: error: too few arguments to function ‘sendBigInteger’
+       sendBigInteger(&prime,0);
+       ^~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/factorParallel.c:2402:7: error: too few arguments to function ‘sendPstFactors’
+       sendPstFactors(pstFactors,0);
+       ^~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/helper.c:79:6: error: conflicting types for ‘sendPstFactors’
+ void sendPstFactors(struct sFactors *pstFactors,int dest){
+      ^~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:39:6: note: previous declaration of ‘sendPstFactors’ was here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/helper.c:104:6: error: conflicting types for ‘receivePstFactors’
+ void receivePstFactors(struct sFactors *pstFactors,int source){
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:40:6: note: previous declaration of ‘receivePstFactors’ was here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:106:5: error: too few arguments to function ‘printPstFactors’
+     printPstFactors(&pstFactors);
+     ^~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:111:6: error: too few arguments to function ‘sendBigInteger’
+      sendBigInteger(&N, rank);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:113:6: error: too few arguments to function ‘printPstFactors’
+      printPstFactors(&pstFactors);
+      ^~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:114:6: error: too few arguments to function ‘sendPstFactors’
+      sendPstFactors(&pstFactors, rank);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:150:6: error: too few arguments to function ‘sendBigInteger’
+      sendBigInteger(&N, waitList.list[i]);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:152:6: error: too few arguments to function ‘sendPstFactors’
+      sendPstFactors(&pstFactors, waitList.list[i]);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:238:6: error: too many arguments to function ‘receivePstFactors’
+      receivePstFactors(&pstFactors, 0,world_rank,world_rank);
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: declared here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:22:05 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c:79:6: error: conflicting types for ‘sendPstFactors’
+ void sendPstFactors(struct sFactors *pstFactors,int dest){
+      ^~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:39:6: note: previous declaration of ‘sendPstFactors’ was here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/helper.c:104:6: error: conflicting types for ‘receivePstFactors’
+ void receivePstFactors(struct sFactors *pstFactors,int source){
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:40:6: note: previous declaration of ‘receivePstFactors’ was here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:106:5: error: too few arguments to function ‘printPstFactors’
+     printPstFactors(&pstFactors);
+     ^~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:111:6: error: too few arguments to function ‘sendBigInteger’
+      sendBigInteger(&N, rank);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:113:6: error: too few arguments to function ‘printPstFactors’
+      printPstFactors(&pstFactors);
+      ^~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:114:6: error: too few arguments to function ‘sendPstFactors’
+      sendPstFactors(&pstFactors, rank);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:150:6: error: too few arguments to function ‘sendBigInteger’
+      sendBigInteger(&N, waitList.list[i]);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:152:6: error: too few arguments to function ‘sendPstFactors’
+      sendPstFactors(&pstFactors, waitList.list[i]);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:238:6: error: too many arguments to function ‘receivePstFactors’
+      receivePstFactors(&pstFactors, 0,world_rank,world_rank);
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: declared here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:22:55 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c:104:6: error: conflicting types for ‘receivePstFactors’
+ void receivePstFactors(struct sFactors *pstFactors,int source){
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:40:6: note: previous declaration of ‘receivePstFactors’ was here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:106:5: error: too few arguments to function ‘printPstFactors’
+     printPstFactors(&pstFactors);
+     ^~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:111:6: error: too few arguments to function ‘sendBigInteger’
+      sendBigInteger(&N, rank);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:113:6: error: too few arguments to function ‘printPstFactors’
+      printPstFactors(&pstFactors);
+      ^~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: declared here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:114:6: error: too few arguments to function ‘sendPstFactors’
+      sendPstFactors(&pstFactors, rank);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:150:6: error: too few arguments to function ‘sendBigInteger’
+      sendBigInteger(&N, waitList.list[i]);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:6: note: declared here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:152:6: error: too few arguments to function ‘sendPstFactors’
+      sendPstFactors(&pstFactors, waitList.list[i]);
+      ^~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: declared here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:238:6: error: too many arguments to function ‘receivePstFactors’
+      receivePstFactors(&pstFactors, 0,world_rank,world_rank);
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: declared here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:24:38 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:105:9: warning: too many arguments for format [-Wformat-extra-args]
+  printf("\n\nrank%d: start receiveing PstFactors from \n\n",dest,source);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:238:6: error: too many arguments to function ‘receivePstFactors’
+      receivePstFactors(&pstFactors, 0,world_rank,world_rank);
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: declared here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:27:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:238:6: error: too many arguments to function ‘receivePstFactors’
+      receivePstFactors(&pstFactors, 0,world_rank,world_rank);
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: declared here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:27:35 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:00:26 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:08:20 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:01:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:106:21: warning: passing argument 1 of ‘printPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+     printPstFactors(&pstFactors,world_rank);
+                     ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:113:22: warning: passing argument 1 of ‘printPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      printPstFactors(&pstFactors,world_rank);
+                      ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:114:21: warning: passing argument 1 of ‘sendPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      sendPstFactors(&pstFactors, rank,world_rank);
+                     ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:137:23: warning: passing argument 1 of ‘receivePstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+     receivePstFactors(&pstFactors, rank,world_rank);
+                       ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c:139:21: warning: passing argument 1 of ‘printPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+     printPstFactors(&pstFactors,world_rank);
+                     ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:152:21: warning: passing argument 1 of ‘sendPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      sendPstFactors(&pstFactors, waitList.list[i],world_rank);
+                     ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:39:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/startParallel.c:238:24: warning: passing argument 1 of ‘receivePstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      receivePstFactors(&pstFactors, 0,world_rank);
+                        ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c:239:22: warning: passing argument 1 of ‘printPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      printPstFactors(&pstFactors,world_rank);
+                      ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:243:22: warning: passing argument 2 of ‘ecmParallel’ from incompatible pointer type [-Wincompatible-pointer-types]
+      ecmParallel(&N, &pstFactors, world_rank);
+                      ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:40:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void ecmParallel(BigInteger *N, struct sFactors *pstFactors,int world_rank);
+      ^~~~~~~~~~~
+./src/startParallel.c:258:17: error: ‘(struct sFactors *)&pstFactors’ is a pointer; did you mean to use ‘->’?
+  free(pstFactors.ptrFactor);
+                 ^
+                 ->
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+20:02:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:238:24: warning: passing argument 1 of ‘receivePstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      receivePstFactors(&pstFactors, 0,world_rank);
+                        ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c:239:22: warning: passing argument 1 of ‘printPstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      printPstFactors(&pstFactors,world_rank);
+                      ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:41:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/startParallel.c:243:22: warning: passing argument 2 of ‘ecmParallel’ from incompatible pointer type [-Wincompatible-pointer-types]
+      ecmParallel(&N, &pstFactors, world_rank);
+                      ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:40:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void ecmParallel(BigInteger *N, struct sFactors *pstFactors,int world_rank);
+      ^~~~~~~~~~~
+./src/startParallel.c:258:17: error: ‘(struct sFactors *)&pstFactors’ is a pointer; did you mean to use ‘->’?
+  free(pstFactors.ptrFactor);
+                 ^
+                 ->
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+20:02:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:238:24: warning: passing argument 1 of ‘receivePstFactors’ from incompatible pointer type [-Wincompatible-pointer-types]
+      receivePstFactors(&pstFactors, 0,world_rank);
+                        ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:40:6: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c:258:17: error: ‘(struct sFactors *)&pstFactors’ is a pointer; did you mean to use ‘->’?
+  free(pstFactors.ptrFactor);
+                 ^
+                 ->
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:02:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:258:17: error: ‘(struct sFactors *)&pstFactors’ is a pointer; did you mean to use ‘->’?
+  free(pstFactors.ptrFactor);
+                 ^
+                 ->
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+20:04:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:258:29: error: invalid type argument of ‘->’ (have ‘struct sFactors’)
+  for(int i=0;i<pstFactors[0]->multiplicity;i++){
+                             ^~
+./src/startParallel.c:259:21: error: invalid type argument of ‘->’ (have ‘struct sFactors’)
+   free(pstFactors[i]->ptrFactor);
+                     ^~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+20:04:32 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:09:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:12:40 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:21:26 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:40:04 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2418:17: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+        MPI_Recv(GD[0].x,length,MPI_INT,0,TEST_GD,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                 ^~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:2420:26: error: incompatible type for argument 1 of ‘receiveBigInteger’
+        receiveBigInteger(Temp1,0,world_rank);
+                          ^~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:41:6: note: expected ‘BigInteger * {aka struct BigInteger *}’ but argument is of type ‘BigInteger {aka struct BigInteger}’
+ void receiveBigInteger(BigInteger *number, int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:244:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, outString, 1);
+                                                     ^~~~~~~~~
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+21:40:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2420:26: error: incompatible type for argument 1 of ‘receiveBigInteger’
+        receiveBigInteger(Temp1,0,world_rank);
+                          ^~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:41:6: note: expected ‘BigInteger * {aka struct BigInteger *}’ but argument is of type ‘BigInteger {aka struct BigInteger}’
+ void receiveBigInteger(BigInteger *number, int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:244:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, outString, 1);
+                                                     ^~~~~~~~~
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+21:40:44 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:244:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, outString, 1);
+                                                     ^~~~~~~~~
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+21:41:13 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:244:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ makes pointer from integer without a cast [-Wint-conversion]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, *outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+21:41:35 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:46:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:01:49 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:08:53 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:10:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1918:24: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘int’ [-Wformat=]
+           printf("cho %s",*ptrOutput);
+                        ^
+22:11:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1919:11: error: variable-sized object may not be initialized
+           char a[l] = strcpy(ptrOutput);
+           ^~~~
+./src/factorParallel.c:1919:23: error: too few arguments to function ‘strcpy’
+           char a[l] = strcpy(ptrOutput);
+                       ^~~~~~
+In file included from ./src/factorParallel.c:19:0:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+22:13:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1919:11: error: variable-sized object may not be initialized
+           char a[l]=malloc(l*sizeof(char));
+           ^~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+22:14:08 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1919:20: error: invalid initializer
+           char a[]=malloc(l*sizeof(char));
+                    ^~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:14:17 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:15:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1922:11: warning: attempt to free a non-heap object ‘a’ [-Wfree-nonheap-object]
+           free(a);
+           ^~~~~~~
+22:15:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:21:09 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2406:50: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                  ^
+./src/factorParallel.c:1880:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c:2408:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:22:05 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2406:14: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   char * lt =&outString;
+              ^
+./src/factorParallel.c:2407:50: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, lt, 1);
+                                                  ^~
+./src/factorParallel.c:1880:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:22:27 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:50: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, lt, 1);
+                                                  ^~
+./src/factorParallel.c:1880:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:27:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:50: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, lt, 1);
+                                                  ^~
+./src/factorParallel.c:1880:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:28:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2406:14: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   char **lt =&outString[0];
+              ^
+./src/factorParallel.c:2407:50: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, *lt, 1);
+                                                  ^
+./src/factorParallel.c:1880:6: note: expected ‘char **’ but argument is of type ‘char *’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:28:38 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:28:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:242:53: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+      SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                     ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:43:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/startParallel.c:244:40: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+      printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                        ^
+22:29:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2409:37: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char (*)[30000]’ [-Wformat=]
+   printf("\n\n\nFactorisation is:\n%s \n",&outString);
+                                     ^
+22:29:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:29:56 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:32:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:50: warning: passing argument 3 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, &outString, 1);
+                                                  ^
+./src/factorParallel.c:1880:6: note: expected ‘char **’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+22:32:34 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2406:15: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   char **lt = outString;
+               ^~~~~~~~~
+22:34:56 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:35:59 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:38:53 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:27: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+         char *outString = &a;
+                           ^
+19:04:27 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:27: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+         char *outString = &a;
+                           ^
+19:04:55 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:27: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+         char *outString = &a;
+                           ^
+19:05:02 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:27: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+         char *outString = a;
+                           ^
+19:05:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2407:27: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+         char *outString = &a[0];
+                           ^
+19:06:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:08:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:09:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1953:30: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char **’ [-Wformat=]
+   printf("hole string is: \n%s\n\n----------------------------------------------------",pptrOutput);
+                              ^
+19:10:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1953:30: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char **’ [-Wformat=]
+   printf("hole string is: \n%s\n\n----------------------------------------------------",pptrOutput);
+                              ^
+19:11:10 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:11:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:13:11 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1883:24: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+   char* saveForPrint = &ptrOutput;
+                        ^
+19:14:28 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1884:16: warning: assignment makes integer from pointer without a cast [-Wint-conversion]
+   *saveForPrint= &ptrOutput;
+                ^
+19:14:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1884:16: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   saveForPrint = &ptrOutput;
+                ^
+19:15:55 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1884:16: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   saveForPrint = &ptrOutput;
+                ^
+19:18:30 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1884:16: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
+   saveForPrint = &ptrOutput;
+                ^
+19:19:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1883:14: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+ char *save = *ptrOutput;
+              ^
+22:33:15 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:34:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:35:59 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘showFactors’:
+./src/helper.c:141:31: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘int’ [-Wformat=]
+  printf("factorisation is: \n%s",*ptrOutput);
+                               ^
+22:36:30 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘showFactors’:
+./src/helper.c:141:15: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+  char *save = *ptrOutput;
+               ^
+22:38:28 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘showFactors’:
+./src/helper.c:141:15: warning: initialization makes pointer from integer without a cast [-Wint-conversion]
+  char *save = *ptrOutput;
+               ^
+22:40:01 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:40:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:46:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c:1880:6: error: conflicting types for ‘SendFactorizationToOutput’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char *print)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:24:0:
+./includes/factor.h:43:6: note: previous declaration of ‘SendFactorizationToOutput’ was here
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2410:56: warning: passing argument 5 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, lt, 1,&a);
+                                                        ^
+./src/factorParallel.c:1880:6: note: expected ‘char *’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char *print)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:47:24 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/ecmfront.c: In function ‘ecmFrontText’:
+./src/ecmfront.c:964:3: error: too few arguments to function ‘SendFactorizationToOutput’
+   SendFactorizationToOutput(rc,astFactorsMod, &ptrOutput, doFactorization);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./src/ecmfront.c:25:0:
+./includes/factor.h:43:6: note: declared here
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char* print);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2410:56: warning: passing argument 5 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, lt, 1,&a);
+                                                        ^
+./src/factorParallel.c:1880:6: note: expected ‘char *’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char *print)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/helper.c: In function ‘showFactors’:
+./src/helper.c:141:2: error: too few arguments to function ‘SendFactorizationToOutput’
+  SendFactorizationToOutput(EXPR_OK,pstFactors,lt,1);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./includes/helper.h:4:0,
+                 from ./src/helper.c:1:
+./includes/factor.h:43:6: note: declared here
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char* print);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+22:47:54 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/ecmfront.c: In function ‘ecmFrontText’:
+./src/ecmfront.c:964:75: error: expected expression before ‘char’
+   SendFactorizationToOutput(rc,astFactorsMod, &ptrOutput, doFactorization,char*print);
+                                                                           ^~~~
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2410:56: warning: passing argument 5 of ‘SendFactorizationToOutput’ from incompatible pointer type [-Wincompatible-pointer-types]
+   SendFactorizationToOutput(EXPR_OK, pstFactors, lt, 1,&a);
+                                                        ^
+./src/factorParallel.c:1880:6: note: expected ‘char *’ but argument is of type ‘char (*)[30000]’
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char *print)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+./src/helper.c: In function ‘showFactors’:
+./src/helper.c:141:2: error: too few arguments to function ‘SendFactorizationToOutput’
+  SendFactorizationToOutput(EXPR_OK,pstFactors,lt,1);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./includes/helper.h:4:0,
+                 from ./src/helper.c:1:
+./includes/factor.h:43:6: note: declared here
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char* print);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:48:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘showFactors’:
+./src/helper.c:141:2: error: too few arguments to function ‘SendFactorizationToOutput’
+  SendFactorizationToOutput(EXPR_OK,pstFactors,lt,1);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./includes/helper.h:4:0,
+                 from ./src/helper.c:1:
+./includes/factor.h:43:6: note: declared here
+ void SendFactorizationToOutput(enum eExprErr rc, struct sFactors *pstFactors, char **pptrOutput, int doFactorization,char* print);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+22:48:44 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:50:42 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:52:03 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:139:17: error: incompatible type for argument 1 of ‘showFactors’
+     showFactors(N,pstFactors,world_rank);
+                 ^
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:47:6: note: expected ‘BigInteger * {aka struct BigInteger *}’ but argument is of type ‘BigInteger {aka struct BigInteger}’
+ void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
+      ^~~~~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:52:19 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:53:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:57:02 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:59:14 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:00:55 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:04:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1885:3: error: expected ‘;’ before ‘if’
+   if (rc != EXPR_OK)
+   ^~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+23:04:53 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1885:3: error: expected ‘;’ before ‘if’
+   if (rc != EXPR_OK)
+   ^~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+23:05:03 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘SendFactorizationToOutput’:
+./src/factorParallel.c:1885:3: error: expected ‘;’ before ‘if’
+   if (rc != EXPR_OK)
+   ^~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+23:05:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:06:10 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:06:39 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:07:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:09:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
