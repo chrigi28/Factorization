@@ -36,6 +36,7 @@ extern struct sFactors stFactors[MAX_FACTORS];
 extern int *factorArr[FACTOR_ARRSIZE];
 void factorParallel(BigInteger *nbrToFactor, int *number, int *factors, struct sFactors *pstFactors, char *pcKnownFactors,int world_rank);
 void factor(BigInteger *nbrToFactor, int *number, int *factors, struct sFactors *pstFactors, char *pcKnownFactors);
+int checkFactor(struct sFactors* pstFactors);
 void FactoringSIQS(limb *pNbrToFactor, limb *pFactor);
 void ecmParallel(BigInteger *N, struct sFactors *pstFactors,int world_rank);
 extern int lang;

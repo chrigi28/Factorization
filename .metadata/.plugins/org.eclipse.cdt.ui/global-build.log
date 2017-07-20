@@ -1510,3 +1510,841 @@ mpicc ./src/*.c -I./includes -o ./bin/Test -lm
 23:09:25 **** Incremental Build of configuration Default for project Factorization ****
 make 
 mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+23:14:03 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+13:53:26 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+13:54:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:23:26 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+15:18:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘checkFactor’:
+./src/factorParallel.c:2466:23: error: ‘pstFactors’ undeclared (first use in this function)
+       insertBigFactor(pstFactors, &Temp1);
+                       ^~~~~~~~~~
+./src/factorParallel.c:2466:23: note: each undeclared identifier is reported only once for each function it appears in
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+15:19:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+15:20:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2430:22: warning: passing argument 1 of ‘checkFactor’ from incompatible pointer type [-Wincompatible-pointer-types]
+       if(checkFactor(&pstFactors)){
+                      ^
+In file included from ./src/factorParallel.c:24:0:
+./includes/factor.h:39:5: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors **’
+ int checkFactor(struct sFactors* pstFactors);
+     ^~~~~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:188:30: warning: passing argument 1 of ‘checkFactor’ from incompatible pointer type [-Wincompatible-pointer-types]
+     int factor = checkFactor(&pstFactors);
+                              ^
+In file included from ./src/startParallel.c:10:0:
+./includes/factor.h:39:5: note: expected ‘struct sFactors *’ but argument is of type ‘struct sFactors (*)[1000]’
+ int checkFactor(struct sFactors* pstFactors);
+     ^~~~~~~~~~~
+15:21:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+15:28:59 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmParallel’:
+./src/factorParallel.c:1858:46: error: expected ‘)’ before ‘;’ token
+    printf("first element of GD: %d\n",GD[0].x;)
+                                              ^
+./src/factorParallel.c:1859:4: error: expected ‘;’ before ‘printf’
+    printf("size of GD is:%d\n",l);
+    ^~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+15:29:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:03:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:17:44 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:19:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:21:09 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:22:21 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:31:02 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:31:40 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:38:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:47:21 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:47:33 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:19:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+In file included from ./src/ecmfront.c:26:0:
+./includes/helper.h:37:3: error: redeclaration of enumerator ‘FACTOR_FOUND_BY_PARALLEL’
+   FACTOR_FOUND_BY_PARALLEL, // cho
+   ^~~~~~~~~~~~~~~~~~~~~~~~
+./includes/helper.h:28:2: note: previous definition of ‘FACTOR_FOUND_BY_PARALLEL’ was here
+  FACTOR_FOUND_BY_PARALLEL
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:37:3: error: redeclaration of enumerator ‘FACTOR_FOUND_BY_PARALLEL’
+   FACTOR_FOUND_BY_PARALLEL, // cho
+   ^~~~~~~~~~~~~~~~~~~~~~~~
+./includes/helper.h:28:2: note: previous definition of ‘FACTOR_FOUND_BY_PARALLEL’ was here
+  FACTOR_FOUND_BY_PARALLEL
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:37:3: error: redeclaration of enumerator ‘FACTOR_FOUND_BY_PARALLEL’
+   FACTOR_FOUND_BY_PARALLEL, // cho
+   ^~~~~~~~~~~~~~~~~~~~~~~~
+./includes/helper.h:28:2: note: previous definition of ‘FACTOR_FOUND_BY_PARALLEL’ was here
+  FACTOR_FOUND_BY_PARALLEL
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ./src/startParallel.c:14:0:
+./includes/helper.h:37:3: error: redeclaration of enumerator ‘FACTOR_FOUND_BY_PARALLEL’
+   FACTOR_FOUND_BY_PARALLEL, // cho
+   ^~~~~~~~~~~~~~~~~~~~~~~~
+./includes/helper.h:28:2: note: previous definition of ‘FACTOR_FOUND_BY_PARALLEL’ was here
+  FACTOR_FOUND_BY_PARALLEL
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+17:20:36 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:40:39 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmCurveParallel’:
+./src/factorParallel.c:1256:54: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+    MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                      ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1295:53: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+   MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                     ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1410:53: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+   MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                     ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1456:54: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+    MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                      ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1493:55: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+     MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                       ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1525:55: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+     MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                       ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1550:56: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+      MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                        ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1597:53: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+   MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                     ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1610:54: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+    MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                      ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1634:54: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+    MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                      ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1670:55: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+     MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                       ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1720:54: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+    MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                      ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1762:55: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+     MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                       ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1790:57: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+       MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                         ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+./src/factorParallel.c:1858:53: error: incompatible type for argument 5 of ‘MPI_Iprobe’
+   MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,status);
+                                                     ^~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:952:5: note: expected ‘MPI_Status * {aka struct MPI_Status *}’ but argument is of type ‘MPI_Status {aka struct MPI_Status}’
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status);
+     ^~~~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+17:41:20 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:42:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+17:57:42 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2520:4: error: too many arguments to function ‘MPI_Send’
+    MPI_Send(NULL,1,MPI_INT,1,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    ^~~~~~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:916:5: note: declared here
+ int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag,
+     ^~~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+17:57:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:01:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmCurveParallel’:
+./src/factorParallel.c:1259:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1273:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1298:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1413:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1459:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1496:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1528:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1553:16: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+       MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1600:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1613:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1637:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1673:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1723:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1765:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1793:17: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+        MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                 ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1861:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+18:03:49 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmCurveParallel’:
+./src/factorParallel.c:1259:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1273:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1298:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1413:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1459:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1496:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1528:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1553:16: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+       MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1600:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1613:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1637:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1673:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1723:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1765:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1793:17: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+        MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                 ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1861:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+18:04:31 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘ecmCurveParallel’:
+./src/factorParallel.c:1259:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1273:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1298:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1413:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1459:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1496:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1528:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1553:16: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+       MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1600:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1613:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1637:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1673:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1723:14: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+     MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+              ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1765:15: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+      MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+               ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1793:17: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+        MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+                 ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+./src/factorParallel.c:1861:13: warning: passing argument 1 of ‘MPI_Recv’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Recv(null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+             ^~~~
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:918:5: note: expected ‘void *’ but argument is of type ‘int’
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag,
+     ^~~~~~~~
+18:05:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:22:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:186:17: warning: passing argument 2 of ‘Bin2Dec’ from incompatible pointer type [-Wincompatible-pointer-types]
+     Bin2Dec(GD, &newFactor, NumberLength,6);
+                 ^
+In file included from ./src/startParallel.c:8:0:
+./includes/bignbr.h:63:6: note: expected ‘char *’ but argument is of type ‘char (*)[200]’
+ void Bin2Dec(limb *binary, char *decimal, int nbrLimbs, int groupLen);
+      ^~~~~~~
+18:22:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:23:24 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:29:09 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:37:35 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘insertBigFactor’:
+./src/factorParallel.c:2214:14: error: lvalue required as unary ‘&’ operand
+  showFactors(&NULL,pstFactors,-1);
+              ^
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+18:37:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:38:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:41:56 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:43:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:45:39 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:53:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:55:20 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:56:14 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:57:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:58:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:12:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:213:48: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘void (*)(BigInteger *, int *, int *, struct sFactors *, char *) {aka void (*)(struct BigInteger *, int *, int *, struct sFactors *, char *)}’ [-Wformat=]
+     printf("\n\nmain0: Factor Checked result: %d\n NEW Factorization:\n",factor);
+                                                ^
+/tmp/ccXkqgrn.o: In function `main':
+startParallel.c:(.text+0xcb4): undefined reference to `factor'
+collect2: error: ld returned 1 exit status
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:15:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2534:13: warning: passing argument 1 of ‘MPI_Send’ makes pointer from integer without a cast [-Wint-conversion]
+    MPI_Send(1,1,MPI_INT,1,CHECK_FACTOR,MPI_COMM_WORLD);
+             ^
+In file included from ./includes/helper.h:3:0,
+                 from ./src/factorParallel.c:25:
+./includes/mpi.h:916:5: note: expected ‘const void *’ but argument is of type ‘int’
+ int MPI_Send(const void *buf, int count, MPI_Datatype datatype, int dest, int tag,
+     ^~~~~~~~
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:217:48: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘void (*)(BigInteger *, int *, int *, struct sFactors *, char *) {aka void (*)(struct BigInteger *, int *, int *, struct sFactors *, char *)}’ [-Wformat=]
+     printf("\n\nmain0: Factor Checked result: %d\n NEW Factorization:\n",factor);
+                                                ^
+/tmp/ccM62uR8.o: In function `main':
+startParallel.c:(.text+0xc46): undefined reference to `factor'
+startParallel.c:(.text+0xd1e): undefined reference to `factor'
+collect2: error: ld returned 1 exit status
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:15:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:217:48: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘void (*)(BigInteger *, int *, int *, struct sFactors *, char *) {aka void (*)(struct BigInteger *, int *, int *, struct sFactors *, char *)}’ [-Wformat=]
+     printf("\n\nmain0: Factor Checked result: %d\n NEW Factorization:\n",factor);
+                                                ^
+/tmp/ccMPYJvr.o: In function `main':
+startParallel.c:(.text+0xc46): undefined reference to `factor'
+startParallel.c:(.text+0xd1e): undefined reference to `factor'
+collect2: error: ld returned 1 exit status
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:16:17 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+/tmp/cc5qUVjm.o: In function `main':
+startParallel.c:(.text+0xc46): undefined reference to `factor'
+collect2: error: ld returned 1 exit status
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:16:41 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:17:40 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:20:18 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:20:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:21:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:22:52 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:191:5: error: expected ‘;’ before ‘MPI_Send’
+     MPI_Send(&NumberLength,1,MPI_INT,1,CHECK_FACTOR,MPI_COMM_WORLD);
+     ^~~~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:23:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:23:32 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:24:14 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:29:35 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:32:17 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:34:36 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:06:42 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:09:06 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm

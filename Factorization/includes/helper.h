@@ -24,17 +24,18 @@ enum Messages {
 	CHECK_FACTOR,
 	GD_LENGTH,
 	TEST_GD,
-	NUMBER_LENGTH
+	NUMBER_LENGTH,
+	INSERT_FACTOR
 };
 extern char * STATENAMES[];
 
 enum eEcmResult{
-  FACTOR_NOT_FOUND = 0,
-  FACTOR_FOUND,
-  CHANGE_TO_SIQS,
-  GET_NEXT_EC,
-  FACTOR_FOUND_BY_PARALLEL, // cho
-  CLOSE_PROZESS
+	FACTOR_NOT_FOUND = 0,
+	FACTOR_FOUND,
+	CHANGE_TO_SIQS,
+	GET_NEXT_EC,
+	FACTOR_FOUND_BY_PARALLEL, // cho
+	CLOSE_PROZESS
 };
 
 void sendBigInteger(BigInteger *number,int dest,int source);
