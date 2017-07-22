@@ -1225,7 +1225,7 @@ static void Lehman(BigInteger *nbr, int k, BigInteger *factor)
 }
 
 static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
-	int noMess;
+	int interrupt;
 	MPI_Status status;
 	BigInteger potentialFactor;
 #ifdef __EMSCRIPTEN__
@@ -1254,10 +1254,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		}
 		else{
 
-			MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-			if(noMess){
-				MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				return CLOSE_PROZESS;
+			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			if(interrupt){
+				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			printf("rank %d:request EC (from factorParallel)\n",rank);
 			int null = 1;
@@ -1270,8 +1270,8 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			//      EC++;
 			//      EC = getNextECToCompute(); // cho requestEC from main
 			if(EC == -1){
-				MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				return CLOSE_PROZESS;
+				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				return FACTOR_FOUND_BY_PARALLEL;
 			}
 #ifdef __EMSCRIPTEN__
 			text[0] = '7';
@@ -1293,10 +1293,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		}
 		// Try to factor BigInteger N using Lehman algorithm. Result in potentialFactor.
 		Lehman(N, EC % 50000000, &potentialFactor);
-		MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-		if(noMess){
-			MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-			return CLOSE_PROZESS;
+		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		if(interrupt){
+			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		if (potentialFactor.nbrLimbs > 1)
 		{                // Factor found.
@@ -1408,10 +1408,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		modmult(Aux1, Aux2, A0);                   // A0 <- 2*(EC+1)/(3*(EC+1)^2 - 1)
 
 
-		MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-		if(noMess){
-			MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-			return CLOSE_PROZESS;
+		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		if(interrupt){
+			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		//  if A0*(A0 ^ 2 - 1)*(9 * A0 ^ 2 - 1) mod N=0 then select another curve.
 		modmult(A0, A0, A02);          // A02 <- A0^2
@@ -1454,10 +1454,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		for (Pass = 0; Pass < 2; Pass++)
 		{
 
-			MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-			if(noMess){
-				MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				return CLOSE_PROZESS;
+			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			if(interrupt){
+				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			/* For powers of 2 */
 			indexPrimes = 0;
@@ -1491,10 +1491,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			do
 			{
 
-				MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-				if(noMess){
-					MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-					return CLOSE_PROZESS;
+				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				if(interrupt){
+					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				indexPrimes++;
 				P = SmallPrime[indexM];
@@ -1523,10 +1523,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			for (i = 0; i < SIEVE_SIZE; i++)
 			{
 
-				MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-				if(noMess){
-					MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-					return CLOSE_PROZESS;
+				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				if(interrupt){
+					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				sieve2310[i] =
 						(u % 3 == 0
@@ -1548,10 +1548,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 				for (i = 0; i < 10*SIEVE_SIZE; i++)
 				{
 
-					MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-					if(noMess){
-						MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-						return CLOSE_PROZESS;
+					MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+					if(interrupt){
+						MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+						return FACTOR_FOUND_BY_PARALLEL;
 					}
 					if (sieve[i] != 0)
 					{
@@ -1595,10 +1595,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		} /* end for Pass */
 
 
-		MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-		if(noMess){
-			MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-			return CLOSE_PROZESS;
+		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		if(interrupt){
+			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		/******************************************************/
 		/* Second step (using improved standard continuation) */
@@ -1608,10 +1608,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		for (u = 1; u < SIEVE_SIZE; u += 2)
 		{
 
-			MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-			if(noMess){
-				MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				return CLOSE_PROZESS;
+			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			if(interrupt){
+				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			if (u % 3 == 0 || u % 5 == 0 || u % 7 == 0
 #if MAX_PRIME_SIEVE == 11
@@ -1632,10 +1632,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		for (Pass = 0; Pass < 2; Pass++)
 		{
 
-			MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-			if(noMess){
-				MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				return CLOSE_PROZESS;
+			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			if(interrupt){
+				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			int Qaux, J;
 			memcpy(GcdAccumulated, MontgomeryMultR1, NumberLength * sizeof(limb));
@@ -1668,10 +1668,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			for (I = 5; I < SIEVE_SIZE; I += 2)
 			{
 
-				MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-				if(noMess){
-					MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-					return CLOSE_PROZESS;
+				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				if(interrupt){
+					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				memcpy(WX, X, NumberLength * sizeof(limb));
 				memcpy(WZ, Z, NumberLength * sizeof(limb));
@@ -1718,10 +1718,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 				memcpy(UZ, WZ, NumberLength * sizeof(limb));  // Previous (X:Z)
 			} /* end for I */
 
-			MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-			if(noMess){
-				MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				return CLOSE_PROZESS;
+			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			if(interrupt){
+				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			AddBigNbrModN(DX, DZ, Aux1, TestNbr, NumberLength);
 			modmult(Aux1, Aux1, W1);
@@ -1760,10 +1760,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			for (indexM = 0; indexM <= maxIndexM; indexM++)
 			{
 
-				MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-				if(noMess){
-					MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-					return CLOSE_PROZESS;
+				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				if(interrupt){
+					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				if (indexM >= Qaux)
 				{ // If inside step 2 range...
@@ -1788,10 +1788,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 					for (i = 0; i < GROUP_SIZE; i++)
 					{
 
-						MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-						if(noMess){
-							MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-							return CLOSE_PROZESS;
+						MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+						if(interrupt){
+							MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+							return FACTOR_FOUND_BY_PARALLEL;
 						}
 						j = sieveidx[i]; // 0 < J < HALF_SIEVE_SIZE
 						if (sieve[J + j] != 0 && sieve[J - 1 - j] != 0)
@@ -1856,10 +1856,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			}
 		} /* end for Pass */
 
-		MPI_Iprobe(0,INSERT_FACTOR,MPI_COMM_WORLD,&noMess,&status);
-		if(noMess){
-			MPI_Recv(&null,1,MPI_INT,0,INSERT_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-			return CLOSE_PROZESS;
+		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		if(interrupt){
+			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		performLehman = TRUE;
 
@@ -1871,7 +1871,14 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 
 	printf("rank %d: ecm begin\n ",world_rank);
 	//showFactors(N,pstFactors,world_rank);
-	printPstFactors(pstFactors,world_rank);
+//	printPstFactors(pstFactors,world_rank);
+	if(world_rank>1){
+		MPI_Send(&world_rank,1,MPI_INT,0,GET_FACTOR_DATA,MPI_COMM_WORLD);
+		receiveBigInteger(N,0,world_rank);
+		receivePstFactors(pstFactors,0,world_rank);
+		printf("rank%d data updated:\n",world_rank);
+		showFactors(N,pstFactors,world_rank);
+	}
 	int P, Q;
 #ifndef __EMSCRIPTEN__
 	(void)pstFactors;     // Ignore parameter.
@@ -1945,7 +1952,10 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 		else if (ecmResp == FACTOR_FOUND){
 			//memcpy(Temp1.limbs, GD, numLimbs * sizeof(limb));
 			MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD); //send main0 in rdyToRecv mode
+			MPI_Recv(&ecmResp,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 			MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+			MPI_Recv(&ecmResp,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("sendGD\n");
 			MPI_Send(&GD[0],MAX_LEN,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
 			printf("\n Data Send to Master %d finished return\n",world_rank);
 			// send message to rank0
@@ -1954,9 +1964,9 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 			// start rank 1 again keep rank > 1 rdy for EC
 			break;
 		}
-		if(ecmResp == CLOSE_PROZESS){
-			closeFlag = 1;
-			printf("\n ============================================================================\nrank%d:closed because of interrupt\n",world_rank);
+		if(ecmResp == FACTOR_FOUND_BY_PARALLEL){
+//			closeFlag = 1;
+			printf("\n ============================================================================\nrank%d:interrupted \n",world_rank);
 			return;
 		}
 	} while (!memcmp(GD, TestNbr, NumberLength*sizeof(limb)));
@@ -2506,6 +2516,8 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 			showFactors(&prime,pstFactors,world_rank);
 			//irecv for cancel or update
 			sendPstFactors(pstFactors,0,world_rank);
+			printf("\n\???????????????????????????????????????????????????????????????\n");
+			showFactors(&prime,pstFactors,world_rank);
 			//send message to Master factor &prime with pstFactors
 			printf("rank1: data transfered\n");
 			//      MPI_Send(&nextEC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);

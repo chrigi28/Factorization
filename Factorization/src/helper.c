@@ -16,6 +16,11 @@ char * STATENAMES[]={
 	"SEND_UPPERBOUND\0",
 	"SEND_PTRFACTOR\0",
 	"CHECK_FACTOR\0",
+	"GD_LENGTH",
+	"TEST_GD",
+	"NUMBER_LENGTH",
+	"INTERRUPT_EC",
+	"GET_FACTOR_DATA",
 	"",
 	"",
 	"",
@@ -149,6 +154,17 @@ void cho_Waitany(MPI_Status *status){
 		//usleep(100000);
 		usleep(500000);
 		MPI_Iprobe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&noMess,status);
+
+	}
+	//printf("received from %i, tag %i\n",status->MPI_SOURCE,status->MPI_TAG);
+}
+void cho_WaitSpecific(MPI_Status *status,int tag){
+	int noMess = 0;
+	//printf("cho wait\n");
+	while(noMess == 0){
+		//usleep(100000);
+		usleep(500000);
+		MPI_Iprobe(MPI_ANY_SOURCE,tag,MPI_COMM_WORLD,&noMess,status);
 
 	}
 	//printf("received from %i, tag %i\n",status->MPI_SOURCE,status->MPI_TAG);
