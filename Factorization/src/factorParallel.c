@@ -2555,6 +2555,8 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 
 		}
 	}
+	printf("all processes factored\n");
+	MPI_Send(&null,1,MPI_INT,0,FACTORING_DONE,MPI_COMM_WORLD);
 #ifdef __EMSCRIPTEN__
 	SaveFactors(pstFactors);
 #endif

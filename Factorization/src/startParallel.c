@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <time.h>
 //test copy
 #include "bignbr.h"
 #include "highlevel.h"
@@ -18,8 +18,11 @@ const int TERMINATE_MESSAGE = -1;
 
 int main(int argc, char** argv) {
 	// Initialize the MPI environment
+	time_t start = time(NULL);
+	time_t end;
 	int i = 0;
 	int factoringRunning = 0;
+	int factoringDone = 0;
 	MPI_Init(NULL, NULL);
 	enum Messages message = GET_JOB;
 	int outBuffer[10];
@@ -76,7 +79,7 @@ int main(int argc, char** argv) {
 		memset(&(rdyToFactor.list[0]), -1, sizeof(rdyToFactor.list[0]) * world_size);
 		rdyToFactor.idx = 0;
 		while (pendingAnswers > 0) {
-			printf("main0: pending answers %i\n", pendingAnswers);
+			//printf("main0: pending answers %i\n", pendingAnswers);
 			//printf("wait for any comm\n");
 			int waitLength = world_size;
 			printf("\nrank0: wait for next Request: \n");
@@ -97,7 +100,7 @@ int main(int argc, char** argv) {
 			case REGISTER_FOR_EC: {
 				printf("main0: register_for ec received from %d\n", rank);
 
-				if (factoringRunning == 1) {
+				if (factoringRunning == 1 && currentEC>20) {
 					MPI_Send(&factoringRunning, 1, MPI_INT, rank,REGISTER_FOR_EC, MPI_COMM_WORLD);
 //					printf("main0: Send FactorData to rank:%d\n", rank);
 //					sendBigInteger(&N, rank,world_rank);
@@ -137,17 +140,21 @@ int main(int argc, char** argv) {
 				printf("\nmain0: bigint and pstfactor received\n\n");
 				factoringRunning = 1;
 //    			    MPI_Send(&currentEC,1,MPI_INT,rank,START_FACTORING,MPI_COMM_WORLD);
-
-				for (int i = 1; i < world_size; i++) {
-//    			    	printf("main0: \nforloop idx: %d\n",i);
-					MPI_Send(&i, 1, MPI_INT, i, REGISTER_FOR_EC,MPI_COMM_WORLD);
-					//currentEC++;
-//					sendBigInteger(&N, i,world_rank);
-////    			        printf("main0: bigint sent\n");
-//					sendPstFactors(pstFactors, i,world_rank);
-//					printf("main0: send FactorData to rank:%d\n",i);
+				if(currentEC>20){
+					for (int i = 1; i < world_size; i++) {
+	//    			    	printf("main0: \nforloop idx: %d\n",i);
+						if(rdyToFactor.list[i]==1){
+							MPI_Send(&i, 1, MPI_INT, i, REGISTER_FOR_EC,MPI_COMM_WORLD);
+							rdyToFactor.list[i]=0;
+						}
+						//currentEC++;
+	//					sendBigInteger(&N, i,world_rank);
+	////    			        printf("main0: bigint sent\n");
+	//					sendPstFactors(pstFactors, i,world_rank);
+	//					printf("main0: send FactorData to rank:%d\n",i);
+					}
 				}
-//    			    MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
+					//    			    MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
 				break;
 
 			case SEND_EC:
@@ -163,6 +170,14 @@ int main(int argc, char** argv) {
 					answ = -1;
 				}
 				MPI_Send(&answ, 1, MPI_INT, rank, SEND_EC, MPI_COMM_WORLD);
+				if(currentEC>20){
+					for(int i=2;i<world_size;i++){
+						if(rdyToFactor.list[i]==1){
+							MPI_Send(&i, 1, MPI_INT, i, REGISTER_FOR_EC,MPI_COMM_WORLD);
+							rdyToFactor.list[i]=0;
+						}
+					}
+				}
 
 				//    				MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
 				printf("main0: nextEC is : %d\n", currentEC);
@@ -224,6 +239,18 @@ int main(int argc, char** argv) {
 				sendBigInteger(&N,rank,0);
 				sendPstFactors(pstFactors,rank,0);
 				break;
+			case FACTORING_DONE:
+				end = time(NULL);
+				printf("\n\n time Needed to factorize %.2f seconds\n", (double)(end- start));
+				factoringRunning = 0;
+				factoringDone = 1;
+				int cancel =-1;
+				for(int i=0;i<world_size;i++){
+					if(rdyToFactor.list[i]==1){
+						MPI_Send(&cancel, 1, MPI_INT, i, REGISTER_FOR_EC,MPI_COMM_WORLD);
+					}
+				}
+				break;
 			default:
 				printf("\n\n ==========================ERROR========================\n\n");
 				printf("undefined TAG was: %d", status.MPI_TAG);
@@ -260,7 +287,7 @@ int main(int argc, char** argv) {
 				MPI_Send(&world_rank, 1, MPI_INT, 0, REGISTER_FOR_EC,MPI_COMM_WORLD);
 				cho_WaitSpecific(&status,REGISTER_FOR_EC);
 //    			printf("rank%d: mes received tag = %d \n",world_rank,status.MPI_TAG);
-//					MPI_Recv(&EC, 1, MPI_INT, 0, REGISTER_FOR_EC, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				MPI_Recv(&EC, 1, MPI_INT, 0, REGISTER_FOR_EC, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				printf("Rank%d: EC received %d\n", world_rank, EC);
 				if (EC != -1) {
 //						receiveBigInteger(&N, 0,world_rank);

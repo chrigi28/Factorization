@@ -19,13 +19,15 @@ enum Messages {
 	SEND_EC,
 	NO_OF_PSTFACTORS,
 	SEND_MULTIPLICITY,
-	SEND_UPPERBOUND,
+	SEND_UPPERBOUND, //10
 	SEND_PTRFACTOR,
 	CHECK_FACTOR,
 	GD_LENGTH,
 	TEST_GD,
 	NUMBER_LENGTH,
-	INSERT_FACTOR
+	INTERRUPT_EC,
+	GET_FACTOR_DATA,
+	FACTORING_DONE
 };
 extern char * STATENAMES[];
 
@@ -43,8 +45,10 @@ void receiveBigInteger(BigInteger *number, int source,int dest);
 void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
 void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
 void printPstFactors(struct sFactors *pstFactors, int source);
+void writeFactorToDisk(struct sFactors *pstFactors);
 void logPstFactors(struct sFactors *pstFactors);
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
 void cho_Waitany(MPI_Status *status);
+void cho_WaitSpecific(MPI_Status *status,int tag);
 #endif

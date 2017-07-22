@@ -135,7 +135,10 @@ void receivePstFactors(struct sFactors *pstFactors,int source,int dest){
 		}
 
 	}
-
+	if(dest == 0){
+		writeFactorToDisk(pstFactors);
+		printf("factor Saved\n");
+	}
 }
 
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
@@ -168,4 +171,54 @@ void cho_WaitSpecific(MPI_Status *status,int tag){
 
 	}
 	//printf("received from %i, tag %i\n",status->MPI_SOURCE,status->MPI_TAG);
+}
+
+void writeFactorToDisk(struct sFactors *pstFactors){
+	int NumberOfElements = pstFactors->multiplicity+1;
+	char buf[30];
+	for(int i = 0;i<NumberOfElements;i++){
+		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",i );
+		FILE *fp;
+		fp = fopen( buf, "wb");
+		if(fp != NULL){
+			int numberLength = pstFactors[i].ptrFactor[0]+1;
+			fwrite(&(numberLength),sizeof(int),1,fp );
+	//		printf("write numberlength %d\n",numberLength);
+			fwrite(&(pstFactors[i].multiplicity),sizeof(int),1,fp );
+	//		printf("write multipli %d\n",pstFactors[i].multiplicity);
+			fwrite(&(pstFactors[i].upperBound),sizeof(int),1,fp );
+	//		printf("write upper %d\n",pstFactors[i].upperBound);
+			fwrite(&(pstFactors[i].ptrFactor[0]),sizeof(int),numberLength,fp);
+	//		printf("ptr is: ");
+			for(int j=0;j<numberLength;j++){
+				printf("%d ",pstFactors[i].ptrFactor[j]);
+			}
+			printf("\n");
+			fclose(fp);
+		}else{
+			printf("failed to open file:%s\n",buf);
+		}
+
+	}
+}
+void readFactorFromDisk(struct sFactors *pstFactors){
+	int NumberOfElements = pstFactors->multiplicity+1;
+	char buf[30];
+	int fileNr = 0;
+	for(;;){
+		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",fileNr );
+		FILE *fp;
+		fp = fopen( buf, "rb");
+		int ptrValueLength = 0;
+		fseek(fp, 0, SEEK_SET);
+		fread(&(ptrValueLength),sizeof(int),1,fp );
+		fread(&(pstFactors[fileNr].multiplicity),sizeof(int),1,fp );
+		fread(&(pstFactors[fileNr].upperBound),sizeof(int),1,fp );
+		fread(&(pstFactors[fileNr].ptrFactor[0]),sizeof(int),ptrValueLength,fp);
+		fclose(fp);
+		fileNr++;
+		if(fileNr>pstFactors[0].multiplicity){
+			break;
+		}
+	}
 }
