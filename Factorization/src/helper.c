@@ -108,6 +108,9 @@ void sendPstFactors(struct sFactors *pstFactors,int dest,int source){
 		}
 
 	}
+	int len = strlen(tofactorDec);
+	MPI_Send(&len,1,MPI_INT,dest,SEND_CHAR,MPI_COMM_WORLD);
+	MPI_Send(tofactorDec,len,MPI_CHAR,dest,SEND_CHAR,MPI_COMM_WORLD);
 }
 
 void receivePstFactors(struct sFactors *pstFactors,int source,int dest){
@@ -143,6 +146,9 @@ void receivePstFactors(struct sFactors *pstFactors,int source,int dest){
 		writeFactorToDisk(pstFactors);
 		printf("factor Saved\n");
 	}
+	int len;
+	MPI_Recv(&len,1,MPI_INT,source,SEND_CHAR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+	MPI_Recv(tofactorDec,len,MPI_CHAR,source,SEND_CHAR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 }
 
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
@@ -152,6 +158,24 @@ void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
 	char **lt = &outString;
 	SendFactorizationToOutput(EXPR_OK,pstFactors,lt,1,a);
 	printf("Factorisation is: \n%s\n",a);
+}
+
+void saveFactorizationToText(struct sFactors *pstFactors,char *path){
+	char a[30000];
+    char *outString = &a[0];
+	char **lt = &outString;
+	SendFactorizationToOutput(EXPR_OK,pstFactors,lt,1,a);
+	FILE *fp;
+	char buf[1000];
+	snprintf(buf, sizeof(buf), "./saves/%s/Factorization.txt",path );
+	fp = fopen(buf, "w");
+	if(fp != NULL){
+		fprintf(fp,"%s\n",a);
+		fclose(fp);
+		printf("factorization saved to %s\n",buf);
+	}else{
+		printf("failed to save factorization to txt");
+	}
 }
 
 void cho_Waitany(MPI_Status *status){
@@ -249,6 +273,7 @@ void writeFactorToDisk(struct sFactors *pstFactors){
 		}
 
 	}
+	saveFactorizationToText(pstFactors,savePath);
 }
 void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
 	char buf[1000];
@@ -292,6 +317,7 @@ void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
 	}
 	printf("%d Factors loaded",pstFactors[0].multiplicity);
 }
+
 
 void setSavePoint(char *tofactor){
 	strcpy(savePath,tofactor);

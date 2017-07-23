@@ -1,0 +1,3 @@
+mpiexec -n "number of prozesses (use one more for master)" ./Factorization "therm or number to factor" -continue (if needed)
+example: 4 prozesses
+mpiexec -n 5 ./Factorization  10^201+1

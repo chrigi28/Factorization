@@ -2382,9 +2382,9 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 	}
 	for (factorNbr = 1; factorNbr <= pstFactors->multiplicity; factorNbr++, pstCurFactor++)
 	{
-		printf("factorNbr is %d\n Multi is: %d\n",factorNbr,pstFactors->multiplicity);
+//		printf("factorNbr is %d\n Multi is: %d\n",factorNbr,pstFactors->multiplicity);
 		int upperBound = pstCurFactor->upperBound;
-		printf("upperbound is %d\n",upperBound);
+//		printf("upperbound is %d\n",upperBound);
 		restartFactoring = FALSE;
 		// If number is prime, do not process it.
 		if (upperBound == 0)
@@ -2531,7 +2531,8 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 
 		}
 	}
-	printf("all processes factored\n");
+	printf("all factors processed\n");
+	saveFactorizationToText(pstFactors,pcKnownFactors);
 	MPI_Send(&null,1,MPI_INT,0,FACTORING_DONE,MPI_COMM_WORLD);
 #ifdef __EMSCRIPTEN__
 	SaveFactors(pstFactors);

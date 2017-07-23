@@ -1,0 +1,102 @@
+//#include <mpi.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+//#include "mpi.h"
+//void cho_Waitany(MPI_Status *status);
+
+struct sFactors
+{
+  int *ptrFactor;
+  int multiplicity;
+  int upperBound;
+}pst1,pst2,pst3;
+
+void writeFactorToDisk(struct sFactors *pstFactors){
+	int NumberOfElements = pstFactors->multiplicity+1;
+	char buf[30];
+	for(int i = 0;i<NumberOfElements;i++){
+		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",i );
+		FILE *fp;
+		fp = fopen( buf, "wb");
+		int numberLength = pstFactors[i].ptrFactor[0]+1;
+		fwrite(&(numberLength),sizeof(int),1,fp );
+		fwrite(&(pstFactors[i].multiplicity),sizeof(int),1,fp );
+		fwrite(&(pstFactors[i].upperBound),sizeof(int),1,fp );
+		fwrite(&(pstFactors[i].ptrFactor[0]),sizeof(int),numberLength,fp);
+		fclose(fp);
+	}
+}
+void readFactorFromDisk(struct sFactors *pstFactors){
+	int NumberOfElements = pstFactors->multiplicity+1;
+	char buf[30];
+	int fileNr = 0;
+	for(;;){
+		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",fileNr );
+		FILE *fp;
+		fp = fopen( buf, "rb");
+		int ptrValueLength = 0;
+		fseek(fp, 0, SEEK_SET);
+		fread(&(ptrValueLength),sizeof(int),1,fp );
+		fread(&(pstFactors[fileNr].multiplicity),sizeof(int),1,fp );
+		fread(&(pstFactors[fileNr].upperBound),sizeof(int),1,fp );
+		fread(&(pstFactors[fileNr].ptrFactor[0]),sizeof(int),ptrValueLength,fp);
+		fclose(fp);
+		fileNr++;
+		if(fileNr>=pstFactors[0].multiplicity){
+			break;
+		}
+	}
+}
+
+int main(int argc, char** argv) {
+	struct sFactors pstFactors[3];
+	pst1.multiplicity=2;
+	pst1.upperBound=1;
+	int ptr1[] = {3,1,2,3};
+	pst1.ptrFactor= ptr1;
+
+	pst2.multiplicity=5;
+	pst2.upperBound=1;
+	int ptr2[] = {3,4,5,6};
+	pst2.ptrFactor= ptr2;
+
+	pst3.multiplicity=45684;
+	pst3.upperBound=1;
+	int ptr3[] = {3,7,8,9};
+	pst3.ptrFactor= ptr3;
+
+	pstFactors[0] = pst1;
+	pstFactors[1] = pst2;
+	pstFactors[2] = pst3;
+	printf("write data\n");
+	writeFactorToDisk(pstFactors);
+	printf("write done\n");
+
+
+	struct sFactors pstFactors2[3];
+	int ptr4[4];
+	int ptr5[4];
+	int ptr6[4];
+	pstFactors2[0].ptrFactor =ptr4;
+	pstFactors2[1].ptrFactor =ptr5;
+	pstFactors2[2].ptrFactor =ptr6;
+	printf("startRead\n");
+	readFactorFromDisk(pstFactors2);
+	printf("read done\n");
+
+	printf("multiplicity0: %d\n",pstFactors2[0].multiplicity);
+	printf("upper: %d\n",pstFactors2[0].upperBound);
+	printf("ptr0,0:%d 1:%d 2:%d 3:%d\n",pstFactors2[0].ptrFactor[0],pstFactors2[0].ptrFactor[1],pstFactors2[0].ptrFactor[2],pstFactors2[0].ptrFactor[3]);
+
+
+	printf("multipl1: %d\n",pstFactors2[1].multiplicity);
+	printf("upper1: %d\n",pstFactors2[1].upperBound);
+	printf("ptr1,0:%d 1:%d 2:%d 3:%d\n",pstFactors2[1].ptrFactor[0],pstFactors2[1].ptrFactor[1],pstFactors2[1].ptrFactor[2],pstFactors2[1].ptrFactor[3]);
+
+	printf("multipl2: %d\n",pstFactors2[2].multiplicity);
+	printf("upper 2: %d\n",pstFactors2[2].upperBound);
+	printf("ptr2,0:%d 1:%d 2:%d 3:%d\n",pstFactors2[2].ptrFactor[0],pstFactors2[2].ptrFactor[1],pstFactors2[2].ptrFactor[2],pstFactors2[2].ptrFactor[3]);
+
+}

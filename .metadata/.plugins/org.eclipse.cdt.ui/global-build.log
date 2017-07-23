@@ -2348,3 +2348,839 @@ mpicc ./src/*.c -I./includes -o ./bin/Test -lm
 20:09:06 **** Incremental Build of configuration Default for project Factorization ****
 make 
 mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:33:48 **** Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:37:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:58:06 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+13:01:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+13:04:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+13:10:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:16:33 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:23:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:23:26 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:33:04 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:38:36 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:45:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:45:52 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:46:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:48:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+14:49:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:03:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘writeFactorToDisk’:
+./src/helper.c:177:47: warning: format ‘%s’ expects argument of type ‘char *’, but argument 4 has type ‘int’ [-Wformat=]
+   snprintf(buf, sizeof(buf), "./saves/sFactor%s.bin",i );
+                                               ^
+16:03:51 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:25:26 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+16:26:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:02:14 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:05:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:47:59 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+/tmp/cciwskE5.o: In function `factorParallel':
+factorParallel.c:(.text+0x772d): undefined reference to `factor'
+collect2: error: ld returned 1 exit status
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+18:50:40 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:54:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘receivePstFactors’:
+./src/helper.c:139:3: warning: implicit declaration of function ‘writeFactorToDisk’ [-Wimplicit-function-declaration]
+   writeFactorToDisk(pstFactors);
+   ^~~~~~~~~~~~~~~~~
+./src/helper.c: At top level:
+./src/helper.c:176:6: warning: conflicting types for ‘writeFactorToDisk’
+ void writeFactorToDisk(struct sFactors *pstFactors){
+      ^~~~~~~~~~~~~~~~~
+./src/helper.c:139:3: note: previous implicit declaration of ‘writeFactorToDisk’ was here
+   writeFactorToDisk(pstFactors);
+   ^~~~~~~~~~~~~~~~~
+18:55:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:59:44 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+18:59:54 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:02:08 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:06:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:07:39 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:08:49 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:42:48 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/ecmfront.c: In function ‘ecmFrontText’:
+./src/ecmfront.c:950:15: error: incompatible type for argument 1 of ‘setSavePoint’
+  setSavePoint(tofactor);
+               ^~~~~~~~
+In file included from ./src/ecmfront.c:26:0:
+./includes/helper.h:55:6: note: expected ‘char *’ but argument is of type ‘BigInteger {aka struct BigInteger}’
+ void setSavePoint(char *tofactor);
+      ^~~~~~~~~~~~
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2370:3: warning: implicit declaration of function ‘readFactorFromDisk’ [-Wimplicit-function-declaration]
+   readFactorFromDisk(pstFactors);
+   ^~~~~~~~~~~~~~~~~~
+./src/helper.c: In function ‘writeFactorToDisk’:
+./src/helper.c:180:2: warning: implicit declaration of function ‘mkdir’ [-Wimplicit-function-declaration]
+  mkdir(buf,0x0777);
+  ^~~~~
+./src/helper.c: In function ‘setSavePoint’:
+./src/helper.c:228:2: error: too many arguments to function ‘strcpy’
+  strcpy(savePath,tofactor,strlen(tofactor));
+  ^~~~~~
+In file included from ./includes/helper.h:8:0,
+                 from ./src/helper.c:1:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:43:28 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2370:3: warning: implicit declaration of function ‘readFactorFromDisk’ [-Wimplicit-function-declaration]
+   readFactorFromDisk(pstFactors);
+   ^~~~~~~~~~~~~~~~~~
+./src/helper.c: In function ‘writeFactorToDisk’:
+./src/helper.c:180:2: warning: implicit declaration of function ‘mkdir’ [-Wimplicit-function-declaration]
+  mkdir(buf,0x0777);
+  ^~~~~
+./src/helper.c: In function ‘setSavePoint’:
+./src/helper.c:228:2: error: too many arguments to function ‘strcpy’
+  strcpy(savePath,tofactor,strlen(tofactor));
+  ^~~~~~
+In file included from ./includes/helper.h:8:0,
+                 from ./src/helper.c:1:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:44:09 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/ecmfront.c: In function ‘readFactorFromDisk’:
+./src/ecmfront.c:47:13: error: invalid storage class for function ‘stringToHTML’
+ static void stringToHTML(char **pptrOutput, char *ptrString)
+             ^~~~~~~~~~~~
+./src/ecmfront.c:91:13: error: invalid storage class for function ‘SkipSpaces’
+ static void SkipSpaces(char **pptrText)
+             ^~~~~~~~~~
+./src/ecmfront.c:101:13: error: invalid storage class for function ‘evalExpression’
+ static char evalExpression(char *expr, int counter, BigInteger *ptrResult)
+             ^~~~~~~~~~~~~~
+./src/ecmfront.c:131:13: error: invalid storage class for function ‘BatchError’
+ static void BatchError(char **pptrOutput, char *tofactorText, char *errorText)
+             ^~~~~~~~~~
+./src/ecmfront.c:302:13: error: invalid storage class for function ‘ExponentToBigInteger’
+ static void ExponentToBigInteger(int exponent, BigInteger *bigint)
+             ^~~~~~~~~~~~~~~~~~~~
+./src/ecmfront.c:319:13: error: invalid storage class for function ‘GetNumberOfDivisors’
+ static void GetNumberOfDivisors(char **pptrOutput)
+             ^~~~~~~~~~~~~~~~~~~
+./src/ecmfront.c:350:13: error: invalid storage class for function ‘GetSumOfDivisors’
+ static void GetSumOfDivisors(char **pptrOutput)
+             ^~~~~~~~~~~~~~~~
+./src/ecmfront.c:380:13: error: invalid storage class for function ‘GetEulerTotient’
+ static void GetEulerTotient(char **pptrOutput)
+             ^~~~~~~~~~~~~~~
+./src/ecmfront.c:410:13: error: invalid storage class for function ‘GetMobius’
+ static void GetMobius(char **pptrOutput)
+             ^~~~~~~~~
+./src/ecmfront.c:446:13: error: invalid storage class for function ‘ComputeFourSquares’
+ static void ComputeFourSquares(struct sFactors *pstFactors)
+             ^~~~~~~~~~~~~~~~~~
+./src/ecmfront.c:853:13: error: invalid storage class for function ‘varSquared’
+ static void varSquared(char **pptrOutput, char letter, char sign)
+             ^~~~~~~~~~
+./src/ecmfront.c:865:13: error: invalid storage class for function ‘valueVar’
+ static void valueVar(char **pptrOutput, char letter, BigInteger *value)
+             ^~~~~~~~
+./src/ecmfront.c:881:13: error: invalid storage class for function ‘ShowFourSquares’
+ static void ShowFourSquares(char **pptrOutput)
+             ^~~~~~~~~~~~~~~
+./src/ecmfront.c:932:6: error: static declaration of ‘ecmFrontText’ follows non-static declaration
+ void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank)
+      ^~~~~~~~~~~~
+In file included from ./src/ecmfront.c:26:0:
+./includes/helper.h:52:6: note: previous declaration of ‘ecmFrontText’ was here
+ void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
+      ^~~~~~~~~~~~
+./src/ecmfront.c:1034:1: error: expected declaration or statement at end of input
+ }
+ ^
+./src/factorParallel.c: In function ‘readFactorFromDisk’:
+./src/factorParallel.c:98:13: error: invalid storage class for function ‘add3’
+ static void add3(limb *x3, limb *z3, limb *x2, limb *z2, limb *x1, limb *z1, limb *x, limb *z);
+             ^~~~
+./src/factorParallel.c:99:13: error: invalid storage class for function ‘duplicate’
+ static void duplicate(limb *x2, limb *z2, limb *x1, limb *z1);
+             ^~~~~~~~~
+./src/factorParallel.c:111:13: error: invalid storage class for function ‘insertBigFactor’
+ static void insertBigFactor(struct sFactors *pstFactors, BigInteger *divisor);
+             ^~~~~~~~~~~~~~~
+./src/factorParallel.c:134:13: error: invalid storage class for function ‘GetYieldFrequency’
+ static void GetYieldFrequency(void)
+             ^~~~~~~~~~~~~~~~~
+./src/factorParallel.c:155:12: error: invalid storage class for function ‘lucas_cost’
+ static int lucas_cost(int n, double v)
+            ^~~~~~~~~~
+./src/factorParallel.c: In function ‘prac’:
+./src/factorParallel.c:269:2: warning: implicit declaration of function ‘duplicate’ [-Wimplicit-function-declaration]
+  duplicate(xA, zA, xA, zA); /* A=2*A */
+  ^~~~~~~~~
+./src/factorParallel.c:290:4: warning: implicit declaration of function ‘add3’ [-Wimplicit-function-declaration]
+    add3(xT, zT, xA, zA, xB, zB, xC, zC); /* T = f(A,B,C) */
+    ^~~~
+./src/factorParallel.c: In function ‘readFactorFromDisk’:
+./src/factorParallel.c:388:13: error: invalid storage class for function ‘add3’
+ static void add3(limb *x3, limb *z3, limb *x2, limb *z2,
+             ^~~~
+./src/factorParallel.c:427:13: error: invalid storage class for function ‘duplicate’
+ static void duplicate(limb *x2, limb *z2, limb *x1, limb *z1)
+             ^~~~~~~~~
+./src/factorParallel.c:444:12: error: invalid storage class for function ‘gcdIsOne’
+ static int gcdIsOne(limb *value)
+            ^~~~~~~~
+./src/factorParallel.c:457:13: error: invalid storage class for function ‘GenerateSieve’
+ static void GenerateSieve(int initial)
+             ^~~~~~~~~~~~~
+./src/factorParallel.c:578:12: error: invalid storage class for function ‘Cos’
+ static int Cos(int N)
+            ^~~
+./src/factorParallel.c: In function ‘GetAurifeuilleFactor’:
+./src/factorParallel.c:702:2: warning: implicit declaration of function ‘insertBigFactor’ [-Wimplicit-function-declaration]
+  insertBigFactor(pstFactors, &Dsal);
+  ^~~~~~~~~~~~~~~
+./src/factorParallel.c: In function ‘readFactorFromDisk’:
+./src/factorParallel.c:903:16: error: invalid storage class for function ‘ProcessExponent’
+ static boolean ProcessExponent(struct sFactors *pstFactors, BigInteger *nbrToFactor, int Exponent)
+                ^~~~~~~~~~~~~~~
+./src/factorParallel.c:983:13: error: invalid storage class for function ‘PowerPM1Check’
+ static void PowerPM1Check(struct sFactors *pstFactors, BigInteger *nbrToFactor)
+             ^~~~~~~~~~~~~
+./src/factorParallel.c:1093:13: error: invalid storage class for function ‘Lehman’
+ static void Lehman(BigInteger *nbr, int k, BigInteger *factor)
+             ^~~~~~
+./src/factorParallel.c:1227:24: error: invalid storage class for function ‘ecmCurveParallel’
+ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
+                        ^~~~~~~~~~~~~~~~
+./src/factorParallel.c:2057:13: error: invalid storage class for function ‘SortFactors’
+ static void SortFactors(struct sFactors *pstFactors)
+             ^~~~~~~~~~~
+./src/factorParallel.c:2121:13: error: invalid storage class for function ‘insertIntFactor’
+ static void insertIntFactor(struct sFactors *pstFactors, struct sFactors *pstFactorDividend, int divisor)
+             ^~~~~~~~~~~~~~~
+./src/factorParallel.c:2184:13: error: invalid storage class for function ‘insertBigFactor’
+ static void insertBigFactor(struct sFactors *pstFactors, BigInteger *divisor)
+             ^~~~~~~~~~~~~~~
+./src/factorParallel.c:2322:12: error: invalid storage class for function ‘getNextInteger’
+ static int getNextInteger(char **ppcFactors, int *result, char delimiter)
+            ^~~~~~~~~~~~~~
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2370:3: error: too few arguments to function ‘readFactorFromDisk’
+   readFactorFromDisk(pstFactors);
+   ^~~~~~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:42:8: note: declared here
+ };void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
+        ^~~~~~~~~~~~~~~~~~
+./src/factorParallel.c: In function ‘readFactorFromDisk’:
+./src/factorParallel.c:2571:1: error: expected declaration or statement at end of input
+ }
+ ^
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:32:6: error: static declaration of ‘sendBigInteger’ follows non-static declaration
+ void sendBigInteger(BigInteger *number,int dest, int source){
+      ^~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:44:6: note: previous declaration of ‘sendBigInteger’ was here
+ void sendBigInteger(BigInteger *number,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/helper.c:38:6: error: static declaration of ‘receiveBigInteger’ follows non-static declaration
+ void receiveBigInteger(BigInteger *number, int source, int dest){
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:45:6: note: previous declaration of ‘receiveBigInteger’ was here
+ void receiveBigInteger(BigInteger *number, int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/helper.c:54:6: error: static declaration of ‘printPstFactors’ follows non-static declaration
+ void printPstFactors(struct sFactors *pstFactors, int source){
+      ^~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:48:6: note: previous declaration of ‘printPstFactors’ was here
+ void printPstFactors(struct sFactors *pstFactors, int source);
+      ^~~~~~~~~~~~~~~
+./src/helper.c:69:6: error: static declaration of ‘logPstFactors’ follows non-static declaration
+ void logPstFactors(struct sFactors *pstFactors){
+      ^~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:51:6: note: previous declaration of ‘logPstFactors’ was here
+ void logPstFactors(struct sFactors *pstFactors);
+      ^~~~~~~~~~~~~
+./src/helper.c:84:6: error: static declaration of ‘sendPstFactors’ follows non-static declaration
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source){
+      ^~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:46:6: note: previous declaration of ‘sendPstFactors’ was here
+ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
+      ^~~~~~~~~~~~~~
+./src/helper.c:109:6: error: static declaration of ‘receivePstFactors’ follows non-static declaration
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest){
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:47:6: note: previous declaration of ‘receivePstFactors’ was here
+ void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
+      ^~~~~~~~~~~~~~~~~
+./src/helper.c:144:6: error: static declaration of ‘showFactors’ follows non-static declaration
+ void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank){
+      ^~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:53:6: note: previous declaration of ‘showFactors’ was here
+ void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
+      ^~~~~~~~~~~
+./src/helper.c:153:6: error: static declaration of ‘cho_Waitany’ follows non-static declaration
+ void cho_Waitany(MPI_Status *status){
+      ^~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:54:6: note: previous declaration of ‘cho_Waitany’ was here
+ void cho_Waitany(MPI_Status *status);
+      ^~~~~~~~~~~
+./src/helper.c:164:6: error: static declaration of ‘cho_WaitSpecific’ follows non-static declaration
+ void cho_WaitSpecific(MPI_Status *status,int tag){
+      ^~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:55:6: note: previous declaration of ‘cho_WaitSpecific’ was here
+ void cho_WaitSpecific(MPI_Status *status,int tag);
+      ^~~~~~~~~~~~~~~~
+./src/helper.c:176:6: error: static declaration of ‘writeFactorToDisk’ follows non-static declaration
+ void writeFactorToDisk(struct sFactors *pstFactors){
+      ^~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:49:6: note: previous declaration of ‘writeFactorToDisk’ was here
+ void writeFactorToDisk(struct sFactors *pstFactors);
+      ^~~~~~~~~~~~~~~~~
+./src/helper.c: In function ‘writeFactorToDisk’:
+./src/helper.c:180:2: warning: implicit declaration of function ‘mkdir’ [-Wimplicit-function-declaration]
+  mkdir(buf,0x0777);
+  ^~~~~
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:206:6: error: redefinition of ‘readFactorFromDisk’
+ void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
+      ^~~~~~~~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:42:8: note: previous definition of ‘readFactorFromDisk’ was here
+ };void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
+        ^~~~~~~~~~~~~~~~~~
+./src/helper.c:227:6: error: static declaration of ‘setSavePoint’ follows non-static declaration
+ void setSavePoint(char *tofactor){
+      ^~~~~~~~~~~~
+In file included from ./src/helper.c:1:0:
+./includes/helper.h:56:6: note: previous declaration of ‘setSavePoint’ was here
+ void setSavePoint(char *tofactorText);
+      ^~~~~~~~~~~~
+./src/helper.c: In function ‘setSavePoint’:
+./src/helper.c:228:2: error: too many arguments to function ‘strcpy’
+  strcpy(savePath,tofactor,strlen(tofactor));
+  ^~~~~~
+In file included from ./includes/helper.h:8:0,
+                 from ./src/helper.c:1:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:229:1: error: expected declaration or statement at end of input
+ }
+ ^
+make: *** wait: No child processes. Stop.
+make: *** Waiting for unfinished jobs....
+make: *** wait: No child processes. Stop.
+Command canceled
+19:44:38 **** Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/factorParallel.c: In function ‘factorParallel’:
+./src/factorParallel.c:2370:3: error: too few arguments to function ‘readFactorFromDisk’
+   readFactorFromDisk(pstFactors);
+   ^~~~~~~~~~~~~~~~~~
+In file included from ./src/factorParallel.c:25:0:
+./includes/helper.h:50:6: note: declared here
+ void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder);
+      ^~~~~~~~~~~~~~~~~~
+./src/helper.c: In function ‘writeFactorToDisk’:
+./src/helper.c:180:2: warning: implicit declaration of function ‘mkdir’ [-Wimplicit-function-declaration]
+  mkdir(buf,0x0777);
+  ^~~~~
+./src/helper.c: In function ‘setSavePoint’:
+./src/helper.c:228:2: error: too many arguments to function ‘strcpy’
+  strcpy(savePath,tofactor,strlen(tofactor));
+  ^~~~~~
+In file included from ./includes/helper.h:8:0,
+                 from ./src/helper.c:1:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:45:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘writeFactorToDisk’:
+./src/helper.c:180:2: warning: implicit declaration of function ‘mkdir’ [-Wimplicit-function-declaration]
+  mkdir(buf,0x0777);
+  ^~~~~
+./src/helper.c: In function ‘setSavePoint’:
+./src/helper.c:228:2: error: too many arguments to function ‘strcpy’
+  strcpy(savePath,tofactor,strlen(tofactor));
+  ^~~~~~
+In file included from ./includes/helper.h:8:0,
+                 from ./src/helper.c:1:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+19:46:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘setSavePoint’:
+./src/helper.c:236:2: error: too many arguments to function ‘strcpy’
+  strcpy(savePath,tofactor,strlen(tofactor));
+  ^~~~~~
+In file included from ./includes/helper.h:8:0,
+                 from ./src/helper.c:1:
+/usr/include/string.h:125:14: note: declared here
+ extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+              ^~~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+19:47:13 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+19:52:33 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+20:15:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:31:39 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:36:42 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:40:24 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:43:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:44:20 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:51:10 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+21:54:05 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:00:06 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:05:41 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+In file included from /usr/include/time.h:37:0,
+                 from ./src/startParallel.c:6:
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:282:29: error: invalid initializer
+    char knownFactor[1000] = NULL;
+                             ^
+./src/startParallel.c:284:5: warning: implicit declaration of function ‘strcp’ [-Wimplicit-function-declaration]
+     strcp(knownFactor,argv[2]);
+     ^~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:06:16 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:283:16: error: assignment to expression with array type
+    knownFactor = NULL;
+                ^
+./src/startParallel.c:285:5: warning: implicit declaration of function ‘strcp’ [-Wimplicit-function-declaration]
+     strcp(knownFactor,argv[2]);
+     ^~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+22:07:41 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:10:11 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:12:15 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:272:39: error: ‘pstFactors’ is a pointer; did you mean to use ‘->’?
+  printf("%d Factors loaded",pstFactors.multiplicity);
+                                       ^
+                                       ->
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:14:03 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:272:39: error: ‘pstFactors’ is a pointer; did you mean to use ‘->’?
+  printf("%d Factors loaded",pstFactors.multiplicity);
+                                       ^
+                                       ->
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:286:5: warning: implicit declaration of function ‘prinf’ [-Wimplicit-function-declaration]
+     prinf("start new factorization\n");
+     ^~~~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:14:18 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:272:39: error: ‘pstFactors’ is a pointer; did you mean to use ‘->’?
+  printf("%d Factors loaded",pstFactors.multiplicity);
+                                       ^
+                                       ->
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+22:14:42 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+22:15:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:25:23 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:26:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:30:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:31:30 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:33:52 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:34:59 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:36:57 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:40:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:41:32 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:50:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:50:29 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+09:57:11 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+10:13:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:275:39: error: lvalue required as left operand of assignment
+    &(pstFactors[fileNr].ptrFactor[0]) = currentPosition;
+                                       ^
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+10:13:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:275:33: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
+    pstFactors[fileNr].ptrFactor = *currentPosition;
+                                 ^
+10:15:25 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:275:24: error: invalid type argument of ‘->’ (have ‘struct sFactors’)
+    &(pstFactors[fileNr]->ptrFactor) = *currentPosition;
+                        ^~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+10:15:35 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/helper.c: In function ‘readFactorFromDisk’:
+./src/helper.c:275:36: error: lvalue required as left operand of assignment
+    &(pstFactors[fileNr].ptrFactor) = *currentPosition;
+                                    ^
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+10:17:46 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+10:39:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+10:40:13 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+10:52:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:05:01 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:09:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:09:52 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:12:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:13:50 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Terminated
+Command canceled
+11:14:26 **** Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:18:10 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:19:58 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+11:20:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:33:15 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:34:07 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:39:28 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:39:37 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:153:5: error: a label can only be part of a statement and a declaration is not a statement
+     int answ;
+     ^~~
+Makefile:2: recipe for target 'all' failed
+make: *** [all] Error 1
+12:40:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+12:41:18 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+12:44:53 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+12:59:27 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+./src/helper.c: In function ‘saveFactorizationToText’:
+./src/helper.c:167:11: warning: passing argument 1 of ‘fprintf’ from incompatible pointer type [-Wincompatible-pointer-types]
+   fprintf("%s",a);
+           ^~~~
+In file included from ./includes/helper.h:6:0,
+                 from ./src/helper.c:1:
+/usr/include/stdio.h:358:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+ extern int fprintf (FILE *__restrict __stream,
+            ^~~~~~~
+./src/helper.c:167:16: warning: format not a string literal and no format arguments [-Wformat-security]
+   fprintf("%s",a);
+                ^
+13:00:02 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+./src/helper.c: In function ‘saveFactorizationToText’:
+./src/helper.c:167:11: warning: passing argument 1 of ‘fprintf’ from incompatible pointer type [-Wincompatible-pointer-types]
+   fprintf(a);
+           ^
+In file included from ./includes/helper.h:6:0,
+                 from ./src/helper.c:1:
+/usr/include/stdio.h:358:12: note: expected ‘FILE * restrict {aka struct _IO_FILE * restrict}’ but argument is of type ‘char *’
+ extern int fprintf (FILE *__restrict __stream,
+            ^~~~~~~
+./src/helper.c:167:3: error: too few arguments to function ‘fprintf’
+   fprintf(a);
+   ^~~~~~~
+In file included from ./includes/helper.h:6:0,
+                 from ./src/helper.c:1:
+/usr/include/stdio.h:358:12: note: declared here
+ extern int fprintf (FILE *__restrict __stream,
+            ^~~~~~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+13:00:21 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+13:56:04 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+13:58:02 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+13:58:31 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+13:59:11 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:00:34 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:01:12 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:01:53 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:12:34 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:41:3: error: variable-sized object may not be initialized
+   int canceledEC[world_size] = 0;
+   ^~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+14:13:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:18:43 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:33:45 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:157:5: error: a label can only be part of a statement and a declaration is not a statement
+     int lowestProcessedEC=INT_MAX;
+     ^~~
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+14:33:55 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:35:21 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+./src/startParallel.c: In function ‘main’:
+./src/startParallel.c:67:3: error: too few arguments to function ‘memset’
+   memset(runningEClist), -1, sizeof(int) * world_size);
+   ^~~~~~
+In file included from ./src/startParallel.c:4:0:
+/usr/include/string.h:62:14: note: declared here
+ extern void *memset (void *__s, int __c, size_t __n) __THROW __nonnull ((1));
+              ^~~~~~
+./src/startParallel.c:67:54: error: expected ‘;’ before ‘)’ token
+   memset(runningEClist), -1, sizeof(int) * world_size);
+                                                      ^
+./src/startParallel.c:67:54: error: expected statement before ‘)’ token
+make: *** [all] Error 1
+Makefile:2: recipe for target 'all' failed
+14:38:22 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:42:38 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:43:54 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+14:53:00 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+15:00:47 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+15:06:35 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+15:07:06 **** Incremental Build of configuration Default for project Factorization ****
+make 
+mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm

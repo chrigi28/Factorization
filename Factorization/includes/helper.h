@@ -30,7 +30,8 @@ enum Messages {
 	GET_FACTOR_DATA,
 	FACTORING_DONE,
 	LOAD_EC,
-	LOGOUT
+	LOGOUT,
+	SEND_CHAR
 };
 extern char * STATENAMES[];
 
@@ -51,6 +52,7 @@ void printPstFactors(struct sFactors *pstFactors, int source);
 void writeFactorToDisk(struct sFactors *pstFactors);
 void loadCurrentEc(int *EC);
 void saveCurrentEc(int EC);
+void saveFactorizationToText(struct sFactors *pstFactors,char *path);
 void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder);
 void logPstFactors(struct sFactors *pstFactors);
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);

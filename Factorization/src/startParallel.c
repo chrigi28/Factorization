@@ -4,15 +4,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-//test copy
 #include "bignbr.h"
 #include "highlevel.h"
 #include "factor.h"
-//void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
-//end copy
-
 #include "helper.h"
-int null = 0;
+#include <limits.h>
+
+
 const int ANSWER_SIZE = 2000;
 const int TERMINATE_MESSAGE = -1;
 
@@ -25,8 +23,7 @@ int main(int argc, char** argv) {
 	int factoringDone = 0;
 	MPI_Init(NULL, NULL);
 
-	enum Messages message = GET_JOB;
-	int outBuffer[10];
+
 	BigInteger N;
 	struct sFactors pstFactors[1000];
 	MPI_Status status;
@@ -42,48 +39,39 @@ int main(int argc, char** argv) {
 		int index = 0;
 		int currentEC = 1; //1 starts automaticly by rank 1
 		int currentAnswerPosition = 0;
+		struct {
+			int list[world_size];
+			int idx;
+		}canceledEC;
+		memset(canceledEC.list,0,sizeof(int)*world_size);
+		canceledEC.idx=0;
 //	    BigInteger N;
 //	    struct sFactors pstFactors;
+//
+//		MPI_Request request[world_size];
+//		for (int i = 0; i < world_size; i++) {
+//			request[i] = MPI_REQUEST_NULL;
+//		}
 
-		MPI_Request request[world_size];
-		for (int i = 0; i < world_size; i++) {
-			request[i] = MPI_REQUEST_NULL;
-		}
-		//char answers[numberOfTotalTasks][ANSWER_SIZE];
-		//memset(answers,0,sizeof(answers[0][0])*numberOfTotalTasks*ANSWER_SIZE);
-		char inBuffer[world_size][ANSWER_SIZE];
-		int receiveBuffer[world_size];
-		memset(receiveBuffer, 0, sizeof(receiveBuffer[0]) * world_size);
-//    	for(int i=0;i<world_size;i++){
-//    		char answer[ANSWER_SIZE];
-//    		memset(answer,0,sizeof(answer[0])*ANSWER_SIZE);
-//    		inBuffer[i] = answer;
-//    	}
-		int null;
-		int pendingAnswers = 0;
-		for (int i = 1; i < world_size; i++) {
-			printf("all register comm i: %d\n", i);
-			if (i == 1) {
-				message = SEND_RDY_FACTOR;
-			} else {
-				message = REGISTER_FOR_EC;
-			}
-//    		MPI_Irecv(&null, 1, MPI_INT, i,message, MPI_COMM_WORLD, &request[i]);
-			pendingAnswers++;
-		}
-		pendingAnswers = world_size - 1;
+//		char inBuffer[world_size][ANSWER_SIZE];
+//		int receiveBuffer[world_size];
+//		memset(receiveBuffer, 0, sizeof(receiveBuffer[0]) * world_size);
+
+		int pendingAnswers = world_size - 1;
 
 		struct waitList {
 			int idx;
 			int list[world_size];
 		} rdyToFactor;
 		int runningEClist[world_size];
+		memset(runningEClist, -1, sizeof(int) * world_size);
 		memset(&(rdyToFactor.list[0]), -1, sizeof(rdyToFactor.list[0]) * world_size);
 		rdyToFactor.idx = 0;
+
 		while (pendingAnswers > 0) {
 			//printf("main0: pending answers %i\n", pendingAnswers);
 			//printf("wait for any comm\n");
-			int waitLength = world_size;
+//			int waitLength = world_size;
 			printf("\nrank0: wait for next Request: \n");
 			int rank = -1;
 			cho_Waitany(&status);
@@ -96,9 +84,10 @@ int main(int argc, char** argv) {
 			char *t1 = STATENAMES[tag];
 			printf("\nRequest received Tag%d: %s from %d\n", status.MPI_TAG, t1,rank);
 			MPI_Recv(&count, count, MPI_INT, rank, tag, MPI_COMM_WORLD,&status);
+
 			switch (tag) {
 			case REGISTER_FOR_EC: {
-				printf("main0: register_for ec received from %d\n", rank);
+//				printf("main0: register_for ec received from %d\n", rank);
 
 				if (factoringRunning == 1 && currentEC>20) {
 					MPI_Send(&factoringRunning, 1, MPI_INT, rank,REGISTER_FOR_EC, MPI_COMM_WORLD);
@@ -164,19 +153,36 @@ int main(int argc, char** argv) {
 
 			case SEND_EC:
 				//MPI_Recv(&null,1,MPI_INT,rank,SEND_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-				printf("main0: ec request received from %d\n", rank);
+//				printf("main0: ec request received from %d\n", rank);
+				;
+				int lowestProcessedEC=INT_MAX;
+				for(int i=0;i<world_size;i++){
+					int currentNumber = runningEClist[i];
+					if(currentNumber != -1 && currentNumber < lowestProcessedEC){
+						lowestProcessedEC = currentNumber;
+					}
+				}
+				if(lowestProcessedEC == runningEClist[rank]){
+					saveCurrentEc(lowestProcessedEC);
+				}
 				int answ;
 				if(factoringRunning){
-					answ = currentEC;
+					if(canceledEC.idx==0){
+						answ = currentEC;
+					}else{
+						answ = canceledEC.list[canceledEC.idx];
+						canceledEC.idx--;
+					}
 					rdyToFactor.list[rank] = 0;
 					runningEClist[rank] = currentEC;
+
 					currentEC++;
-					saveCurrentEc(currentEC);
+
 				}else{
 					answ = -1;
 				}
 				MPI_Send(&answ, 1, MPI_INT, rank, SEND_EC, MPI_COMM_WORLD);
-				if(currentEC>20){
+				if(currentEC>10){
 					for(int i=2;i<world_size;i++){
 						if(rdyToFactor.list[i]==1){
 							MPI_Send(&i, 1, MPI_INT, i, REGISTER_FOR_EC,MPI_COMM_WORLD);
@@ -197,14 +203,14 @@ int main(int argc, char** argv) {
 				limb GD[MAX_LEN];
 
 				int NumberLength;
-				printf("send rdy to get numberlength\n");
+//				printf("send rdy to get numberlength\n");
 				MPI_Send(&NumberLength, 1, MPI_INT, rank, CHECK_FACTOR, MPI_COMM_WORLD);
-				printf("receiv numberlength\n");
+//				printf("receiv numberlength\n");
 				MPI_Recv(&NumberLength, 1, MPI_INT, rank, CHECK_FACTOR,	MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				printf("send rdy to get GD\n");
+//				printf("send rdy to get GD\n");
 				MPI_Send(&NumberLength, 1, MPI_INT, rank, CHECK_FACTOR, MPI_COMM_WORLD);
 				memset(&GD[1], 0, (NumberLength - 1) * sizeof(limb));
-				printf("main0: numberlenght received from Rank %d  get GD\n",rank);
+//				printf("main0: numberlenght received from Rank %d  get GD\n",rank);
 				MPI_Recv(&GD[0], MAX_LEN, MPI_INT, rank,CHECK_FACTOR, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				char newFactor[200];
 				Bin2Dec(GD, newFactor, NumberLength,6);
@@ -213,6 +219,8 @@ int main(int argc, char** argv) {
 				if(rank != 1){
 					printf("interupt rank1\n");
 					MPI_Send(&restart,1,MPI_INT,1,INTERRUPT_EC,MPI_COMM_WORLD);
+					canceledEC.list[canceledEC.idx] = runningEClist[1];
+					canceledEC.idx++;
 					runningEClist[1]=-1;
 				}
 
@@ -222,20 +230,23 @@ int main(int argc, char** argv) {
 //				printf("send gd\n");
 				MPI_Send(&GD[0],MAX_LEN,MPI_INT,1,CHECK_FACTOR,MPI_COMM_WORLD);
 				int factor;
-				printf("wait for answer\n");
+//				printf("wait for answer\n");
 				MPI_Recv(&factor, MAX_LEN, MPI_INT, 1,CHECK_FACTOR, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				if(factor){
 					factoringRunning = 0;
 					receivePstFactors(pstFactors,1,0);
-					printf("\n\n\nMAIN0: factoring after check \n\n\n\n");
+//					printf("\n\n\nMAIN0: factoring after check \n\n\n\n");
 					showFactors(&N,pstFactors,world_rank);
 
 					for(int i=1;i<world_size;i++){
 						if(runningEClist[i] > -1){
 							//cancel all running processes
-							printf("send Cancel to rank%d\n",i);
+//							printf("send Cancel to rank%d\n",i);
 							int cancel=-1;
 							MPI_Send(&cancel,1,MPI_INT,i,INTERRUPT_EC,MPI_COMM_WORLD);
+							canceledEC.list[canceledEC.idx] = runningEClist[i];
+							runningEClist[i] = -1;
+							canceledEC.idx++;
 						}
 					}
 				}
@@ -283,7 +294,7 @@ int main(int argc, char** argv) {
 
 		if (world_rank == 1) {
 			printf("rank1: send rdy factor %s\n",argv[2]);
-			printf("No of arguments: %d\n",argc);
+//			printf("No of arguments: %d\n",argc);
 			if((argc > 2)&&(strcmp(argv[2],"-continue")==0)){
 				printf("continue factorization: %s\n",argv[2]);
 				ecmFrontText(argv[1], 1, argv[1], 1);
@@ -291,18 +302,18 @@ int main(int argc, char** argv) {
 				printf("start new factorization\n");
 				ecmFrontText(argv[1], 1, NULL, 1);
 			}
-			printf("startFrontTExt\n");
+
 
 		} else {
 			int EC;
 			while (1) {
 				int found = 0;
-				printf("Rank%d: register for for EC\n", world_rank);
+//				printf("Rank%d: register for for EC\n", world_rank);
 				MPI_Send(&world_rank, 1, MPI_INT, 0, REGISTER_FOR_EC,MPI_COMM_WORLD);
 				cho_WaitSpecific(&status,REGISTER_FOR_EC);
 //    			printf("rank%d: mes received tag = %d \n",world_rank,status.MPI_TAG);
 				MPI_Recv(&EC, 1, MPI_INT, 0, REGISTER_FOR_EC, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				printf("Rank%d: EC received %d\n", world_rank, EC);
+//				printf("Rank%d: EC received %d\n", world_rank, EC);
 				if (EC != -1) {
 //						receiveBigInteger(&N, 0,world_rank);
 //						printf("Rank%d: bigint received\n", world_rank);

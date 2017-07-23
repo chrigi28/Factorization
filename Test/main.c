@@ -1,62 +1,109 @@
-#include <mpi.h>
+//#include <mpi.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include "mpi.h"
-void cho_Waitany(MPI_Status *status);
+//#include "mpi.h"
+//void cho_Waitany(MPI_Status *status);
 
-int main(int argc, char** argv) {
-    // Initialize the MPI environment
-	printf("hallo MPI world\n");
-    MPI_Init(NULL, NULL);
-    int outBuffer[10];
-    MPI_Status status;
-    // Get the number of processes
-    int world_size;
-    int world_rank; // my rank
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-    //get own rank
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-
-
-    if (world_rank == 0){ //taskhandler
-//    	MPI_Request request[2*world_size];
-//    	for(int i=0;i<world_size;i++){
-//    		request[i]=MPI_REQUEST_NULL;
-//    	}
-    	for(int i = 0;i<world_size-1;i++){
-			cho_Waitany(&status);
-			int tag = status.MPI_TAG;
-			int rank = status.MPI_SOURCE;
-			int count = 0;
-			MPI_Get_count(&status,MPI_INT,&count);
-			MPI_Recv(&count,count,MPI_INT,rank,tag ,MPI_COMM_WORLD,&status);
-
-			printf("Message reached: %d\n",count);
-    	}
-    }else{
-    	sleep(30);
-    	int data = world_rank*1435;
-    	MPI_Send(&data,1,MPI_INT,0,43,MPI_COMM_WORLD);
-
-    }
-
-    printf("process finished finalize mpiworld: %i\n",world_rank);
-    // Finalize the MPI environment.
-    MPI_Finalize();
+struct sFactors
+{
+  int *ptrFactor;
+  int multiplicity;
+  int upperBound;
+}pst1,pst2,pst3;
+void saveCurrentEc(int EC){
+	FILE *fp;
+	char buf[1000];
+	snprintf(buf, sizeof(buf), "./saves/10^201+1/currentEC.bin");
+	fp = fopen(buf, "wb");
+	if(fp != NULL){
+		fwrite(&(EC),sizeof(int),1,fp );
+		fclose(fp);
+	}else{
+		printf("failed to open file:%s\n",buf);
+	}
 }
 
-
-void cho_Waitany(MPI_Status *status){
-	int noMess = 0;
-	printf("cho wait\n");
-	while(noMess == 0){
-		//usleep(100000);
-
-		usleep(500000);
-		MPI_Iprobe(MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,&noMess,status);
-
+void writeFactorToDisk(struct sFactors *pstFactors){
+	int NumberOfElements = pstFactors->multiplicity+1;
+	char buf[30];
+	for(int i = 0;i<NumberOfElements;i++){
+		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",i );
+		FILE *fp;
+		fp = fopen( buf, "wb");
+		int numberLength = pstFactors[i].ptrFactor[0]+1;
+		fwrite(&(numberLength),sizeof(int),1,fp );
+		printf("write numberlength %d\n",numberLength);
+		fwrite(&(pstFactors[i].multiplicity),sizeof(int),1,fp );
+		printf("write multipli %d\n",pstFactors[i].multiplicity);
+		fwrite(&(pstFactors[i].upperBound),sizeof(int),1,fp );
+		printf("write upper %d\n",pstFactors[i].upperBound);
+		fwrite(&(pstFactors[i].ptrFactor[0]),sizeof(int),numberLength,fp);
+		printf("ptr is: ");
+		for(int j=0;j<numberLength;j++){
+			printf("%d ",pstFactors[i].ptrFactor[j]);
+		}
+		printf("\n");
+		fclose(fp);
 	}
-	//printf("received from %i, tag %i\n",status->MPI_SOURCE,status->MPI_TAG);
+}void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
+	char buf[1000];
+	int fileNr = 0;
+	printf("path to folder: %s\n",pathToFolder);
+	for(;;){
+		snprintf(buf, sizeof(buf), "./saves/%s/sFactor%i.bin",pathToFolder,fileNr );
+		printf("read from %s\n",buf);
+
+		FILE *fp;
+		fp = fopen( buf, "rb");
+		if(fp != NULL){
+			int ptrValueLength = 0;
+			printf("load factor %d\n",fileNr);
+			int* currentPosition;
+			currentPosition = pstFactors->ptrFactor;
+			fseek(fp, 0, SEEK_SET);
+			fread(&(ptrValueLength),sizeof(int),1,fp );
+			printf("read ptrValue length %d\n",ptrValueLength);
+			fread(&(pstFactors[fileNr].multiplicity),sizeof(int),1,fp );
+			printf("read multi %d\n",pstFactors[fileNr].multiplicity);
+			fread(&(pstFactors[fileNr].upperBound),sizeof(int),1,fp );
+			printf("read upper %d\n",pstFactors[fileNr].upperBound);
+			pstFactors[fileNr].ptrFactor = currentPosition;
+			fread(currentPosition,sizeof(int),ptrValueLength,fp);
+			currentPosition+=ptrValueLength;
+			fclose(fp);
+			printf("factor %d loaded\n",fileNr);
+			fileNr++;
+			if(fileNr>pstFactors[0].multiplicity){
+				break;
+			}
+		}else{
+			printf("Could not open file: %s\n",buf );
+			break;
+		}
+	}
+	printf("%d Factors loaded",pstFactors[0].multiplicity);
+}
+int main(int argc, char** argv) {
+	int factors[10000];
+	struct sFactors pstFactors[20];
+
+	pstFactors[0].ptrFactor = factors;
+	readFactorFromDisk(pstFactors,"10^201+1");
+	printf("read done\n");
+
+	printf("multiplicity0: %d\n",pstFactors[7].multiplicity);
+	printf("upper: %d\n",pstFactors[7].upperBound);
+	saveCurrentEc(245);
+//
+//	printf("multipl1: %d\n",pstFactors2[1].multiplicity);
+//	printf("upper1: %d\n",pstFactors2[1].upperBound);
+//	printf("ptr1,0:%d 1:%d 2:%d 3:%d\n",pstFactors2[1].ptrFactor[0],pstFactors2[1].ptrFactor[1],pstFactors2[1].ptrFactor[2],pstFactors2[1].ptrFactor[3]);
+//
+//	printf("multipl2: %d\n",pstFactors2[2].multiplicity);
+//	printf("upper 2: %d\n",pstFactors2[2].upperBound);
+//	printf("ptr2,0:%d 1:%d 2:%d 3:%d\n",pstFactors2[2].ptrFactor[0],pstFactors2[2].ptrFactor[1],pstFactors2[2].ptrFactor[2],pstFactors2[2].ptrFactor[3]);
+
+	printf("done\n");
 }

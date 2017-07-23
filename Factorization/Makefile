@@ -1,3 +1,3 @@
 all: 
-	mpicc ./src/*.c -I./includes -o ./bin/Test -lm
+	mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
 	
