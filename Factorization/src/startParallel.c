@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
 	int factoringRunning = 0;
 	int factoringDone = 0;
 	MPI_Init(NULL, NULL);
+
 	enum Messages message = GET_JOB;
 	int outBuffer[10];
 	BigInteger N;
@@ -37,6 +38,7 @@ int main(int argc, char** argv) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
 	if (world_rank == 0) { //taskhandler
+		setSavePoint(argv[1]);
 		int index = 0;
 		int currentEC = 1; //1 starts automaticly by rank 1
 		int currentAnswerPosition = 0;
@@ -92,10 +94,8 @@ int main(int argc, char** argv) {
 			MPI_Get_count(&status, MPI_INT, &count);
 
 			char *t1 = STATENAMES[tag];
-			printf("\nRequest received Tag%d: %s from %d\n", status.MPI_TAG, t1,
-					rank);
-			MPI_Recv(&count, count, MPI_INT, rank, tag, MPI_COMM_WORLD,
-					&status);
+			printf("\nRequest received Tag%d: %s from %d\n", status.MPI_TAG, t1,rank);
+			MPI_Recv(&count, count, MPI_INT, rank, tag, MPI_COMM_WORLD,&status);
 			switch (tag) {
 			case REGISTER_FOR_EC: {
 				printf("main0: register_for ec received from %d\n", rank);
@@ -109,8 +109,13 @@ int main(int argc, char** argv) {
 //					sendPstFactors(&pstFactors[0], rank,world_rank);
 //					// MPI_Irecv(&receiveBuffer[rank], 1, MPI_INT, rank ,MPI_ANY_TAG, MPI_COMM_WORLD, &request[rank]);
 				}else{
-					rdyToFactor.list[rank] = 1;
-					printf("main0: rank %d added to waitlist\n",rank);
+					if(factoringDone){
+						int cancel = -1;
+						MPI_Send(&cancel, 1, MPI_INT, rank,REGISTER_FOR_EC, MPI_COMM_WORLD);
+					}else{
+						rdyToFactor.list[rank] = 1;
+						printf("main0: rank %d added to waitlist\n",rank);
+					}
 				}
 //					printf("main0: register_for ec received %d\n",rank);
 			}
@@ -166,6 +171,7 @@ int main(int argc, char** argv) {
 					rdyToFactor.list[rank] = 0;
 					runningEClist[rank] = currentEC;
 					currentEC++;
+					saveCurrentEc(currentEC);
 				}else{
 					answ = -1;
 				}
@@ -251,6 +257,15 @@ int main(int argc, char** argv) {
 					}
 				}
 				break;
+			case LOAD_EC:
+				loadCurrentEc(&currentEC);
+				printf("EC loaded set to %d\n",currentEC);
+				break;
+			case LOGOUT:
+				pendingAnswers--;
+				rdyToFactor.list[rank]=-1;
+				runningEClist[rank] = -1;
+				break;
 			default:
 				printf("\n\n ==========================ERROR========================\n\n");
 				printf("undefined TAG was: %d", status.MPI_TAG);
@@ -266,19 +281,18 @@ int main(int argc, char** argv) {
 	else { //worker
 		printf("rank %d: worker\n", world_rank);
 
-		int incoming_msg_size;
 		if (world_rank == 1) {
-			printf("rank1: send rdy factor\n");
-//    		MPI_Send(&null,1,MPI_INT,0,SEND_RDY_FACTOR,MPI_COMM_WORLD);
-//    		printf("rank1: wait for jobtofactor\n");
-//    		MPI_Probe(0,JOBTOFACTOR,MPI_COMM_WORLD,&status);
-//    		printf("3\n");
-//    	    MPI_Get_count(&status, MPI_CHAR, &incoming_msg_size);
-//    	    printf("4 count: %d\n",incoming_msg_size);
-//    	    char receive[incoming_msg_size+1];
-//    	    MPI_Recv(&receive,incoming_msg_size,MPI_CHAR,0,JOBTOFACTOR,MPI_COMM_WORLD,&status); //term to factor as char array (as commandline)
+			printf("rank1: send rdy factor %s\n",argv[2]);
+			printf("No of arguments: %d\n",argc);
+			if((argc > 2)&&(strcmp(argv[2],"-continue")==0)){
+				printf("continue factorization: %s\n",argv[2]);
+				ecmFrontText(argv[1], 1, argv[1], 1);
+			}else{
+				printf("start new factorization\n");
+				ecmFrontText(argv[1], 1, NULL, 1);
+			}
 			printf("startFrontTExt\n");
-			ecmFrontText(argv[1], 1, NULL, 1);
+
 		} else {
 			int EC;
 			while (1) {
@@ -317,6 +331,7 @@ int main(int argc, char** argv) {
 
 	printf("process finished finalize mpiworld: %i\n", world_rank);
 	// Finalize the MPI environment.
+	MPI_Send(&world_rank, 1, MPI_INT, 0, LOGOUT,MPI_COMM_WORLD);
 	MPI_Finalize();
 	for(int i=0;i<pstFactors[0].multiplicity;i++){
 		free(pstFactors[i].ptrFactor);

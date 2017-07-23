@@ -947,6 +947,8 @@ void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,in
   printf("rank1:expression ok? RC is : %d\n",rc);
   if (rc == EXPR_OK && doFactorization)
   {
+
+
     NumberLength = tofactor.nbrLimbs;
     CompressBigInteger(nbrToFactor, &tofactor);
 #ifdef __EMSCRIPTEN__

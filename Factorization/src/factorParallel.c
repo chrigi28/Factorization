@@ -2366,37 +2366,11 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 	pstCurFactor->multiplicity = 1;
 	pstCurFactor->ptrFactor = factors;
 	pstCurFactor->upperBound = 2;
-	if (pcKnownFactors != NULL)
-	{   // Insert factors saved on Web Storage.
-		while (*pcKnownFactors != 0)
-		{
-			int *ptrNewFactor = pstFactors->ptrFactor;
-			ptrCharFound = findChar(pcKnownFactors, '^');
-			if (ptrCharFound == NULL)
-			{
-				break;
-			}
-			*ptrCharFound = 0;
-			Dec2Bin(pcKnownFactors, prime.limbs, (int)(ptrCharFound - pcKnownFactors), &prime.nbrLimbs);
-			CompressBigInteger(ptrNewFactor, &prime);
-			pcKnownFactors = ptrCharFound + 1;
-			if (getNextInteger(&pcKnownFactors, &multiplicity, '('))
-			{     // Error on processing exponent.
-				break;
-			}
-			if (getNextInteger(&pcKnownFactors, &factorUpperBound, ')'))
-			{     // Error on processing upper bound.
-				break;
-			}
-			for (ctr = 0; ctr < multiplicity; ctr++)
-			{
-				insertBigFactor(pstFactors, &prime);
-			}
-			if (*pcKnownFactors == '*')
-			{
-				pcKnownFactors++;  // Skip multiplication sign.
-			}
-		}
+	if (pcKnownFactors != NULL){   // load pstFactor from files
+		printf("load factors from disk\n");
+		readFactorFromDisk(pstFactors,pcKnownFactors);
+		printf("\nindicate to load EC \n");
+		MPI_Send(&null,1,MPI_INT,0,LOAD_EC,MPI_COMM_WORLD);
 	}
 #ifdef __EMSCRIPTEN__
 	SaveFactors(pstFactors);
@@ -2408,7 +2382,9 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 	}
 	for (factorNbr = 1; factorNbr <= pstFactors->multiplicity; factorNbr++, pstCurFactor++)
 	{
+		printf("factorNbr is %d\n Multi is: %d\n",factorNbr,pstFactors->multiplicity);
 		int upperBound = pstCurFactor->upperBound;
+		printf("upperbound is %d\n",upperBound);
 		restartFactoring = FALSE;
 		// If number is prime, do not process it.
 		if (upperBound == 0)

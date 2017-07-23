@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+char savePath[1000];
 enum Messages {
 	GET_JOB = 0,
 	SEND_JOB,
@@ -27,7 +28,9 @@ enum Messages {
 	NUMBER_LENGTH,
 	INTERRUPT_EC,
 	GET_FACTOR_DATA,
-	FACTORING_DONE
+	FACTORING_DONE,
+	LOAD_EC,
+	LOGOUT
 };
 extern char * STATENAMES[];
 
@@ -46,9 +49,13 @@ void sendPstFactors(struct sFactors *pstFactors,int dest,int source);
 void receivePstFactors(struct sFactors *pstFactors,int source,int dest);
 void printPstFactors(struct sFactors *pstFactors, int source);
 void writeFactorToDisk(struct sFactors *pstFactors);
+void loadCurrentEc(int *EC);
+void saveCurrentEc(int EC);
+void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder);
 void logPstFactors(struct sFactors *pstFactors);
 void ecmFrontText(char *tofactorText, int doFactorization, char *knownFactors,int world_rank);
 void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
 void cho_Waitany(MPI_Status *status);
 void cho_WaitSpecific(MPI_Status *status,int tag);
+void setSavePoint(char *tofactor);
 #endif

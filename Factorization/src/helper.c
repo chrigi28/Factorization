@@ -1,6 +1,10 @@
 #include "helper.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 
 char * STATENAMES[]={
 	"GET_JOB\0",
@@ -173,11 +177,56 @@ void cho_WaitSpecific(MPI_Status *status,int tag){
 	//printf("received from %i, tag %i\n",status->MPI_SOURCE,status->MPI_TAG);
 }
 
+void saveCurrentEc(int EC){
+	FILE *fp;
+	char buf[1000];
+	snprintf(buf, sizeof(buf), "./saves/%s/currentEC.bin",savePath );
+	fp = fopen(buf, "wb");
+	if(fp != NULL){
+		fwrite(&(EC),sizeof(int),1,fp );
+		fclose(fp);
+	}else{
+		printf("failed to open file:%s\n",buf);
+	}
+}
+
+void loadCurrentEc(int *EC){
+	FILE *fp;
+	char buf[1000];
+	snprintf(buf, sizeof(buf), "./saves/%s/currentEC.bin",savePath );
+	fp = fopen(buf, "rb");
+	if(fp != NULL){
+		fread(EC,sizeof(int),1,fp );
+		fclose(fp);
+		printf("currentEC loaded: %d\n",*EC);
+	}else{
+		printf("failed to open file:%s\n",buf);
+	}
+}
+
+int cfileexists(const char* filename){
+    struct stat buffer;
+    int exist = stat(filename,&buffer);
+    if(exist == 0)
+        return 1;
+    else // -1
+        return 0;
+}
+
 void writeFactorToDisk(struct sFactors *pstFactors){
 	int NumberOfElements = pstFactors->multiplicity+1;
-	char buf[30];
+	char buf[1000];
+	snprintf(buf, sizeof(buf), "saves/%s",savePath );
+	if(cfileexists(buf)==0){
+		mkdir(buf,0777);
+//		umask()
+	}else{
+		printf("folder exists\n");
+	}
+
+	printf("write to disk\n%s",buf);
 	for(int i = 0;i<NumberOfElements;i++){
-		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",i );
+		snprintf(buf, sizeof(buf), "./saves/%s/sFactor%i.bin",savePath,i );
 		FILE *fp;
 		fp = fopen( buf, "wb");
 		if(fp != NULL){
@@ -201,24 +250,50 @@ void writeFactorToDisk(struct sFactors *pstFactors){
 
 	}
 }
-void readFactorFromDisk(struct sFactors *pstFactors){
-	int NumberOfElements = pstFactors->multiplicity+1;
-	char buf[30];
+void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
+	char buf[1000];
 	int fileNr = 0;
+	printf("path to folder: %s\n",pathToFolder);
+	int* currentPosition;
+	currentPosition = pstFactors->ptrFactor;
 	for(;;){
-		snprintf(buf, sizeof(buf), "./saves/sFactor%i.bin",fileNr );
+		snprintf(buf, sizeof(buf), "./saves/%s/sFactor%i.bin",pathToFolder,fileNr );
+		printf("read from %s\n",buf);
+
 		FILE *fp;
 		fp = fopen( buf, "rb");
-		int ptrValueLength = 0;
-		fseek(fp, 0, SEEK_SET);
-		fread(&(ptrValueLength),sizeof(int),1,fp );
-		fread(&(pstFactors[fileNr].multiplicity),sizeof(int),1,fp );
-		fread(&(pstFactors[fileNr].upperBound),sizeof(int),1,fp );
-		fread(&(pstFactors[fileNr].ptrFactor[0]),sizeof(int),ptrValueLength,fp);
-		fclose(fp);
-		fileNr++;
-		if(fileNr>pstFactors[0].multiplicity){
+		if(fp != NULL){
+			int ptrValueLength = 0;
+			printf("load factor %d\n",fileNr);
+			fseek(fp, 0, SEEK_SET);
+			fread(&(ptrValueLength),sizeof(int),1,fp );
+			printf("read ptrValue length %d\n",ptrValueLength);
+			fread(&(pstFactors[fileNr].multiplicity),sizeof(int),1,fp );
+			printf("read multi %d\n",pstFactors[fileNr].multiplicity);
+			fread(&(pstFactors[fileNr].upperBound),sizeof(int),1,fp );
+			printf("read upper %d\n",pstFactors[fileNr].upperBound);
+			pstFactors[fileNr].ptrFactor = currentPosition;
+			fread(currentPosition,sizeof(int),ptrValueLength,fp);
+			currentPosition+=ptrValueLength;
+			fclose(fp);
+			printf("factor %d loaded\n",fileNr);
+			fileNr++;
+			if(fileNr>pstFactors[0].multiplicity){
+				if(pstFactors[fileNr-1].upperBound == 0){
+					pstFactors[fileNr-1].upperBound = 2;
+				}
+
+				break;
+			}
+		}else{
+			printf("Could not open file: %s\n",buf );
 			break;
 		}
 	}
+	printf("%d Factors loaded",pstFactors[0].multiplicity);
+}
+
+void setSavePoint(char *tofactor){
+	strcpy(savePath,tofactor);
+	printf("foldername set to %s\n",tofactor);
 }
