@@ -226,6 +226,7 @@ void loadCurrentEc(int *EC){
 	}else{
 		printf("failed to open file:%s\n",buf);
 	}
+//	*EC=415;
 }
 
 int cfileexists(const char* filename){

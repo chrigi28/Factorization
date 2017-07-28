@@ -30,7 +30,7 @@ enum Messages {
 	GET_FACTOR_DATA,
 	FACTORING_DONE,
 	LOAD_EC,
-	LOGOUT,
+	LOGOUT, //20
 	SEND_CHAR
 };
 extern char * STATENAMES[];

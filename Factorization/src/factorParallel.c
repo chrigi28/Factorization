@@ -1263,14 +1263,29 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			int null = 1;
 			MPI_Send(&null,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);
 			printf("rank %d:wait for EC\n",rank);
+			do{
+				cho_Waitany(&status);
+				if(status.MPI_TAG==SEND_EC){
+					MPI_Recv(&EC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,&status);
+					printf("rank %d:EC received: %d\n",rank,EC);
+					break;
+				}else{
+					if(status.MPI_TAG==INTERRUPT_EC){
+						MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+						return FACTOR_FOUND_BY_PARALLEL;
+					}
+					else{
+						printf("!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!\n rank%d: received unexpected message from rank%d: Tag: %d\n",rank,status.MPI_SOURCE,status.MPI_TAG);
+						MPI_Recv(&null,1,MPI_INT,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+						printf("rank%d:ignore error message %d\n",rank,null);
+					}
+				}
+			}while(1);
 
-			cho_Waitany(&status);
-			MPI_Recv(&EC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,&status);
-			printf("rank %d:EC received: %d\n",rank,EC);
 			//      EC++;
 			//      EC = getNextECToCompute(); // cho requestEC from main
 			if(EC == -1){
-				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+//				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 				return FACTOR_FOUND_BY_PARALLEL;
 			}
 #ifdef __EMSCRIPTEN__

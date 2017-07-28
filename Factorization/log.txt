@@ -1,0 +1,270 @@
+rank 4: worker
+rank 1: worker
+rank1: send rdy factor (null)
+start new factorization
+rank 2: worker
+foldername set to 10^34+1
+rank1:expression ok? RC is : 0
+before factorparallel
+
+rank0: wait for next Request: 
+rank 3: worker
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+-------------------------
+Factor Found insertbigInt
+
+
+
+BEFORE ecmParallel
+
+sending bigInt from 1 to 0
+
+Rank1 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 99 009900 990099 009900 990099 009901 (32 digits)
+
+
+rank1: start sending PstFactors to 0
+
+
+???????????????????????????????????????????????????????????????
+
+Rank1 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 99 009900 990099 009900 990099 009901 (32 digits)
+rank1: data transfered
+rank 1: ecm begin
+ rank:1 ecmcurveparallel NextEc = 0 
+rank 1:request EC (from factorParallel)
+rank 1:wait for EC
+
+Request received Tag5: START_FACTORING from 1
+
+main0: startFactoring
+rank0: receive bigInt from 1
+main0: bigint received
+
+
+rank0: start receiveing PstFactors from 1
+
+write to disk
+saves/10^34+1failed to open file:./saves/10^34+1/sFactor0.bin
+failed to open file:./saves/10^34+1/sFactor1.bin
+failed to open file:./saves/10^34+1/sFactor2.bin
+failed to save factorization to txtfactor Saved
+
+after received pstfactors
+
+Rank0 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 99 009900 990099 009900 990099 009901 (32 digits)
+MAIN0: printing pstFactors after receiving
+
+main0: bigint and pstfactor received
+
+
+rank0: wait for next Request: 
+
+Request received Tag7: SEND_EC from 1
+failed to open file:./saves/10^34+1/currentEC.bin
+main0: nextEC is : 2
+
+rank0: wait for next Request: 
+rank 1:EC received: 1
+
+Request received Tag12: CHECK_FACTOR from 1
+
+
+ ==========================factor found========================
+
+main0: Rank 1 found, check factor
+newFactor is 1491 383821
+
+
+rank0: start receiveing PstFactors from 1
+
+write to disk
+saves/10^34+1failed to open file:./saves/10^34+1/sFactor0.bin
+failed to open file:./saves/10^34+1/sFactor1.bin
+failed to open file:./saves/10^34+1/sFactor2.bin
+failed to open file:./saves/10^34+1/sFactor3.bin
+failed to save factorization to txtfactor Saved
+
+Rank0 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 1491 383821 * 66387 940914 975910 752481
+
+rank0: wait for next Request: 
+sendGD
+
+ Data Send to Master 1 finished return
+rank1: after ecmParallel
+
+-------------------------
+Factor Found insertbigInt
+
+
+
+rank1: start sending PstFactors to 0
+
+rank1: continue factorisation
+
+
+BEFORE ecmParallel
+
+sending bigInt from 1 to 0
+
+Rank1 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 1491 383821 * 66387 940914 975910 752481
+
+
+rank1: start sending PstFactors to 0
+
+
+???????????????????????????????????????????????????????????????
+
+Rank1 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 1491 383821 * 66387 940914 975910 752481
+rank1: data transfered
+rank 1: ecm begin
+ rank:1 ecmcurveparallel NextEc = 0 
+rank 1:request EC (from factorParallel)
+rank 1:wait for EC
+
+Request received Tag6: REGISTER_FOR_EC from 2
+main0: rank 2 added to waitlist
+
+rank0: wait for next Request: 
+
+Request received Tag6: REGISTER_FOR_EC from 3
+main0: rank 3 added to waitlist
+
+rank0: wait for next Request: 
+
+Request received Tag6: REGISTER_FOR_EC from 4
+main0: rank 4 added to waitlist
+
+rank0: wait for next Request: 
+
+Request received Tag5: START_FACTORING from 1
+
+main0: startFactoring
+rank0: receive bigInt from 1
+main0: bigint received
+
+
+rank0: start receiveing PstFactors from 1
+
+write to disk
+saves/10^34+1failed to open file:./saves/10^34+1/sFactor0.bin
+failed to open file:./saves/10^34+1/sFactor1.bin
+failed to open file:./saves/10^34+1/sFactor2.bin
+failed to open file:./saves/10^34+1/sFactor3.bin
+failed to save factorization to txtfactor Saved
+
+after received pstfactors
+
+Rank0 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 1491 383821 * 66387 940914 975910 752481
+MAIN0: printing pstFactors after receiving
+
+main0: bigint and pstfactor received
+
+
+rank0: wait for next Request: 
+
+Request received Tag7: SEND_EC from 1
+failed to open file:./saves/10^34+1/currentEC.bin
+main0: nextEC is : 3
+
+rank0: wait for next Request: 
+rank 1:EC received: 2
+
+Request received Tag12: CHECK_FACTOR from 1
+
+
+ ==========================factor found========================
+
+main0: Rank 1 found, check factor
+newFactor is 28 559389
+
+
+rank0: start receiveing PstFactors from 1
+
+write to disk
+saves/10^34+1failed to open file:./saves/10^34+1/sFactor0.bin
+failed to open file:./saves/10^34+1/sFactor1.bin
+failed to open file:./saves/10^34+1/sFactor2.bin
+failed to open file:./saves/10^34+1/sFactor3.bin
+failed to open file:./saves/10^34+1/sFactor4.bin
+failed to save factorization to txtfactor Saved
+
+Rank0 print current factors:
+Factorisation is: 
+10000 000000 000000 000000 000000 000001 (35 digits) = 101 * 28 559389 * 1491 383821 * 2324 557465 671829
+
+rank0: wait for next Request: 
+sendGD
+
+ Data Send to Master 1 finished return
+rank1: after ecmParallel
+
+-------------------------
+Factor Found insertbigInt
+
+
+
+rank1: start sending PstFactors to 0
+
+rank1: continue factorisation
+all factors processed
+failed to save factorization to txt
+after factorparallel
+process finished finalize mpiworld: 1
+
+Request received Tag18:  from 1
+
+
+ time Needed to factorize 5.00 seconds
+send Register_for_EC to rank1 cancel
+send Register_for_EC to rank2 cancel
+send Register_for_EC to rank3 cancel
+send Register_for_EC to rank4 cancel
+
+rank0: wait for next Request: 
+rank4: Closes EC received :-1
+process finished finalize mpiworld: 4
+rank3: Closes EC received :-1
+process finished finalize mpiworld: 3
+
+Request received Tag20:  from 1
+
+rank0: wait for next Request: 
+rank2: Closes EC received :-1
+process finished finalize mpiworld: 2
+
+Request received Tag20:  from 2
+
+rank0: wait for next Request: 
+
+Request received Tag20:  from 3
+
+rank0: wait for next Request: 
+
+Request received Tag20:  from 4
+end master
