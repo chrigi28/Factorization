@@ -1,5 +1,7 @@
 #ifndef _HELPER_H
 #define _HELPER_H
+
+#define _BSD_DEFAULT
 #include "mpi.h"
 #include "factor.h"
 #include <mpi.h>

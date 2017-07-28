@@ -1,3 +1,3 @@
 all: 
-	mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm
+	mpicc ./src/*.c -I./includes -o ./bin/Factorization -lm -std=c11
 	
