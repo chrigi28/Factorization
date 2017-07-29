@@ -1240,7 +1240,7 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		int I, Pass;
 		int i, j, u;
 		long long L1, L2, LS, P, IP, Paux = 1;
-		printf("rank:%d ecmcurveparallel NextEc = %d \n",rank,NextEC);
+//		printf("rank%d: ecmcurveparallel NextEc = %d \n",rank,NextEC);
 		if (NextEC > 0)
 		{
 			EC = NextEC;
@@ -1253,35 +1253,43 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			}
 		}
 		else{
+			printf("rank%d: step1\n",rank);
 
-			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			checkInterrupt(&interrupt);
 			if(interrupt){
-				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				printf("rank%d: interrupted\n\n",rank);
 				return FACTOR_FOUND_BY_PARALLEL;
 			}
-			printf("rank %d:request EC (from factorParallel)\n",rank);
+			printf("rank%d: send request EC to main0\n\n",rank);
 			int null = 1;
 			MPI_Send(&null,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD);
-			printf("rank %d:wait for EC\n",rank);
+			printf("rank%d: wait for EC\n\n",rank);
 			do{
+				printf("rank%d: step2\n",rank);
 				cho_Waitany(&status);
+				printf("rank%d: step3\n",rank);
 				if(status.MPI_TAG==SEND_EC){
 					MPI_Recv(&EC,1,MPI_INT,0,SEND_EC,MPI_COMM_WORLD,&status);
-					printf("rank %d:EC received: %d\n",rank,EC);
+					printf("rank%d:EC received: %d\n",rank,EC);
 					break;
 				}else{
+					printf("rank%d: step4\n",rank);
 					if(status.MPI_TAG==INTERRUPT_EC){
-						MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-						return FACTOR_FOUND_BY_PARALLEL;
+						checkInterrupt(&interrupt);
+						if(interrupt){
+							printf("rank%d: interrupted\n\n",rank);
+							return FACTOR_FOUND_BY_PARALLEL;
+						}
 					}
 					else{
+						printf("rank%d: step5\n",rank);
 						printf("!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!\n rank%d: received unexpected message from rank%d: Tag: %d\n",rank,status.MPI_SOURCE,status.MPI_TAG);
 						MPI_Recv(&null,1,MPI_INT,MPI_ANY_SOURCE,MPI_ANY_TAG,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 						printf("rank%d:ignore error message %d\n",rank,null);
 					}
 				}
 			}while(1);
-
+			printf("rank%d: step6\n",rank);
 			//      EC++;
 			//      EC = getNextECToCompute(); // cho requestEC from main
 			if(EC == -1){
@@ -1308,9 +1316,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		}
 		// Try to factor BigInteger N using Lehman algorithm. Result in potentialFactor.
 		Lehman(N, EC % 50000000, &potentialFactor);
-		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		printf("rank%d: step7\n",rank);
+		checkInterrupt(&interrupt);
 		if(interrupt){
-			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: interrupted\n\n",rank);
 			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		if (potentialFactor.nbrLimbs > 1)
@@ -1421,11 +1430,11 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		SubtBigNbrModN(Aux3, MontgomeryMultR1, Aux2, TestNbr, NumberLength);
 		ModInvBigNbr(Aux2, Aux2, TestNbr, NumberLength);
 		modmult(Aux1, Aux2, A0);                   // A0 <- 2*(EC+1)/(3*(EC+1)^2 - 1)
+		printf("rank%d: step8\n",rank);
 
-
-		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		checkInterrupt(&interrupt);
 		if(interrupt){
-			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: interrupted\n\n",rank);
 			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		//  if A0*(A0 ^ 2 - 1)*(9 * A0 ^ 2 - 1) mod N=0 then select another curve.
@@ -1463,15 +1472,16 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		/**************/
 		/* First step */
 		/**************/
+		printf("rank%d: step9\n",rank);
 		memcpy(Xaux, X, NumberLength * sizeof(limb));
 		memcpy(Zaux, Z, NumberLength * sizeof(limb));
 		memcpy(GcdAccumulated, MontgomeryMultR1, (NumberLength+1) * sizeof(limb));
 		for (Pass = 0; Pass < 2; Pass++)
 		{
 
-			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			checkInterrupt(&interrupt);
 			if(interrupt){
-				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				printf("rank%d: interrupted\n\n",rank);
 				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			/* For powers of 2 */
@@ -1494,6 +1504,11 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			}
 			else
 			{
+				checkInterrupt(&interrupt);
+				if(interrupt){
+					printf("rank%d: interrupted\n\n",rank);
+					return FACTOR_FOUND_BY_PARALLEL;
+				}
 				if (gcdIsOne(Z) > 1)
 				{
 					return FACTOR_FOUND;
@@ -1506,9 +1521,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			do
 			{
 
-				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				checkInterrupt(&interrupt);
 				if(interrupt){
-					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					printf("rank%d: interrupted\n\n",rank);
 					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				indexPrimes++;
@@ -1525,6 +1540,11 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 				}
 				else
 				{
+					checkInterrupt(&interrupt);
+					if(interrupt){
+						printf("rank%d: interrupted\n\n",rank);
+						return FACTOR_FOUND_BY_PARALLEL;
+					}
 					if (gcdIsOne(Z) > 1)
 					{
 						return FACTOR_FOUND;
@@ -1538,9 +1558,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			for (i = 0; i < SIEVE_SIZE; i++)
 			{
 
-				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				checkInterrupt(&interrupt);
 				if(interrupt){
-					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					printf("rank%d: interrupted\n\n",rank);
 					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				sieve2310[i] =
@@ -1563,9 +1583,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 				for (i = 0; i < 10*SIEVE_SIZE; i++)
 				{
 
-					MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+					checkInterrupt(&interrupt);
 					if(interrupt){
-						MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+						printf("rank%d: interrupted\n\n",rank);
 						return FACTOR_FOUND_BY_PARALLEL;
 					}
 					if (sieve[i] != 0)
@@ -1609,10 +1629,10 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			}
 		} /* end for Pass */
 
-
-		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		printf("rank%d: step10 programstep2\n",rank);
+		checkInterrupt(&interrupt);
 		if(interrupt){
-			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: interrupted\n\n",rank);
 			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		/******************************************************/
@@ -1623,9 +1643,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		for (u = 1; u < SIEVE_SIZE; u += 2)
 		{
 
-			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			checkInterrupt(&interrupt);
 			if(interrupt){
-				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				printf("rank%d: interrupted\n\n",rank);
 				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			if (u % 3 == 0 || u % 5 == 0 || u % 7 == 0
@@ -1647,9 +1667,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 		for (Pass = 0; Pass < 2; Pass++)
 		{
 
-			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			checkInterrupt(&interrupt);
 			if(interrupt){
-				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				printf("rank%d: interrupted\n\n",rank);
 				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			int Qaux, J;
@@ -1683,9 +1703,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			for (I = 5; I < SIEVE_SIZE; I += 2)
 			{
 
-				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				checkInterrupt(&interrupt);
 				if(interrupt){
-					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					printf("rank%d: interrupted\n\n",rank);
 					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				memcpy(WX, X, NumberLength * sizeof(limb));
@@ -1707,8 +1727,12 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 					modmult(GcdAccumulated, Aux1, Aux2);
 					memcpy(GcdAccumulated, Aux2, NumberLength * sizeof(limb));
 				}
-				else
-				{
+				else{
+				checkInterrupt(&interrupt);
+				if(interrupt){
+					printf("rank%d: interrupted\n\n",rank);
+					return FACTOR_FOUND_BY_PARALLEL;
+				}
 					if (gcdIsOne(Aux1) > 1)
 					{
 						return FACTOR_FOUND;
@@ -1733,9 +1757,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 				memcpy(UZ, WZ, NumberLength * sizeof(limb));  // Previous (X:Z)
 			} /* end for I */
 
-			MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+			checkInterrupt(&interrupt);
 			if(interrupt){
-				MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+				printf("rank%d: interrupted\n\n",rank);
 				return FACTOR_FOUND_BY_PARALLEL;
 			}
 			AddBigNbrModN(DX, DZ, Aux1, TestNbr, NumberLength);
@@ -1775,9 +1799,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			for (indexM = 0; indexM <= maxIndexM; indexM++)
 			{
 
-				MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+				checkInterrupt(&interrupt);
 				if(interrupt){
-					MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					printf("rank%d: interrupted\n\n",rank);
 					return FACTOR_FOUND_BY_PARALLEL;
 				}
 				if (indexM >= Qaux)
@@ -1803,9 +1827,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 					for (i = 0; i < GROUP_SIZE; i++)
 					{
 
-						MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+						checkInterrupt(&interrupt);
 						if(interrupt){
-							MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+							printf("rank%d: interrupted\n\n",rank);
 							return FACTOR_FOUND_BY_PARALLEL;
 						}
 						j = sieveidx[i]; // 0 < J < HALF_SIEVE_SIZE
@@ -1816,6 +1840,11 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 						SubtBigNbrModN(Aux1, root[i], M, TestNbr, NumberLength);
 						modmult(GcdAccumulated, M, Aux2);
 						memcpy(GcdAccumulated, Aux2, NumberLength * sizeof(limb));
+					}
+					checkInterrupt(&interrupt);
+					if(interrupt){
+						printf("rank%d: interrupted\n\n",rank);
+						return FACTOR_FOUND_BY_PARALLEL;
 					}
 					if (Pass != 0)
 					{
@@ -1863,6 +1892,11 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 				{
 					continue;
 				}
+				checkInterrupt(&interrupt);
+				if(interrupt){
+					printf("rank%d: interrupted\n\n",rank);
+					return FACTOR_FOUND_BY_PARALLEL;
+				}
 				// GD <- GCD(GcdAccumulated, TestNbr)
 				if (memcmp(GD, TestNbr, NumberLength*sizeof(limb)))
 				{           // GCD is not 1 or TestNbr
@@ -1871,9 +1905,9 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 			}
 		} /* end for Pass */
 
-		MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,&interrupt,&status);
+		checkInterrupt(&interrupt);
 		if(interrupt){
-			MPI_Recv(&null,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: interrupted\n\n",rank);
 			return FACTOR_FOUND_BY_PARALLEL;
 		}
 		performLehman = TRUE;
@@ -1884,14 +1918,16 @@ static enum eEcmResult ecmCurveParallel(BigInteger *N,int rank){
 void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 {
 
-	printf("rank %d: ecm begin\n ",world_rank);
+	printf("rank%d: ecm begin\n",world_rank);
 	//showFactors(N,pstFactors,world_rank);
 //	printPstFactors(pstFactors,world_rank);
 	if(world_rank>1){
+		printf("rank%d: send get_facordata \n",world_rank);
 		MPI_Send(&world_rank,1,MPI_INT,0,GET_FACTOR_DATA,MPI_COMM_WORLD);
+		printf("rank%d: receive factordata\n",world_rank);
 		receiveBigInteger(N,0,world_rank);
 		receivePstFactors(pstFactors,0,world_rank);
-		printf("rank%d data updated:\n",world_rank);
+		printf("rank%d data updated data to be factored:\n",world_rank);
 		showFactors(N,pstFactors,world_rank);
 	}
 	int P, Q;
@@ -1966,11 +2002,30 @@ void ecmParallel(BigInteger *N, struct sFactors *pstFactors, int world_rank)
 		}
 		else if (ecmResp == FACTOR_FOUND){
 			//memcpy(Temp1.limbs, GD, numLimbs * sizeof(limb));
-			MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD); //send main0 in rdyToRecv mode
+			printf("rank%d: send signal comm to main0\n",world_rank);
+			MPI_Request r = MPI_REQUEST_NULL;
+			MPI_Isend(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,&r); //send main0 in rdyToRecv mode
+			MPI_Status status;
+			cho_Waitany(&status);
+			if(status.MPI_TAG !=CHECK_FACTOR){
+				if(status.MPI_TAG ==INTERRUPT_EC){
+					MPI_Cancel(&r);
+					MPI_Recv(&ecmResp,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					MPI_Send(&ecmResp,1,MPI_INT,0,INTERRUPT_EC,MPI_COMM_WORLD);
+					printf("rank%d: received interrupt cancel check return\n",world_rank);
+					return;
+				}else{
+					MPI_Recv(&ecmResp,1,MPI_INT,0,MPI_ANY_TAG,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+					printf("rank%d: received unexpected answer tag:%d cancel check return\n",world_rank,status.MPI_TAG);
+				}
+			}
+
 			MPI_Recv(&ecmResp,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: response received send numberlength\n",world_rank);
 			MPI_Send(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
+			printf("rank%d: numberlength sent wait for response\n",world_rank);
 			MPI_Recv(&ecmResp,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-			printf("sendGD\n");
+			printf("rank%d: sendGD to main\n",world_rank);
 			MPI_Send(&GD[0],MAX_LEN,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
 			printf("\n Data Send to Master %d finished return\n",world_rank);
 			// send message to rank0
@@ -2397,7 +2452,7 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 	}
 	for (factorNbr = 1; factorNbr <= pstFactors->multiplicity; factorNbr++, pstCurFactor++)
 	{
-//		printf("factorNbr is %d\n Multi is: %d\n",factorNbr,pstFactors->multiplicity);
+		printf("factorNbr is %d\n Multi is: %d\n",factorNbr,pstFactors->multiplicity);
 		int upperBound = pstCurFactor->upperBound;
 //		printf("upperbound is %d\n",upperBound);
 		restartFactoring = FALSE;
@@ -2501,11 +2556,13 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 			printf("\n\nBEFORE ecmParallel\n\n");
 
 			int nextEC = 1;
+			printf("rank%d: send start factoring to main0\n",world_rank);
 			MPI_Send(&nextEC,1,MPI_INT,0,START_FACTORING,MPI_COMM_WORLD);
+			printf("rank%d: start factoring sent send bigInt\n",world_rank);
 			sendBigInteger(&prime,0,world_rank);
-
-			showFactors(&prime,pstFactors,world_rank);
+//			showFactors(&prime,pstFactors,world_rank);
 			//irecv for cancel or update
+			printf("rank%d: send pstFactor to main0\n",world_rank);
 			sendPstFactors(pstFactors,0,world_rank);
 			printf("\n\???????????????????????????????????????????????????????????????\n");
 			showFactors(&prime,pstFactors,world_rank);
@@ -2516,10 +2573,7 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 			ecmParallel(&prime, pstFactors,world_rank);        // Factor number.
 			// Check whether GD is not one. In this case we found a proper factor.
 			printf("rank1: after ecmParallel\n");
-			if(closeFlag == 1){
-				printf("rank1: closeFlag set exit\n");
-				return;
-			}
+
 //			if(closeFlag == FACTOR_FOUND_BY_PARALLEL){
 //				//MPI_Send(GD,)
 //				int length;
@@ -2529,14 +2583,19 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 //				receiveBigInteger(&Temp1,0,world_rank);
 //				//    	  receivePstFactors(pstFactors,0,world_rank);
 //			}
+			printf("rank%d: rdy to receive data\n",world_rank);
 			MPI_Recv(&null,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: indication to receive checkdata received\n",world_rank);
 			MPI_Recv(&NumberLength,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+			printf("rank%d: numberlength received \n",world_rank);
 			MPI_Recv(&GD[0],MAX_LEN,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-
+			printf("rank%d: all datareceived\n",world_rank);
 			int factor = checkFactor(pstFactors);
 //			showFactors(NULL,pstFactors,1);
+			printf("rank%d: send factor result to main0\n",world_rank);
 			MPI_Send(&factor,1,MPI_INT,0,CHECK_FACTOR,MPI_COMM_WORLD);
 			if(factor){
+				printf("rank%d: send new pstFactor to main0\n",world_rank);
 				sendPstFactors(pstFactors,0,1);
 			}
 			factorNbr = 0;
@@ -2546,9 +2605,11 @@ void factorParallel(BigInteger *toFactor, int *number, int *factors, struct sFac
 
 		}
 	}
-	printf("all factors processed\n");
+	printf("rank%d: all factors processed\n",world_rank);
 	saveFactorizationToText(pstFactors,pcKnownFactors);
+	printf("rank%d: send factoring done to main0\n",world_rank);
 	MPI_Send(&null,1,MPI_INT,0,FACTORING_DONE,MPI_COMM_WORLD);
+	return;
 #ifdef __EMSCRIPTEN__
 	SaveFactors(pstFactors);
 #endif

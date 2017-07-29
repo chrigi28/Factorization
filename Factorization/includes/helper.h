@@ -1,7 +1,7 @@
 #ifndef _HELPER_H
 #define _HELPER_H
 
-#define _BSD_DEFAULT
+//#define _DEFAULT_SOURCE
 #include "mpi.h"
 #include "factor.h"
 #include <mpi.h>
@@ -17,7 +17,7 @@ enum Messages {
 	SEND_RESULT,
 	SEND_RDY_FACTOR,
 	JOBTOFACTOR,
-	START_FACTORING,
+	START_FACTORING,//5
 	REGISTER_FOR_EC,
 	SEND_EC,
 	NO_OF_PSTFACTORS,
@@ -27,7 +27,7 @@ enum Messages {
 	CHECK_FACTOR,
 	GD_LENGTH,
 	TEST_GD,
-	NUMBER_LENGTH,
+	NUMBER_LENGTH, //15
 	INTERRUPT_EC,
 	GET_FACTOR_DATA,
 	FACTORING_DONE,
@@ -62,4 +62,5 @@ void showFactors(BigInteger *N,struct sFactors *pstFactors,int world_rank);
 void cho_Waitany(MPI_Status *status);
 void cho_WaitSpecific(MPI_Status *status,int tag);
 void setSavePoint(char *tofactor);
+void checkInterrupt(int * interrupt);
 #endif

@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
+#define _DEFAULT_SOURCE
 
 char * STATENAMES[]={
 	"GET_JOB\0",
@@ -40,7 +40,7 @@ void sendBigInteger(BigInteger *number,int dest, int source){
 	MPI_Send( &(number->sign), 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
 }
 void receiveBigInteger(BigInteger *number, int source, int dest){
-	printf("rank%d: receive bigInt from %d",dest,source);
+	printf("rank%d: receive bigInt from %d\n",dest,source);
 	MPI_Recv( &(number->nbrLimbs), 1, MPI_INT, source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	MPI_Recv( &(number->limbs), number->nbrLimbs, MPI_INT,source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	MPI_Recv( &(number->sign), 1,MPI_INT, source, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -323,4 +323,13 @@ void readFactorFromDisk(struct sFactors *pstFactors,char* pathToFolder){
 void setSavePoint(char *tofactor){
 	strcpy(savePath,tofactor);
 	printf("foldername set to %s\n",tofactor);
+}
+
+void checkInterrupt(int * interrupt){
+	MPI_Status status;
+	MPI_Iprobe(0,INTERRUPT_EC,MPI_COMM_WORLD,interrupt,&status);
+	if(*interrupt){
+		MPI_Recv(interrupt,1,MPI_INT,status.MPI_SOURCE,INTERRUPT_EC,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+		MPI_Send(interrupt,1,MPI_INT,status.MPI_SOURCE,INTERRUPT_EC,MPI_COMM_WORLD);
+	}
 }
